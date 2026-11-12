@@ -1,0 +1,25 @@
+{
+  "name": "higher-degree-glyph-designer",
+  "version": "0.3.1",
+  "private": true,
+  "description": "An offline higher-degree single-glyph editor with interactive transforms",
+  "scripts": {
+    "check": "node --check app.js && node --check build.js && node --check geometry.js && node --check glyph-io.js && node --check file-import.js && node --check operations.js && node --check path-boolean.js && node --check project-library.js && node --check transform-box.js && node --check server.js",
+    "build": "node build.js",
+    "start": "node server.js"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChangGGcn/higher-degree-glyph-designer.git"
+  },
+  "homepage": "https://github.com/ChangGGcn/higher-degree-glyph-designer",
+  "bugs": {
+    "url": "https://github.com/ChangGGcn/higher-degree-glyph-designer/issues"
+  },
+  "author": "ChangGGcn (cHAnGe)",
+  "contributors": [
+    "ChangGGcn (cHAnGe)",
+    "Codex"
+  ]
+}

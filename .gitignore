@@ -1,0 +1,11 @@
+node_modules/
+tests/
+test-artifacts/
+.codex/
+.agents/
+.env
+.env.*
+*.log
+*.zip
+.DS_Store
+Thumbs.db

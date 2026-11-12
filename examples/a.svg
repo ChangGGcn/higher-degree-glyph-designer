@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -800 540 1000" color="#16151b">
+  <title>a</title>
+  <desc>Higher-degree glyph converted to cubic Bezier; tolerance 0.25 font units. Open contours use a 1-unit stroke.</desc>
+  <g transform="scale(1,-1)">
+    <path fill="currentColor" fill-rule="evenodd" d="M 472 0 L 384 0 L 377 64 C 343 13 293 -12 225 -12 C 115 -12 60 73 60 235 C 60 275.5 62.375 312.3125 69.734375 344.75 C 77.09375 377.1875 89.4375 405.25 107.125 428.25 C 124.8125 451.25 147.84375 469.1875 174.328125 481.375 C 200.8125 493.5625 230.75 500 260 500 C 309 500 352 477 380 438 L 384 488 L 472 488 L 472 0 Z M 370 242 C 370 356 334 417 271 417 C 202 417 160 350 160 243 C 160 126 198 72 268 72 C 331 72 370 132 370 242 Z"/>
+  </g>
+</svg>

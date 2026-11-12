@@ -1,0 +1,267 @@
+{
+  "format": "higher-degree-glyph",
+  "version": 3,
+  "glyph": {
+    "name": "a",
+    "unicode": "0061",
+    "upm": 1000,
+    "advanceWidth": 540,
+    "ascender": 800,
+    "descender": -200,
+    "capHeight": 700,
+    "xHeight": 500
+  },
+  "contours": [
+    {
+      "closed": true,
+      "nodes": [
+        {
+          "x": 472,
+          "y": 0
+        },
+        {
+          "x": 384,
+          "y": 0
+        },
+        {
+          "x": 377,
+          "y": 64
+        },
+        {
+          "x": 225,
+          "y": -12,
+          "smooth": false
+        },
+        {
+          "x": 60,
+          "y": 235,
+          "smooth": false
+        },
+        {
+          "x": 69.734375,
+          "y": 344.75,
+          "smooth": true
+        },
+        {
+          "x": 107.125,
+          "y": 428.25,
+          "smooth": true
+        },
+        {
+          "x": 174.328125,
+          "y": 481.375,
+          "smooth": true
+        },
+        {
+          "x": 260,
+          "y": 500,
+          "smooth": false
+        },
+        {
+          "x": 380,
+          "y": 438,
+          "smooth": false
+        },
+        {
+          "x": 384,
+          "y": 488
+        },
+        {
+          "x": 472,
+          "y": 488
+        }
+      ],
+      "segments": [
+        {
+          "type": "line",
+          "controls": []
+        },
+        {
+          "type": "line",
+          "controls": []
+        },
+        {
+          "type": "cubic",
+          "controls": [
+            {
+              "x": 343,
+              "y": 13
+            },
+            {
+              "x": 293,
+              "y": -12
+            }
+          ]
+        },
+        {
+          "type": "cubic",
+          "controls": [
+            {
+              "x": 115,
+              "y": -12
+            },
+            {
+              "x": 60,
+              "y": 73
+            }
+          ]
+        },
+        {
+          "type": "cubic",
+          "controls": [
+            {
+              "x": 60,
+              "y": 275.5
+            },
+            {
+              "x": 62.375,
+              "y": 312.3125
+            }
+          ]
+        },
+        {
+          "type": "cubic",
+          "controls": [
+            {
+              "x": 77.09375,
+              "y": 377.1875
+            },
+            {
+              "x": 89.4375,
+              "y": 405.25
+            }
+          ]
+        },
+        {
+          "type": "cubic",
+          "controls": [
+            {
+              "x": 124.8125,
+              "y": 451.25
+            },
+            {
+              "x": 147.84375,
+              "y": 469.1875
+            }
+          ]
+        },
+        {
+          "type": "cubic",
+          "controls": [
+            {
+              "x": 200.8125,
+              "y": 493.5625
+            },
+            {
+              "x": 230.75,
+              "y": 500
+            }
+          ]
+        },
+        {
+          "type": "cubic",
+          "controls": [
+            {
+              "x": 309,
+              "y": 500
+            },
+            {
+              "x": 352,
+              "y": 477
+            }
+          ]
+        },
+        {
+          "type": "line",
+          "controls": []
+        },
+        {
+          "type": "line",
+          "controls": []
+        },
+        {
+          "type": "line",
+          "controls": []
+        }
+      ]
+    },
+    {
+      "closed": true,
+      "nodes": [
+        {
+          "x": 370,
+          "y": 242
+        },
+        {
+          "x": 271,
+          "y": 417,
+          "smooth": false
+        },
+        {
+          "x": 160,
+          "y": 243,
+          "smooth": false
+        },
+        {
+          "x": 268,
+          "y": 72,
+          "smooth": false
+        }
+      ],
+      "segments": [
+        {
+          "type": "cubic",
+          "controls": [
+            {
+              "x": 370,
+              "y": 356
+            },
+            {
+              "x": 334,
+              "y": 417
+            }
+          ]
+        },
+        {
+          "type": "cubic",
+          "controls": [
+            {
+              "x": 202,
+              "y": 417
+            },
+            {
+              "x": 160,
+              "y": 350
+            }
+          ]
+        },
+        {
+          "type": "cubic",
+          "controls": [
+            {
+              "x": 160,
+              "y": 126
+            },
+            {
+              "x": 198,
+              "y": 72
+            }
+          ]
+        },
+        {
+          "type": "cubic",
+          "controls": [
+            {
+              "x": 331,
+              "y": 72
+            },
+            {
+              "x": 370,
+              "y": 132
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

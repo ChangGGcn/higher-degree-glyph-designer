@@ -1,0 +1,18 @@
+'use strict';
+const fs = require('node:fs');
+const path = require('node:path');
+const root = __dirname;
+let html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+html = html.replace('<link rel="stylesheet" href="styles.css">', () => '<style>\n' + fs.readFileSync(path.join(root, 'styles.css'), 'utf8') + '\n</style>');
+const bundledScripts = ['vendor/paper-core-0.12.18.min.js', 'vendor/fflate-0.8.2.js', 'geometry.js', 'operations.js', 'transform-box.js', 'glyph-io.js', 'path-boolean.js', 'file-import.js', 'project-library.js', 'app.js'];
+const licenses = ['vendor/paper-LICENSE.txt', 'vendor/fflate-LICENSE.txt'].map(name => fs.readFileSync(path.join(root, name), 'utf8')).join('\n\n');
+html = html.replace('</head>', () => '<!-- Bundled third-party licenses:\n' + licenses.replace(/--/g, '—') + '\n-->\n</head>');
+for (const name of bundledScripts) html = html.replace(`<script src="${name}"></script>`, () => '<script>\n' + fs.readFileSync(path.join(root, name), 'utf8').replace(/<\/script/gi, '<\\/script') + '\n</script>');
+fs.writeFileSync(path.join(root, 'higher-degree-glyph-designer.html'), html);
+fs.mkdirSync(path.join(root, 'examples'), { recursive: true });
+const G = require('./glyph-io');
+fs.writeFileSync(path.join(root, 'examples', 'a.glyph'), G.serialize(G.sampleDocument()));
+fs.writeFileSync(path.join(root, 'examples', 'a.svg'), G.svgExport(G.sampleDocument()).svg);
+fs.writeFileSync(path.join(root, 'examples', 'a.cubic.glyph'), G.cubicGlyphExport(G.sampleDocument()).text);
+fs.writeFileSync(path.join(root, 'examples', 'a.glif'), G.glifExport(G.sampleDocument()).text);
+console.log('Built standalone higher-degree-glyph-designer.html and examples. Dependencies bundled; no runtime network required.');

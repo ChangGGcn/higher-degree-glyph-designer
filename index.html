@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f7fa">
+  <title>Higher Degree — 高阶曲线字形设计器 v0.3.1</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+  <symbol id="i-select" viewBox="0 0 24 24"><path d="m5 3 14 10-7 1-3 7z"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6h7l2 3h9v11H3zM3 6V4h7l2 2h8v3"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+  <symbol id="i-component" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"/><path d="M8 8h8v8H8z" fill="currentColor"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="m8 8 13 13M8 16 21 3"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="m13 3 8 8-7 9-10-1-1-10zM4 19l7-7m2-9 8 8"/><circle cx="12" cy="11" r="2"/></symbol>
+  <symbol id="i-line" viewBox="0 0 24 24"><path d="m5 19 14-14"/><rect x="3" y="17" width="4" height="4"/><rect x="17" y="3" width="4" height="4"/></symbol>
+  <symbol id="i-rect" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1"/></symbol>
+  <symbol id="i-ellipse" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="7"/></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 12V5a2 2 0 0 1 4 0v6-7a2 2 0 0 1 4 0v8-5a2 2 0 0 1 4 0v9c0 4-3 6-7 6-3 0-5-2-7-5l-3-5c-1-2 1-4 3-2l2 3"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v5h16v-5"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="m8 5-5 5 5 5M3 10h11a6 6 0 0 1 0 12"/></symbol>
+  <symbol id="i-redo" viewBox="0 0 24 24"><path d="m16 5 5 5-5 5m5-5H10a6 6 0 0 0 0 12"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><path d="M8 3v18M16 3v18M3 8h18M3 16h18"/></symbol>
+  <symbol id="i-fit" viewBox="0 0 24 24"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5"/><rect x="8" y="8" width="8" height="8"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></symbol>
+  <symbol id="i-reverse" viewBox="0 0 24 24"><path d="M4 8h15l-4-4m5 12H5l4 4"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 1 1 4 3c-1 .5-1 1-1 2m0 3h.01"/></symbol>
+  <symbol id="i-curve" viewBox="0 0 24 24"><path d="M4 18C4 3 20 21 20 6"/><path d="M4 18V6m16 12V6" stroke-dasharray="2 3"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="6" r="2"/></symbol>
+  <symbol id="i-snap" viewBox="0 0 24 24"><path d="M5 4v9a7 7 0 0 0 14 0V4h-4v9a3 3 0 0 1-6 0V4zM5 8h4m6 0h4"/></symbol>
+</defs></svg>
+<header class="app-header">
+  <a class="brand" href="#" aria-label="Higher Degree 首页"><span class="brand-mark">B<span>n</span></span><span>higher degree<span class="brand-dot">.</span></span></a>
+  <div class="header-divider"></div><span class="app-description">高阶曲线字形工作室 <span class="version-pill">v0.3.1</span></span>
+  <div class="header-actions">
+    <button id="new-button" class="quiet"><svg><use href="#i-plus"/></svg><span>新建</span></button>
+    <button id="import-button" class="quiet" title="导入 .glyph / .glif / .svg / 本工具 JSON"><svg><use href="#i-upload"/></svg><span>导入字形</span></button>
+    <button id="folder-button" class="quiet" title="导入文件夹：.glyph / .glif / .svg / .json"><svg><use href="#i-folder"/></svg><span>导入文件夹</span></button>
+    <div class="save-split"><button id="save-button" class="button secondary"><svg><use href="#i-download"/></svg><span>保存 .glyph</span></button><button id="save-options-button" class="button secondary save-options-button" title="三次 Bézier / GLIF 导出选项" aria-label="保存格式选项" aria-expanded="false">▾</button><div id="save-options" class="save-menu" hidden><button id="save-cubic">保存三次 Bézier .glyph<span>本工具 JSON · 同 SVG 近似算法</span></button><button id="save-glif">保存 UFO .glif<span>标准三次字形交换格式</span></button></div></div>
+    <button id="export-button" class="button primary"><span>导出 SVG</span><svg><use href="#i-arrow"/></svg></button>
+  </div>
+</header>
+<div class="document-bar">
+  <div class="document-tab"><svg><use href="#i-curve"/></svg><strong id="document-name">a</strong><span class="extension">.glyph</span><span class="tab-dot"></span></div>
+  <span class="save-status" id="save-status"><span></span> 本机草稿已保存</span>
+  <div class="document-actions"><button id="undo-button" class="icon-button" title="撤销 (Ctrl+Z)" aria-label="撤销"><svg><use href="#i-undo"/></svg></button><button id="redo-button" class="icon-button" title="重做 (Ctrl+Shift+Z)" aria-label="重做"><svg><use href="#i-redo"/></svg></button><span class="small-divider"></span><button id="help-button" class="icon-button" title="使用指南 (?)" aria-label="使用指南"><svg><use href="#i-help"/></svg></button></div>
+</div>
+<main class="workspace">
+  <aside id="glyph-library" class="glyph-library collapsed" aria-label="文件夹字形列表">
+    <div class="library-heading"><button id="library-toggle" class="icon-button" aria-label="展开字形文件夹" aria-expanded="false" title="展开 / 收起字形列表"><svg><use href="#i-chevron"/></svg></button><div class="library-expanded"><strong id="library-title">字形文件夹</strong><span id="library-count">未导入</span></div></div>
+    <div class="library-content library-expanded"><input id="library-search" type="search" placeholder="搜索名称 / 路径 / Unicode" aria-label="搜索字形"><div class="library-filter"><label><input id="library-changed" type="checkbox">仅修改项</label><span id="library-progress">本地文件</span></div><div id="library-list" class="library-list" role="listbox" aria-label="字形文件"></div><div class="library-page"><button id="library-prev" class="small-button">上一页</button><span id="library-page-label">0 / 0</span><button id="library-next" class="small-button">下一页</button></div><div class="library-footer"><button id="library-scratch" class="small-button full-width" hidden>返回独立字形</button><button id="library-export" class="button secondary" disabled>导出文件夹 ZIP</button><button id="library-replace" class="text-button">选择文件夹</button><p>切换字形会保留修改与各自撤销记录。原文件不会自动覆盖；请导出保存。</p></div></div>
+    <button id="library-open-collapsed" class="icon-button library-collapsed" title="导入文件夹" aria-label="从左栏导入文件夹"><svg><use href="#i-folder"/></svg></button>
+  </aside>
+  <aside class="tool-rail" aria-label="绘图工具">
+    <button class="tool active" data-tool="select" title="节点选择 (V)：单击边缘加点，拖动边缘改形，右键添加控制点" aria-label="节点选择" aria-pressed="true"><svg><use href="#i-select"/></svg><span>V</span></button>
+    <button class="tool" data-tool="component" title="构件选择 (A)：点内部或边缘选整个构件，Shift 多选" aria-label="构件选择" aria-pressed="false"><svg><use href="#i-component"/></svg><span>A</span></button>
+    <button class="tool" data-tool="pen" title="高阶钢笔 (P)" aria-label="高阶钢笔" aria-pressed="false"><svg><use href="#i-pen"/></svg><span>P</span></button>
+    <button class="tool" data-tool="line" title="直线 (L)" aria-label="直线" aria-pressed="false"><svg><use href="#i-line"/></svg><span>L</span></button>
+    <button class="tool" data-tool="knife" title="剪刀 (K)：单击切开，拖线剪切全部交点" aria-label="剪刀" aria-pressed="false"><svg><use href="#i-scissors"/></svg><span>K</span></button>
+    <div class="rail-divider"></div>
+    <button class="tool" data-tool="rect" title="矩形 (R)" aria-label="矩形" aria-pressed="false"><svg><use href="#i-rect"/></svg><span>R</span></button>
+    <button class="tool" data-tool="ellipse" title="椭圆 (O)" aria-label="椭圆" aria-pressed="false"><svg><use href="#i-ellipse"/></svg><span>O</span></button>
+    <div class="rail-divider"></div>
+    <button class="tool" data-tool="hand" title="平移 (H / 按住空格)" aria-label="平移" aria-pressed="false"><svg><use href="#i-hand"/></svg><span>H</span></button>
+    <div class="rail-bottom"><span class="degree-mark">B<sup>n</sup></span></div>
+  </aside>
+  <section class="canvas-area" aria-label="字形绘图区">
+    <div class="canvas-toolbar">
+      <div class="breadcrumb"><span>字形</span><span class="slash">/</span><strong id="canvas-glyph-name">a</strong><span class="unicode-label" id="canvas-unicode">U+0061</span></div>
+      <div class="view-options"><button id="grid-button" class="icon-button is-on" title="切换网格 (G)" aria-label="网格" aria-pressed="true"><svg><use href="#i-grid"/></svg></button><button id="snap-button" class="icon-button" title="吸附到 10 单位网格 (S)" aria-label="网格吸附" aria-pressed="false"><svg><use href="#i-snap"/></svg></button><span class="small-divider"></span><label class="control-toggle"><input type="checkbox" id="handles-toggle" checked><span>控制柄</span></label></div>
+    </div>
+    <div id="canvas-container" class="canvas-container">
+      <canvas id="editor" tabindex="0" aria-label="字形编辑画布：V 节点，A 构件，P 混合钢笔，K 剪刀，空格拖动平移"></canvas>
+      <div class="canvas-caption"><span class="eyebrow">HIGHER DEGREE</span><span>让每一次变换，都恰如所想。</span></div>
+      <div id="empty-state" class="empty-state" hidden><div class="empty-symbol">Aa</div><h2>从第一个点开始</h2><p>钢笔：左键放节点，右键放控制点。<br>每段控制点数可自由增加，直线与高阶曲线混合。</p><button id="empty-pen" class="button primary">开始绘制 <span>P</span></button><button id="load-sample" class="text-button">或载入示例字形 a</button></div>
+      <div class="canvas-bottom"><div class="mode-switch" role="group" aria-label="显示模式"><button id="outline-button" class="selected" aria-pressed="true">轮廓</button><button id="fill-button" aria-pressed="false">填充</button></div><div class="zoom-controls"><button id="zoom-out" aria-label="缩小">−</button><button id="zoom-label" title="重置为 100%">100%</button><button id="zoom-in" aria-label="放大">+</button><span></span><button id="fit-button" title="适应画布 (0)" aria-label="适应画布"><svg><use href="#i-fit"/></svg></button></div></div>
+    </div>
+    <div class="context-hint"><span class="hint-indicator"></span><span id="tool-hint">左击边缘加点 · 拖动边缘改形 · 右键加控制点 · Shift 多选</span><span class="coordinate" id="pointer-coordinate">X — &nbsp; Y —</span></div>
+  </section>
+  <aside class="inspector" aria-label="字形属性">
+    <div class="inspector-title"><h1>字形属性</h1><span class="badge">v0.3.1</span></div>
+    <div class="inspector-scroll" aria-label="可滚动的字形参数">
+    <section id="selection-transform" class="inspector-section selection-transform" hidden>
+      <div class="section-heading"><h2>选择变换</h2><span id="transform-selection-count" class="muted"></span></div>
+      <div class="anchor-coordinate-layout">
+        <div class="anchor-grid" role="group" aria-label="九宫格参考点">
+          <button data-anchor="nw" title="左上" aria-label="参考点：左上" aria-pressed="false"></button><button data-anchor="n" title="上中" aria-label="参考点：上中" aria-pressed="false"></button><button data-anchor="ne" title="右上" aria-label="参考点：右上" aria-pressed="false"></button>
+          <button data-anchor="w" title="左中" aria-label="参考点：左中" aria-pressed="false"></button><button data-anchor="center" title="几何中心（包围框中心）" aria-label="参考点：中心" aria-pressed="true" class="active"></button><button data-anchor="e" title="右中" aria-label="参考点：右中" aria-pressed="false"></button>
+          <button data-anchor="sw" title="左下" aria-label="参考点：左下" aria-pressed="false"></button><button data-anchor="s" title="下中" aria-label="参考点：下中" aria-pressed="false"></button><button data-anchor="se" title="右下" aria-label="参考点：右下" aria-pressed="false"></button>
+        </div>
+        <div class="anchor-fields"><label>X<input id="selection-x" type="number" step="any" aria-label="选择参考点 X"></label><label>Y<input id="selection-y" type="number" step="any" aria-label="选择参考点 Y"></label></div>
+      </div>
+      <div class="field-row selection-size"><label>宽 W<input id="selection-width" type="number" min="0" step="any"></label><label>高 H<input id="selection-height" type="number" min="0" step="any"></label><label class="aspect-lock"><input id="lock-aspect" type="checkbox" title="保持宽高比">等比</label></div>
+      <div class="button-pair transform-mode-switch"><button id="frame-scale" class="small-button active" aria-pressed="true">拉伸 / 缩放</button><button id="frame-rotate" class="small-button" aria-pressed="false">倾斜 / 旋转</button></div>
+      <details class="pivot-details"><summary>中心：<span id="pivot-description">九宫格中心</span></summary><div class="field-row"><label>中心 X<input id="pivot-x" type="number" step="any"></label><label>中心 Y<input id="pivot-y" type="number" step="any"></label></div><button id="reset-pivot" class="small-button full-width">恢复九宫格参考点</button></details>
+      <button id="selection-reverse" class="small-button full-width"><svg><use href="#i-reverse"/></svg>倒转所选轮廓曲线方向</button>
+      <p class="panel-note" id="frame-hint">拖动框上的手柄变换 · 双击切换模式<br>Shift 等比缩放 / 15° 旋转</p>
+    </section>
+    <section class="inspector-section glyph-properties">
+      <div class="field-row"><label>名称<input id="glyph-name" value="a" maxlength="128" autocomplete="off"></label><label>Unicode<span class="input-prefix"><span>U+</span><input id="glyph-unicode" value="0061" maxlength="6" spellcheck="false"></span></label></div>
+      <div class="field-row"><label>字宽<input id="metric-advanceWidth" type="number" min="0" max="100000" value="540"></label><label>UPM<input id="metric-upm" type="number" min="16" max="100000" value="1000"></label></div>
+      <details class="metrics-details"><summary>参考线度量 <span>⌄</span></summary><div class="field-row"><label>升部<input id="metric-ascender" type="number" value="800"></label><label>降部<input id="metric-descender" type="number" value="-200"></label></div><div class="field-row"><label>大写高度<input id="metric-capHeight" type="number" value="700"></label><label>x 高度<input id="metric-xHeight" type="number" value="500"></label></div></details>
+    </section>
+    <section class="inspector-section selection-section"><div class="section-heading"><h2>节点</h2><span id="selection-count" class="muted">未选择</span></div>
+      <div id="point-empty" class="point-empty">选择节点或曲线，精确调整形状。</div>
+      <div id="point-properties" hidden><div class="point-type"><span id="point-type-dot" class="point-dot"></span><strong id="point-type">内部控制点</strong><span id="point-symbol" class="point-symbol">C₂</span></div><div class="field-row"><label class="coordinate-input"><span>X</span><input id="point-x" type="number" step="1" aria-label="节点 X 坐标"></label><label class="coordinate-input"><span>Y</span><input id="point-y" type="number" step="1" aria-label="节点 Y 坐标"></label></div></div>
+      <div id="segment-properties" hidden><div class="curve-info"><svg><use href="#i-curve"/></svg><div><strong id="segment-type-label">四次贝塞尔</strong><span id="segment-detail">2 个端点 · 3 个控制点</span></div><span class="curve-degree" id="segment-degree">4°</span></div><div class="button-pair"><button id="split-button" class="small-button">中点分割</button><button id="convert-button" class="small-button">转为直线</button></div></div>
+      <button id="smooth-button" class="small-button full-width" hidden>对齐切线 · 平滑节点</button>
+      <div class="button-pair edit-pair"><button id="corner-button" class="small-button">设为角点</button><button id="start-point" class="small-button">设为起点</button></div>
+      <div class="button-pair edit-pair"><button id="round-selection" class="small-button">选中点取整</button><button id="round-glyph" class="small-button">整个字形取整</button></div>
+      <button id="join-points" class="small-button full-width">连接两个开放端点</button>
+      <button id="add-extrema" class="small-button full-width" title="作用于完整选中的轮廓；没有完整轮廓选择时作用于整个字形">添加水平 / 垂直极值点</button>
+      <label class="degree-field" id="degree-field" hidden>当前段的控制点数量<input id="degree-select" type="number" min="0" step="1"></label>
+      <label class="degree-field">每段控制点上限<input id="max-control-points" type="number" min="0" step="1" placeholder="不限（留空）"></label>
+      <p class="panel-note">留空：右键始终加控制点，左键加平滑节点。<br>设定上限后，达到上限的右键改为加节点。</p>
+    </section>
+    <section class="inspector-section contours-section"><div class="section-heading"><h2>构件 / 轮廓</h2><span id="contour-count" class="count-badge">2</span></div><div id="contour-list" class="contour-list"></div><div class="contour-actions"><button id="close-contour" class="small-button">闭合轮廓</button><button id="reverse-contour" class="icon-button" title="倒转所选构件 / 轮廓方向" aria-label="倒转曲线方向"><svg><use href="#i-reverse"/></svg></button><button id="delete-contour" class="icon-button danger" title="删除所选构件 / 轮廓" aria-label="删除所选构件"><svg><use href="#i-trash"/></svg></button></div><div class="button-pair edit-pair"><button id="group-contours" class="small-button">组合为构件</button><button id="ungroup-contours" class="small-button">取消组合</button></div><div class="button-pair edit-pair"><button id="copy-contours" class="small-button">复制构件</button><button id="paste-contours" class="small-button">粘贴构件</button></div></section>
+    <section class="inspector-section boolean-section"><div class="section-heading"><h2>轮廓布尔运算</h2><span id="boolean-count" class="muted">选择 2+ 轮廓</span></div><div class="boolean-grid"><button class="small-button" data-boolean="unite" title="合并所选形状">并集 ∪</button><button class="small-button" data-boolean="intersect" title="仅保留所有形状的公共区域">交集 ∩</button><button class="small-button" data-boolean="subtract" title="从基底中减去其他形状">差集 −</button><button class="small-button" data-boolean="exclude" title="只保留不重叠区域">异或 ⊕</button></div><label class="degree-field">差集基底<select id="boolean-base"></select></label><label class="degree-field">转换容差（字体单位）<select id="boolean-tolerance"><option value="0.05">0.05 · 高精度</option><option value="0.25" selected>0.25 · 推荐</option><option value="1">1.00</option></select></label><p class="panel-note">仅完整闭合轮廓；高阶段先转为三次。组合轮廓作为一个含字腔的形状，至少选两个构件。一次撤销恢复原曲线。</p></section>
+    <section class="inspector-section snapping-section"><details open><summary class="section-summary">吸附与精度</summary><div class="check-row"><label><input id="snap-nodes" type="checkbox" checked>节点吸附</label><label><input id="snap-edges" type="checkbox">边缘吸附</label></div><div class="field-row"><label>网格间距<input id="grid-step" type="number" min="0.001" max="10000" step="any" value="10"></label><label>坐标小数位<select id="coordinate-precision"><option value="0">0 · 整数</option><option value="1">1 位</option><option value="2" selected>2 位</option><option value="3">3 位</option><option value="4">4 位</option><option value="6">6 位</option><option value="-1">完整精度</option></select></label></div><p class="panel-note">S 切换网格吸附 · Alt 暂停全部吸附<br>精度用于新点 / 手动移动；精确分割保留形状。</p></details></section>
+    <section class="inspector-section transform-section"><details><summary class="section-summary">变换与对齐</summary><label class="degree-field">作用范围<select id="transform-scope"><option value="selection">当前选择</option><option value="glyph">整个字形</option></select></label><div class="field-row"><label>横向缩放 %<input id="scale-x" type="number" value="100" step="1"></label><label>纵向缩放 %<input id="scale-y" type="number" value="100" step="1"></label></div><div class="field-row"><label>旋转角度 °<input id="rotate-angle" type="number" value="0" step="1"></label><label>原点<select id="transform-origin"><option value="center">九宫格 / 自定义中心</option><option value="zero">字形原点</option></select></label></div><div class="field-row"><label>水平位移<input id="translate-x" type="number" value="0"></label><label>垂直位移<input id="translate-y" type="number" value="0"></label></div><button id="apply-transform" class="small-button full-width">应用变换</button><div class="button-pair edit-pair"><button id="flip-x" class="small-button">水平镜像</button><button id="flip-y" class="small-button">垂直镜像</button></div><div class="alignment-grid"><button class="small-button" data-align="left">左对齐</button><button class="small-button" data-align="center-x">水平居中</button><button class="small-button" data-align="right">右对齐</button><button class="small-button" data-align="bottom">底对齐</button><button class="small-button" data-align="center-y">垂直居中</button><button class="small-button" data-align="top">顶对齐</button><button class="small-button" data-align="distribute-x">水平等距</button><button class="small-button" data-align="distribute-y">垂直等距</button></div><p class="panel-note">构件模式对齐构件；节点模式对齐选中节点。</p></details></section>
+    </div>
+    <section class="inspector-section preview-section"><div class="section-heading"><h2>字形预览</h2><span class="muted">固定 · 实时</span></div><div class="preview-box"><canvas id="preview" aria-label="字形填充预览"></canvas><span id="preview-label">a / Higher Degree</span></div><div class="preview-foot"><span>偶奇填充 · 保留字腔</span><span id="node-total">13 个节点</span></div></section>
+    <div class="inspector-footer"><span class="local-dot"></span>离线可用 · 文件仅保存在本机</div>
+  </aside>
+</main>
+<footer class="status-bar"><span><span class="status-dot"></span><span id="status-text">就绪</span></span><span class="status-middle">高阶曲线原生编辑 <span>→</span> 三次 SVG 精度转换</span><button id="shortcut-button">快捷键 <kbd>?</kbd></button></footer>
+<input id="file-input" type="file" accept=".glyph,.glif,.svg,.json" hidden>
+<input id="folder-input" type="file" webkitdirectory directory multiple hidden>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<dialog id="cubic-dialog" aria-labelledby="cubic-dialog-title"><div class="dialog-top"><div><span class="eyebrow">CUBIC BÉZIER EXPORT</span><h2 id="cubic-dialog-title">保存三次曲线字形</h2></div><button class="icon-button" data-close="cubic-dialog" aria-label="关闭三次导出窗口"><svg><use href="#i-close"/></svg></button></div><p id="cubic-description" class="dialog-description"></p><label class="export-label">最大近似误差<select id="cubic-tolerance"><option value="0.05">0.05 — 极高精度</option><option value="0.25" selected>0.25 — 推荐</option><option value="1">1.00 — 较小文件</option><option value="2">2.00 — 快速预览</option></select></label><div id="cubic-summary" class="export-summary"></div><p class="export-note">使用与 SVG 相同的自适应近似算法。仅转换下载副本，画布保留原始高阶曲线。</p><div class="dialog-footer"><button class="button secondary" data-close="cubic-dialog">取消</button><button id="download-cubic" class="button primary">下载</button></div></dialog>
+<dialog id="project-export-dialog" aria-labelledby="project-export-title"><div class="dialog-top"><div><span class="eyebrow">FOLDER EXPORT</span><h2 id="project-export-title">保存整个字形工作区</h2></div><button class="icon-button" data-close="project-export-dialog" aria-label="关闭文件夹导出"><svg><use href="#i-close"/></svg></button></div><p class="dialog-description">按原相对目录打包字形。文件格式转换时会保留目录，并自动避开重名。</p><label class="degree-field">导出范围<select id="project-export-scope"><option value="all">全部可读取字形</option><option value="changed">仅修改过的字形</option></select></label><label class="degree-field">文件格式<select id="project-export-format"><option value="native">原生高阶 .glyph</option><option value="cubic">三次 Bézier .glyph</option><option value="glif">三次 UFO .glif</option></select></label><label class="degree-field">三次转换容差<select id="project-export-tolerance"><option value="0.05">0.05</option><option value="0.25" selected>0.25</option><option value="1">1.00</option></select></label><div id="project-export-summary" class="export-summary">就绪</div><p class="export-note">这是字形文件集合，不是完整 UFO 工程。无法解析的文件列入报告，不会伪装成成功。</p><div class="dialog-footer"><button class="button secondary" data-close="project-export-dialog">取消</button><button id="download-project" class="button primary">下载 ZIP</button></div></dialog>
+<dialog id="export-dialog"><div class="dialog-top"><div><span class="eyebrow">EXPORT GLYPH</span><h2>把曲线带到下一站。</h2></div><button class="icon-button" data-close="export-dialog" aria-label="关闭导出窗口"><svg><use href="#i-close"/></svg></button></div><p class="dialog-description">将任意阶贝塞尔统一输出为三次曲线，高阶段按误差上界自适应细分。</p><label class="export-label">最大近似误差 <span>字体单位 / units</span><select id="export-tolerance"><option value="0.05">0.05 — 极高精度</option><option value="0.25" selected>0.25 — 推荐</option><option value="1">1.00 — 较小文件</option><option value="2">2.00 — 快速预览</option></select></label><div id="export-summary" class="export-summary"></div><div class="export-note">.glyph 保存原始高阶曲线；SVG 使用 C、L 路径命令。<br>未闭合轮廓以 1 单位描边导出。</div><div class="dialog-footer"><button class="button secondary" data-close="export-dialog">取消</button><button id="download-svg" class="button primary"><svg><use href="#i-download"/></svg>下载 SVG</button></div></dialog>
+<dialog id="help-dialog" class="help-dialog" aria-labelledby="help-title">
+<div class="dialog-top"><div><span class="eyebrow">HIGHER DEGREE v0.3.1</span><h2 id="help-title">左键落节点，右键塑曲线。</h2></div><button class="icon-button" data-close="help-dialog" aria-label="关闭使用指南"><svg><use href="#i-close"/></svg></button></div>
+<p class="dialog-description">N 个内部控制点对应 N+1 次贝塞尔。上限留空时不限制每段数量；右键始终增加控制点，左键增加轮廓节点。</p>
+<div class="help-steps"><span>左键：起点</span><i>→</i><span class="gold-text">右键：任意控制点</span><i>→</i><span>左键：终点</span></div>
+<p class="help-copy"><strong>P 高阶钢笔</strong>：右键放控制点，左键放节点；设定了上限后，达到上限的右键也可放终点。点击首节点闭合，Enter 结束开放轮廓，Esc 放弃待定控制点。<br><strong>V 节点</strong>：左击曲线插入平滑节点，拖动边缘改形，右击曲线精确升阶添加控制点。Del 真正删除控制点并降阶。普通移动和变换仅影响明确选中的点，未选中的关联柄不移动。<br><strong>A 轮廓 / 构件</strong>：点内部或边缘选全部节点和控制点，Shift 多选；多个轮廓可组合。<br><strong>K 剪刀</strong>：点击节点/边缘剪开；拖线剪开所有交点。</p>
+<p class="help-copy"><strong>画布变换与九宫格</strong><br>选择整个轮廓或至少两个点，即出现变换框。默认拖角/边手柄缩放与拉伸；双击选择内部或轮廓切换为旋转/倾斜，再双击切回。角手柄旋转，边手柄剪切成平行四边形，中心十字可拖动。Shift 等比缩放 / 15° 旋转。<br>九宫格基于所选点的最小轴对齐包围矩形；X/Y 是参考点位置，W/H 是包围尺寸，修改时整组一起变换。中心为包围框中心。自定义中心可输入坐标，点击九宫格恢复预设。原始尺寸为零的方向不能比例拉伸。</p>
+<p class="help-copy"><strong>拖点修饰键</strong><br><b>Alt</b>：平滑节点或其紧邻控制柄沿原三点切线方向移动，未选中点固定；暂停普通吸附。<br><b>Ctrl</b>：任意点相对拖动起点按水平、竖直或斜 45° 移动，不执行共轭约束。<br><b>Shift 或 Ctrl+Alt</b>：仅在<strong>单独选中一个紧邻平滑节点的控制点</strong>时，把该节点的切线方向吸附到 0°/45°/90°，对侧柄联动、共线且保持原长。三键同时按作用相同。先单选该柄再按 Shift 拖动，其他场景 Shift 保留多选功能。<br>选择节点本身或多个点时，Ctrl+Alt 只使用 Ctrl 方向约束，不联动未选中柄。Mac 可用 Cmd 代替 Ctrl。释放共轭键后继续移动会恢复未选中柄，Esc 可取消整次拖动。</p>
+<div class="shortcuts"><span>节点 / 轮廓 / 剪刀<kbd>V / A / K</kbd></span><span>钢笔 / 直线<kbd>P / L</kbd></span><span>矩形 / 椭圆<kbd>R / O</kbd></span><span>平移 / 缩放<kbd>空格拖动 / 滚轮</kbd></span><span>切换变换模式<kbd>双击选择</kbd></span><span>等比 / 15° 旋转<kbd>Shift + 手柄拖动</kbd></span><span>单柄共轭方向吸附<kbd>Shift / Ctrl+Alt</kbd></span><span>沿切线移动<kbd>Alt + 拖点</kbd></span><span>组合 / 解组<kbd>Ctrl G / Ctrl Shift G</kbd></span><span>连接开放端点<kbd>Ctrl J</kbd></span><span>复制 / 剪切 / 粘贴<kbd>Ctrl C / X / V</kbd></span><span>独立复制<kbd>Ctrl D</kbd></span><span>撤销 / 重做<kbd>Ctrl Z / Ctrl Shift Z</kbd></span><span>全选 / 微移<kbd>Ctrl A / 方向键</kbd></span><span>网格 / 网格吸附<kbd>G / S</kbd></span><span>适应画布 / 填充<kbd>0 / Tab</kbd></span><span>保存 / 导入<kbd>Ctrl S / O</kbd></span><span>大步移动<kbd>Shift + 方向键</kbd></span></div>
+<p class="help-copy"><strong>布尔运算</strong><br>用 A 或右侧列表完整选择两个以上闭合轮廓，使用并集、交集、差集、异或。差集从下拉框选定的基底中减去其他形状。多个已组合轮廓作为一个含字腔的形状；需选两个独立构件。高阶段先按容差转成三次，结果可一次撤销。开放路径不能直接参与。</p>
+<p class="help-copy"><strong>文件夹与交换格式</strong><br>支持 .glyph、GLIF 1/2 的 .glif、路径/基本形状 .svg，以及本工具 JSON。SVG 自动按比例适配 700 单位高度；描边按中心线导入，文字、图片、外部资源和蒙版需先展开。<br>导入文件夹后左栏递归列出文件，可收起、搜索或只看修改项。按需解析；切换时各字形保留独立修改、撤销历史和视图。UFO 文件夹可读 contents.plist、fontinfo.plist，引用构件展开为独立轮廓；单文件缺少基字形会报错。<br>保存按钮旁下拉可下载三次 .glyph（本工具 JSON）或标准 .glif（用于跨软件交换），使用与 SVG 同样的转换容差。GLIF 会处理字腔方向，适配常见非零填充。批量 ZIP 可导出全部或修改项，保留目录并附错误报告。ZIP 是字形集合，不是完整 UFO 工程。</p>
+<p class="help-copy help-format"><strong>保存与精度</strong><br>.glyph 保存为 higher-degree-glyph v3，可读旧 Quartic v1/v2。三次 .glyph 仍是本工具格式，不是 Glyphs 的 OpenStep 文件。不限指无单段编辑上限，仍保留单文档 20,000 总点、导入 5 MB 容量保护。保形升阶/分割和三次近似不强行取整。<br>文件夹修改保留于本次会话，关闭前请下载单字形或批量 ZIP；不会自动覆盖原文件。当前字形草稿和偏好仍保存本机，整个文件夹不自动写入本地存储。</p>
+<div class="dialog-footer"><button class="button secondary" id="reset-sample">载入示例 a</button><button class="button primary" data-close="help-dialog">开始创作</button></div></dialog>
+<script src="vendor/paper-core-0.12.18.min.js"></script>
+<script src="vendor/fflate-0.8.2.js"></script>
+<script src="geometry.js"></script>
+<script src="operations.js"></script>
+<script src="transform-box.js"></script>
+<script src="glyph-io.js"></script>
+<script src="path-boolean.js"></script>
+<script src="file-import.js"></script>
+<script src="project-library.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
