@@ -85,6 +85,13 @@
     state.future = timeline.items.slice(timeline.cursor + 1).map(item => G.clone(item.doc)).reverse();
     doc = G.clone(timeline.items[timeline.cursor].doc);
   }
+  function moveTimelineCursor(next) {
+    const origin = item => Number.isFinite(item?.originX) ? item.originX : 0;
+    const shift = origin(timeline.items[next]) - origin(timeline.items[timeline.cursor]);
+    state.view.x += shift * state.view.scale;
+    if (state.pivot) state.pivot.x -= shift;
+    timeline.cursor = next;
+  }
   async function activateHistory(key, fallback = doc) {
     const owner = project, token = switchToken, generation = historyGeneration;
     let saved = null;
@@ -192,7 +199,7 @@
       button.textContent = item.label + ' · ' + new Date(item.time).toLocaleTimeString();
       button.title = new Date(item.time).toLocaleString(); button.onclick = () => {
         if (i === timeline.cursor) return;
-        timeline.cursor = i; loadTimelineIntoState(); finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null;
+        moveTimelineCursor(i); loadTimelineIntoState(); finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null;
         state.history = timeline.items.slice(0, i).map(entry => G.clone(entry.doc));
         state.future = timeline.items.slice(i + 1).map(entry => G.clone(entry.doc)).reverse();
         persist(); renderHistory(); writeTimeline(); update(); setStatus('已跳转到历史步骤');
@@ -235,19 +242,20 @@
     if (!activeContour()) state.contourId = doc.contours[0]?.id || null;
     if (!selectedSegment()) state.segment = null;
   }
-  function record(before, message) {
-    if (JSON.stringify(before) === JSON.stringify(doc)) { update(); return; }
+  function record(before, message, originShift = 0) {
+    if (JSON.stringify(before) === JSON.stringify(doc)) { update(); return false; }
     try { G.validateDocument(doc); }
-    catch (error) { doc = before; finishDrawing(); normalizeSelection(); update(); toast(error.message, true); return; }
+    catch (error) { doc = before; finishDrawing(); normalizeSelection(); update(); toast(error.message, true); return false; }
     state.history.push(before); if (state.history.length > preferences.historyLimit) state.history.shift();
     state.future = []; normalizeSelection(); persist(); setStatus(message); update();
     historyGeneration++;
     const key = historyKey();
     if (!timeline || timeline.key !== key) timeline = { key, label: key.split('/').at(-1), items: [{ doc: G.clone(before), label: '打开字形', time: Date.now() }], cursor: 0 };
     timeline.items.splice(timeline.cursor + 1);
-    timeline.items.push({ doc: G.clone(doc), label: message, time: Date.now() }); timeline.cursor = timeline.items.length - 1;
+    const originX = (timeline.items[timeline.cursor].originX || 0) + originShift;
+    timeline.items.push({ doc: G.clone(doc), label: message, time: Date.now(), originX }); timeline.cursor = timeline.items.length - 1;
     if (timeline.items.length > preferences.historyLimit + 1) { timeline.items.shift(); timeline.cursor--; }
-    renderHistory(); writeTimeline();
+    renderHistory(); writeTimeline(); return true;
   }
   function edit(message, action) {
     const before = G.clone(doc);
@@ -259,14 +267,14 @@
     if (!state.history.length) return;
     state.future.push(G.clone(doc)); doc = state.history.pop(); finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null;
     historyGeneration++;
-    if (timeline?.key === historyKey()) { timeline.cursor = Math.max(0, timeline.cursor - 1); writeTimeline(); renderHistory(); }
+    if (timeline?.key === historyKey()) { moveTimelineCursor(Math.max(0, timeline.cursor - 1)); writeTimeline(); renderHistory(); }
     normalizeSelection(); persist(); update(); setStatus('已撤销');
   }
   function redo() {
     if (!state.future.length) return;
     state.history.push(G.clone(doc)); doc = state.future.pop(); finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null;
     historyGeneration++;
-    if (timeline?.key === historyKey()) { timeline.cursor = Math.min(timeline.items.length - 1, timeline.cursor + 1); writeTimeline(); renderHistory(); }
+    if (timeline?.key === historyKey()) { moveTimelineCursor(Math.min(timeline.items.length - 1, timeline.cursor + 1)); writeTimeline(); renderHistory(); }
     normalizeSelection(); persist(); update(); setStatus('已重做');
   }
   function update() { updateUI(); requestDraw(); }
@@ -337,7 +345,7 @@
         line(ctx, { x: 24, y }, { x: w, y }); ctx.setLineDash([]);
         ctx.fillStyle = color === '#bba4d8' ? '#ad91c8' : '#bdb0cb'; ctx.fillText(name + '  ' + value, 35, y - 6);
       }
-      for (const [x, name, color] of [[G.bounds(doc).minX, '左边距', preferences.contrast ? '#0057b8' : '#b89dd5'], [doc.glyph.advanceWidth, '右边距', preferences.contrast ? '#b34c00' : '#d4c9e1']]) {
+      for (const [x, name, color] of [[0, '左边距', preferences.contrast ? '#0057b8' : '#b89dd5'], [doc.glyph.advanceWidth, '右边距', preferences.contrast ? '#b34c00' : '#d4c9e1']]) {
         ctx.strokeStyle = color; ctx.lineWidth = .9; ctx.setLineDash([3, 5]);
         const p = screen({ x, y: 0 }); line(ctx, { x: p.x, y: 24 }, { x: p.x, y: h }); ctx.setLineDash([]);
         ctx.font = '9px Consolas, monospace'; ctx.fillStyle = color; ctx.fillText(name, p.x + 3, 36);
@@ -577,12 +585,12 @@
     return best;
   }
   function hitMetric(q) {
-    if (state.fill || state.tool !== 'select') return null;
-    const b = G.bounds(doc), candidates = [
-      { key: 'leftBearing', distance: Math.abs(q.x - screen({ x: b.minX, y: 0 }).x) },
+    if (state.fill || state.tool !== 'select' || q.x < 24 || q.y < 24 || q.x > state.width || q.y > state.height) return null;
+    const candidates = [
+      { key: 'leftBearing', distance: Math.abs(q.x - screen({ x: 0, y: 0 }).x) },
       { key: 'rightBearing', distance: Math.abs(q.x - screen({ x: doc.glyph.advanceWidth, y: 0 }).x) },
       ...['ascender', 'capHeight', 'xHeight', 'descender'].map(key => ({ key, distance: Math.abs(q.y - screen({ x: 0, y: doc.glyph[key] }).y) }))
-    ].filter(item => item.distance <= 8 && (['ascender', 'capHeight', 'xHeight', 'descender'].includes(item.key) || q.y <= 42));
+    ].filter(item => item.distance <= 8);
     if (!candidates.length) return null;
     return candidates.sort((a, b) => a.distance - b.distance)[0].key;
   }
@@ -693,7 +701,7 @@
     if (state.tool === 'rect' || state.tool === 'ellipse') { state.drag = { type: 'shape', start: q, current: q }; return; }
     if (event.button === 0) {
       const metric = !hitPoint(q) && !hitSegment(q) ? hitMetric(q) : null;
-      if (metric) { state.drag = { type: 'metric', key: metric, start: fontPoint(q), before: G.clone(doc) }; return; }
+      if (metric) { state.drag = { type: 'metric', key: metric, start: q, before: G.clone(doc), view: { ...state.view }, fitMode: state.fitMode, oldPivot: state.pivot && { ...state.pivot }, originShift: 0 }; return; }
     }
     const hit = hitPoint(q);
     if (event.button === 0 && hit && state.tool === 'select' && !state.components.size && state.selected.has(hit.point.id)) {
@@ -725,16 +733,20 @@
   });
   canvas.addEventListener('pointermove', event => {
     const q = eventPoint(event); state.pointer = q; const p = fontPoint(q);
-    if (!state.drag) { const metric = hitMetric(q); canvas.style.cursor = metric ? metric.endsWith('Bearing') ? 'ew-resize' : 'ns-resize' : ''; }
+    if (!state.drag) {
+      const candidate = hitMetric(q), metric = candidate && !hitFrame(q) && !hitPoint(q) && !hitSegment(q) ? candidate : null;
+      canvas.style.cursor = metric ? metric.endsWith('Bearing') ? 'ew-resize' : 'ns-resize' : '';
+    }
     $('pointer-coordinate').textContent = 'X ' + rounded(p.x) + '   Y ' + rounded(p.y);
     const drag = state.drag;
     if (drag?.type === 'metric') {
-      const target = fontPoint(q), dx = target.x - drag.start.x, dy = target.y - drag.start.y; doc = G.clone(drag.before);
-      if (drag.key === 'leftBearing') {
-        const shift = Math.max(-1e6, Math.min(1e6, dx));
-        G.allPoints(doc).forEach(({ point: pt }) => { pt.x = Math.max(-1e6, Math.min(1e6, pt.x + shift)); });
-        doc.glyph.advanceWidth = Math.max(0, Math.min(100000, doc.glyph.advanceWidth + shift));
-      } else if (drag.key === 'rightBearing') doc.glyph.advanceWidth = Math.max(0, Math.min(100000, drag.before.glyph.advanceWidth + dx));
+      const dx = (q.x - drag.start.x) / drag.view.scale, dy = -(q.y - drag.start.y) / drag.view.scale; doc = G.clone(drag.before);
+      if (drag.key.endsWith('Bearing')) {
+        drag.originShift = G.moveSideBearing(doc, drag.key, dx);
+        state.view = { ...drag.view, x: drag.view.x + drag.originShift * drag.view.scale };
+        state.pivot = drag.oldPivot && { ...drag.oldPivot, x: drag.oldPivot.x - drag.originShift };
+        state.fitMode = false;
+      }
       else {
         let value = drag.before.glyph[drag.key] + dy;
         if (drag.key === 'ascender') value = Math.max(1, drag.before.glyph.capHeight, value);
@@ -789,14 +801,20 @@
     if (!drag && state.drawing) snapPoint(p, event);
     if (drag || state.drawing) requestDraw();
   });
+  function cancelDrag(drag) {
+    if (drag?.before) doc = drag.before;
+    if (drag?.type === 'pivot' || drag?.type === 'metric') state.pivot = drag.oldPivot;
+    if (drag?.type === 'metric') { state.view = { ...drag.view }; state.fitMode = drag.fitMode; }
+    state.constraintGuide = null; update();
+  }
   function endPointer(event, cancelled = false) {
     const drag = state.drag; state.drag = null;
     if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
     if (!drag) return;
     state.constraintGuide = null;
-    if (cancelled) { if (drag.before) doc = drag.before; if (drag.type === 'pivot') state.pivot = drag.oldPivot; update(); return; }
+    if (cancelled) { cancelDrag(drag); return; }
     if (drag.type === 'frame') record(drag.before, drag.mode === 'scale' ? '已拉伸 / 缩放选择' : '已旋转 / 倾斜选择');
-    if (drag.type === 'metric') record(drag.before, '已调整字形度量');
+    if (drag.type === 'metric' && !record(drag.before, '已调整字形度量', drag.originShift)) cancelDrag(drag);
     if (drag.type === 'points') record(drag.before, '已移动节点');
     if (drag.type === 'curve') {
       if (drag.moved) record(drag.before, '已拖动曲线边缘调整形状');
@@ -1094,7 +1112,7 @@
       const batch = await project.exportFiles({ mode, changedOnly, tolerance, progress: (n, total) => { $('project-export-summary').textContent = `正在转换 ${n} / ${total}…`; } });
       const encoder = new TextEncoder(), files = Object.create(null);
       batch.files.forEach(file => { files[file.path] = encoder.encode(file.text); });
-      const report = { application: 'higher-degree-glyph-designer', version: '0.3.1', mode, tolerance, exportedFiles: batch.files.map(f => f.path), skipped: batch.errors, note: '字形集合，不是完整 UFO 工程；修改原始高阶数据请保存 native .glyph。' };
+      const report = { application: 'higher-degree-glyph-designer', version: '0.4.1', mode, tolerance, exportedFiles: batch.files.map(f => f.path), skipped: batch.errors, note: '字形集合，不是完整 UFO 工程；修改原始高阶数据请保存 native .glyph。' };
       let reportPath = '_higher-degree-export-report.json'; while (files[reportPath]) reportPath = '_' + reportPath;
       files[reportPath] = encoder.encode(JSON.stringify(report, null, 2));
       const zipped = await new Promise((resolve, reject) => fflate.zip(files, { level: 6 }, (error, data) => error ? reject(error) : resolve(data)));
@@ -1413,7 +1431,7 @@
     }
     if (event.key === ' ') { event.preventDefault(); state.space = true; updateHint(); return; }
     if (state.drag) {
-      if (key === 'escape') { if (state.drag.before) doc = state.drag.before; if (state.drag.type === 'pivot') state.pivot = state.drag.oldPivot; state.constraintGuide = null; state.drag = null; update(); } return;
+      if (key === 'escape') { const drag = state.drag; state.drag = null; cancelDrag(drag); } return;
     }
     if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown'].includes(key) && state.selected.size) {
       event.preventDefault(); const step = event.shiftKey ? 10 : 1, dx = key === 'arrowleft' ? -step : key === 'arrowright' ? step : 0, dy = key === 'arrowup' ? step : key === 'arrowdown' ? -step : 0;
@@ -1430,14 +1448,14 @@
     const tools = { [preferences.shortcuts.select]: 'select', [preferences.shortcuts.component]: 'component', [preferences.shortcuts.knife]: 'knife', [preferences.shortcuts.pen]: 'pen', [preferences.shortcuts.line]: 'line', r: 'rect', o: 'ellipse', h: 'hand' }; if (!mod && !event.shiftKey && !event.altKey && tools[key]) setTool(tools[key]);
   });
   window.addEventListener('keyup', event => { if (event.key === ' ') { state.space = false; updateHint(); } });
-  window.addEventListener('blur', () => { state.space = false; if (state.drag?.before) doc = state.drag.before; if (state.drag?.type === 'pivot') state.pivot = state.drag.oldPivot; state.constraintGuide = null; state.drag = null; update(); });
+  window.addEventListener('blur', () => { state.space = false; const drag = state.drag; state.drag = null; cancelDrag(drag); });
   window.addEventListener('dragover', event => { if (event.dataTransfer.types.includes('Files')) { event.preventDefault(); event.dataTransfer.dropEffect = 'copy'; } });
   window.addEventListener('drop', event => { if (event.dataTransfer.files.length) { event.preventDefault(); importFile(event.dataTransfer.files[0]); } });
   window.addEventListener('beforeunload', event => { captureProject(); try { localStorage.setItem(storageKey, G.serialize(doc)); } catch (_) {} if (project?.pendingCount) { event.preventDefault(); event.returnValue = ''; } });
   applyPreferences();
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (preferences.theme === 'system') { applyPreferences(); requestDraw(); } });
   new ResizeObserver(resize).observe(container);
-  window.HigherDegreeEditor = Object.freeze({ version: '0.4.0', getDocument: () => G.clone(doc) });
+  window.HigherDegreeEditor = Object.freeze({ version: '0.4.1', getDocument: () => G.clone(doc) });
   window.QuarticEditor = window.HigherDegreeEditor;
   update();
   renderLibrary();

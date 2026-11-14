@@ -1,6 +1,6 @@
 {
   "name": "higher-degree-glyph-designer",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": true,
   "description": "An offline higher-degree single-glyph editor with interactive transforms",
   "license": "MIT",

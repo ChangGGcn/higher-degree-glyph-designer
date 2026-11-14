@@ -3,6 +3,24 @@
   'use strict';
   const { point, uid, mix, distance, evaluate, segmentPoints } = G;
   const duplicatePoint = p => ({ ...p, id: uid() });
+  // Shift the left metric origin; the caller compensates its canvas view by
+  // the returned amount. All points keep their shape and the right bearing.
+  function moveSideBearing(doc, side, delta) {
+    if (!Number.isFinite(delta) || !['leftBearing', 'rightBearing'].includes(side)) throw new Error('无效的边距调整');
+    const width = doc.glyph.advanceWidth;
+    if (side === 'rightBearing') {
+      doc.glyph.advanceWidth = Math.max(0, Math.min(100000, width + delta));
+      return 0;
+    }
+    const points = G.allPoints(doc).map(entry => entry.point);
+    let lower = width - 100000, upper = width;
+    for (const p of points) { lower = Math.max(lower, p.x - 1e6); upper = Math.min(upper, p.x + 1e6); }
+    const shift = Math.max(lower, Math.min(upper, delta));
+    points.forEach(p => { p.x -= shift; });
+    doc.glyph.advanceWidth = width - shift;
+    return shift;
+  }
+  G.moveSideBearing = moveSideBearing;
   function addControl(contour, index, maximum = null) {
     const segment = contour.segments[index];
     if (maximum !== null && segment.controls.length >= maximum) return null;
