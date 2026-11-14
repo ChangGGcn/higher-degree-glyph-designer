@@ -1,0 +1,5 @@
+node_modules/
+test-artifacts/
+*.log
+*.zip
+NotoSansSymbols2-Regular.otf

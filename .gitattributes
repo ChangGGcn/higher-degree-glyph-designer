@@ -1,0 +1,4 @@
+* text=auto eol=lf
+# Vendored artifacts are verified against the exact downloaded bytes.
+vendor/*.js -text
+vendor/*LICENSE.txt -text
