@@ -20,4 +20,15 @@ The standalone HTML embeds the following fixed versions. They execute locally an
 - License: MIT; see `vendor/fflate-LICENSE.txt`.
 - Copyright (c) 2023 Arjun Barrett.
 
+## Noto Sans Symbols 2 v2.008 icon outlines
+
+- Purpose: source outlines for a small set of UI icons, exported to SVG and embedded in the application.
+- Project: https://github.com/notofonts/symbols
+- Copyright: Copyright 2022 The Noto Project Authors.
+- License: SIL Open Font License 1.1; see `assets/Noto-Sans-Symbols-OFL.txt`.
+- Source glyphs: U+003F, U+2316, U+25A6, U+25AD, U+2702, U+270B, U+2712, U+2715, U+27A1, U+2B2D, U+1F5C1.
+- Derived asset: `assets/noto-symbols.svg`.
+
+The original OTF is not distributed. The SVG contains only the converted outline paths used by the interface.
+
 `vendor/checksums.json` records the SHA-256 hashes of the bundled files. No external font editor source code is bundled. The higher-degree model, conversion, file adapters, editor interaction and project state modules are maintained in this repository.

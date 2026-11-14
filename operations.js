@@ -11,6 +11,33 @@
     segment.type = G.typeForControls(segment.controls.length);
     return segment.controls[Math.floor(segment.controls.length / 2)];
   }
+  function reduceDegreeOne(points) {
+    const degree = points.length - 1;
+    if (degree < 2) throw new Error('直线不能再降阶');
+    const forward = Array(degree), backward = Array(degree);
+    forward[0] = { ...points[0] }; backward[degree - 1] = { ...points[degree] };
+    for (let i = 1; i < degree; i++) {
+      const t = i / degree, prior = forward[i - 1], p = points[i];
+      forward[i] = { x: (p.x - t * prior.x) / (1 - t), y: (p.y - t * prior.y) / (1 - t) };
+    }
+    for (let i = degree - 1; i > 0; i--) {
+      const t = i / degree, next = backward[i];
+      backward[i - 1] = { x: (points[i].x - (1 - t) * next.x) / t, y: (points[i].y - (1 - t) * next.y) / t };
+    }
+    const reduced = [points[0], ...Array.from({ length: degree - 2 }, (_, j) => ({
+      x: (forward[j + 1].x + backward[j + 1].x) / 2,
+      y: (forward[j + 1].y + backward[j + 1].y) / 2
+    })), points.at(-1)];
+    // Degree elevation is repeated once; the difference polygon gives a conservative bound.
+    let elevatedPoints = reduced.map(p => ({ x: p.x, y: p.y }));
+    const n = elevatedPoints.length - 1;
+    elevatedPoints = [elevatedPoints[0], ...elevatedPoints.slice(1).map((p, i) => ({
+      x: p.x * (1 - (i + 1) / (n + 1)) + elevatedPoints[i].x * (i + 1) / (n + 1),
+      y: p.y * (1 - (i + 1) / (n + 1)) + elevatedPoints[i].y * (i + 1) / (n + 1)
+    })), elevatedPoints.at(-1)];
+    const error = Math.max(...points.map((p, i) => Math.hypot(p.x - elevatedPoints[i].x, p.y - elevatedPoints[i].y)));
+    return { points: reduced, error };
+  }
   function removeControls(doc, ids) {
     for (const c of doc.contours) c.segments.forEach(s => {
       s.controls = s.controls.filter(p => !ids.has(p.id)); s.type = G.typeForControls(s.controls.length);
@@ -234,6 +261,6 @@
       if (direction > 1e-9) { target.x = node.x - (source.x - node.x) / direction * length; target.y = node.y - (source.y - node.y) / direction * length; }
     });
   }
-  Object.assign(G, { addControl, removeControls, nearestPoint, reshapeSegment, cutAtNode, cutAtParameter, polynomialRoots, bernsteinRoots, lineIntersections, extremaParameters, addExtrema, cutWithLine, joinEndpoints, setStartPoint, pointBounds, transformPoints, snapPosition, preserveSmooth });
+  Object.assign(G, { addControl, reduceDegreeOne, removeControls, nearestPoint, reshapeSegment, cutAtNode, cutAtParameter, polynomialRoots, bernsteinRoots, lineIntersections, extremaParameters, addExtrema, cutWithLine, joinEndpoints, setStartPoint, pointBounds, transformPoints, snapPosition, preserveSmooth });
   if (typeof module !== 'undefined' && module.exports) module.exports = G;
 })(typeof module !== 'undefined' && module.exports ? require('./geometry') : globalThis.QuarticGeometry);

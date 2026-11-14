@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f7f7fa">
-  <title>Higher Degree — 高阶曲线字形设计器 v0.3.1</title>
+  <title>Higher Degree — 高阶曲线字形设计器 v0.4.0</title>
   <style>
 @charset "UTF-8";
-:root{--paper:#fff;--bg:#f6f6f9;--canvas:#f7f7fa;--ink:#24232c;--muted:#98959f;--line:#e9e8ee;--accent:#7657d6;--accent-soft:#eee9fb;--gold:#c58e38;--shadow:0 5px 18px #28203709;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;color:var(--ink);font-size:13px;font-synthesis:none}
+:root{--paper:#fff;--bg:#f6f6f9;--canvas:#f7f7fa;--ink:#24232c;--muted:#98959f;--line:#e9e8ee;--accent:#7657d6;--accent-soft:#eee9fb;--gold:#c58e38;--brand-bg:#24232c;--shadow:0 5px 18px #28203709;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;color:var(--ink);font-size:13px;font-synthesis:none}
 *{box-sizing:border-box}body{margin:0;overflow:hidden;background:var(--bg)}button,input,select{font:inherit}button,a,input,select,summary{-webkit-tap-highlight-color:transparent}button{cursor:pointer;color:inherit}button:disabled{cursor:default;opacity:.32}button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}input:focus,select:focus{outline:0;border-color:#a38bde;box-shadow:0 0 0 3px #7657d614}button{border:0;background:none}svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}.icon-definitions{position:absolute;width:0;height:0;overflow:hidden}button svg{pointer-events:none}[hidden]{display:none!important}
-.app-header{height:72px;display:flex;align-items:center;padding:0 26px;gap:24px;background:var(--paper);border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-size:25px;font-weight:720;letter-spacing:-1px}.brand-mark{display:inline-flex;position:relative;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:var(--ink);color:#fff;font-family:Georgia,serif;font-size:26px;font-weight:400}.brand-mark>span{position:absolute;right:4px;top:2px;font:9px monospace;color:#cabaf8}.brand-dot{color:var(--accent)}.header-divider{height:22px;width:1px;background:var(--line)}.app-description{font-size:12px;color:#86838e;letter-spacing:.8px}.header-actions{margin-left:auto;display:flex;align-items:center;gap:10px}.quiet,.button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:36px;padding:8px 13px;border-radius:7px;font-size:12px;font-weight:520;white-space:nowrap}.quiet:hover{background:var(--bg)}.button.primary{background:var(--ink);color:white;border:1px solid var(--ink)}.button.primary:hover{background:#423651}.button.secondary{background:white;border:1px solid #dedce5}.button.secondary:hover{background:var(--bg)}.button svg{width:15px;height:15px}.document-bar{height:44px;background:#f2f1f6;display:flex;align-items:center;border-bottom:1px solid var(--line);padding-right:18px}.document-tab{margin-left:68px;height:44px;min-width:173px;display:flex;align-items:center;gap:8px;padding:0 17px;background:#fafafd;border-inline:1px solid var(--line);border-top:2px solid var(--accent);font-size:12px}.document-tab svg{color:var(--accent);width:16px}.extension{margin-left:-6px;color:#8c8994}.tab-dot{width:5px;height:5px;background:#b9b4c7;border-radius:50%;margin-left:auto}.save-status{margin-left:20px;font-size:10px;color:#9994a4;display:flex;align-items:center;gap:6px}.save-status>span{width:5px;height:5px;border-radius:50%;background:#92a996}.document-actions{margin-left:auto;display:flex;align-items:center;gap:8px}.icon-button{height:29px;width:29px;display:inline-flex;align-items:center;justify-content:center;border-radius:5px;color:#85808f}.icon-button:hover{background:#eae7f1;color:var(--ink)}.icon-button svg{width:16px;height:16px}.icon-button.is-on{background:var(--accent-soft);color:var(--accent)}.small-divider{height:15px;width:1px;background:#dedbe5;display:inline-block;margin:0 4px}
+.app-header{height:72px;display:flex;align-items:center;padding:0 26px;gap:24px;background:var(--paper);border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-size:25px;font-weight:720;letter-spacing:-1px}.brand-mark{display:inline-flex;position:relative;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:var(--brand-bg);color:#fff;font-family:Georgia,serif;font-size:26px;font-weight:400}.brand-mark>span{position:absolute;right:4px;top:2px;font:9px monospace;color:#cabaf8}.brand-dot{color:var(--accent)}.header-divider{height:22px;width:1px;background:var(--line)}.app-description{font-size:12px;color:#86838e;letter-spacing:.8px}.header-actions{margin-left:auto;display:flex;align-items:center;gap:10px}.quiet,.button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:36px;padding:8px 13px;border-radius:7px;font-size:12px;font-weight:520;white-space:nowrap}.quiet:hover{background:var(--bg)}.button.primary{background:var(--ink);color:white;border:1px solid var(--ink)}.button.primary:hover{background:#423651}.button.secondary{background:white;border:1px solid #dedce5}.button.secondary:hover{background:var(--bg)}.button svg{width:15px;height:15px}.document-bar{height:44px;background:#f2f1f6;display:flex;align-items:center;border-bottom:1px solid var(--line);padding-right:18px}.document-tab{margin-left:68px;height:44px;min-width:173px;display:flex;align-items:center;gap:8px;padding:0 17px;background:#fafafd;border-inline:1px solid var(--line);border-top:2px solid var(--accent);font-size:12px}.document-tab svg{color:var(--accent);width:16px}.extension{margin-left:-6px;color:#8c8994}.tab-dot{width:5px;height:5px;background:#b9b4c7;border-radius:50%;margin-left:auto}.save-status{margin-left:20px;font-size:10px;color:#9994a4;display:flex;align-items:center;gap:6px}.save-status>span{width:5px;height:5px;border-radius:50%;background:#92a996}.document-actions{margin-left:auto;display:flex;align-items:center;gap:8px}.icon-button{height:29px;width:29px;display:inline-flex;align-items:center;justify-content:center;border-radius:5px;color:#85808f}.icon-button:hover{background:#eae7f1;color:var(--ink)}.icon-button svg{width:16px;height:16px}.icon-button.is-on{background:var(--accent-soft);color:var(--accent)}.small-divider{height:15px;width:1px;background:#dedbe5;display:inline-block;margin:0 4px}
 .workspace{display:flex;height:calc(100dvh - 146px);min-height:400px}.tool-rail{width:68px;flex-shrink:0;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:9px;padding-top:18px}.tool{position:relative;width:42px;height:42px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#777280}.tool>svg{width:20px;height:20px}.tool>span{position:absolute;right:4px;bottom:3px;font:8px monospace;color:#aaa6b1}.tool:hover{background:var(--bg)}.tool.active{color:var(--accent);background:var(--accent-soft)}.tool.active>span{color:#a38bd8}.rail-divider{height:1px;width:25px;background:var(--line);margin:4px 0}.rail-bottom{margin-top:auto;padding-bottom:22px;color:#b4aebf}.degree-mark{font-size:20px;font-family:Georgia,serif;font-style:italic}.degree-mark sup{font-size:12px}.canvas-area{flex:1;min-width:0;display:flex;flex-direction:column}.canvas-toolbar{height:53px;min-height:53px;display:flex;align-items:center;padding:0 24px;border-bottom:1px solid var(--line);background:#fafafd}.breadcrumb{display:flex;align-items:center;gap:13px;font-size:11px;color:#8f8999}.breadcrumb strong{color:var(--ink);font-size:14px}.slash{color:#c4bfce}.unicode-label{font:10px "Cascadia Code",Consolas,monospace;letter-spacing:.5px;background:#efedf4;padding:3px 6px;border-radius:4px;color:#9991a6}.view-options{display:flex;align-items:center;margin-left:auto;gap:8px}.control-toggle{display:flex;gap:6px;align-items:center;font-size:11px;color:#898292;cursor:pointer}.control-toggle input{accent-color:var(--accent);height:12px;width:12px;margin:0}.canvas-container{position:relative;flex:1;min-height:0;overflow:hidden;background:var(--canvas)}#editor{display:block;touch-action:none;width:100%;height:100%;outline:0}.canvas-caption{position:absolute;top:44px;left:49px;display:flex;flex-direction:column;gap:9px;pointer-events:none;color:#aba4b6;font-size:11px}.eyebrow{font-size:9px;letter-spacing:2.1px;font-weight:650;color:#9b90ac}.canvas-caption .eyebrow{color:#ada5b9;font-size:8px}.canvas-bottom{position:absolute;bottom:23px;left:27px;right:27px;display:flex;justify-content:space-between;pointer-events:none}.canvas-bottom>div{pointer-events:auto}.mode-switch,.zoom-controls{height:35px;background:#fff;border:1px solid #e5e1ec;box-shadow:var(--shadow);border-radius:8px;display:flex;align-items:center;padding:3px}.mode-switch button{height:27px;width:56px;border-radius:5px;font-size:11px;color:#96909e}.mode-switch .selected{background:var(--accent-soft);color:var(--accent);font-weight:600}.zoom-controls button{height:27px;min-width:28px;color:#81788f;border-radius:4px}.zoom-controls button:hover{background:var(--bg)}.zoom-controls #zoom-label{font:10px Consolas,monospace;min-width:45px}.zoom-controls svg{width:14px;height:14px;vertical-align:middle}.zoom-controls>span{width:1px;height:13px;background:var(--line);margin:0 5px}.context-hint{height:33px;min-height:33px;display:flex;gap:8px;align-items:center;padding:0 21px;background:#fafafd;border-top:1px solid var(--line);font-size:10px;color:#a09aa9}.hint-indicator{width:4px;height:4px;background:#b5a4d6;border-radius:50%}.coordinate{margin-left:auto;font-family:Consolas,monospace;white-space:nowrap;color:#9e94ae}.empty-state{position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);text-align:center;width:85%;max-width:400px;pointer-events:none}.empty-state button{pointer-events:auto}.empty-symbol{font:72px Georgia,serif;color:#bdb4d0}.empty-state h2{font-size:20px;font-weight:500;margin:16px 0 12px}.empty-state p{color:#9b91a7;font-size:12px;line-height:1.8}.empty-state .button{margin-top:14px}.empty-state .button span{margin-left:30px;color:#b6a8d3}.text-button{display:block;font-size:11px;color:var(--accent);margin:15px auto}.inspector{width:280px;flex-shrink:0;background:#fff;border-left:1px solid var(--line);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#dfdae8 transparent}.inspector-title{height:53px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--line)}.inspector-title h1{font-size:12px;margin:0;font-weight:650;letter-spacing:.5px}.badge{font-size:8px;letter-spacing:1.1px;color:var(--accent);background:var(--accent-soft);padding:4px 6px;border-radius:3px;font-weight:650}.inspector-section{padding:20px;border-bottom:1px solid var(--line)}.field-row{display:flex;gap:12px;margin-bottom:14px}.field-row:last-child{margin-bottom:0}.field-row>label{flex:1;min-width:0;font-size:10px;color:#968e9f;line-height:1.5}.field-row input{margin-top:6px;width:100%;border:1px solid #e9e6ee;background:#faf9fc;border-radius:5px;height:31px;padding:0 9px;color:#55505f;font-size:12px;font-family:"Cascadia Code",Consolas,"Microsoft YaHei",monospace;transition:box-shadow .15s}.field-row input:hover{border-color:#d1cbdc}input[type=number]{-moz-appearance:textfield}input::-webkit-inner-spin-button{opacity:0}input:hover::-webkit-inner-spin-button{opacity:1}.input-prefix{position:relative;display:block}.input-prefix>span{position:absolute;top:15px;left:8px;font:10px Consolas,monospace;color:#aaa2b5}.input-prefix input{padding-left:26px}.metrics-details{margin-top:15px}.metrics-details summary{cursor:pointer;font-size:10px;color:#a29aa9;list-style:none;display:flex;justify-content:space-between}.metrics-details summary::-webkit-details-marker{display:none}.metrics-details[open] summary{margin-bottom:12px}.section-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.section-heading h2{font-size:11px;font-weight:600;margin:0;letter-spacing:.4px}.muted{font-size:9px;color:#a49baD}.point-empty{font-size:11px;color:#b4acbe;line-height:1.7;padding:5px 0}.point-type{display:flex;align-items:center;gap:7px;margin-bottom:14px}.point-dot{width:7px;height:7px;background:var(--gold);transform:rotate(45deg);border-radius:1px}.point-type strong{font-size:10px;color:#81758e;font-weight:500}.point-symbol{font:11px Georgia,serif;margin-left:auto;color:#ab8e59;background:#faf5eb;padding:3px 6px;border-radius:3px}.coordinate-input{position:relative}.coordinate-input>span{position:absolute;left:10px;top:15px;color:#aaa1b6;font:10px Consolas,monospace}.coordinate-input input{padding-left:27px}.curve-info{display:flex;gap:10px;align-items:center;background:#f8f6fc;padding:12px 10px;border:1px solid #eee9f5;border-radius:6px;margin:12px 0}.curve-info svg{color:var(--accent);width:22px;height:22px}.curve-info strong{font-size:10px;font-weight:500;color:#89739f;display:block}.curve-info div>span{font-size:8px;color:#b1a4bf;display:block;margin-top:5px}.curve-degree{font:18px Georgia,serif;font-style:italic;color:#ac97c5;margin-left:auto}.button-pair{display:flex;gap:8px}.button-pair button{flex:1}.small-button{font-size:10px;color:#9b91a6;border:1px solid #e7e2ed;border-radius:5px;min-height:27px;padding:5px 8px}.small-button:hover{background:#f5f2f9;color:var(--accent)}.full-width{width:100%;margin-top:12px}.count-badge{border:1px solid var(--line);font-size:9px;color:#a59bad;padding:1px 5px;border-radius:4px}.contour-list{display:flex;flex-direction:column;gap:5px;max-height:180px;overflow:auto}.contour-item{display:flex;align-items:center;gap:9px;text-align:left;height:34px;border:1px solid transparent;padding:6px 9px;border-radius:5px;font-size:10px;width:100%;color:#8f819e}.contour-item:hover{background:#f9f7fc}.contour-item.active{background:#f5f1fc;border-color:#ece5f7;color:#8a6eac}.contour-icon{width:14px;height:14px;display:block;border:1px solid #baa9cf;border-radius:50%}.contour-item>span:nth-child(3){margin-left:auto;font-size:8px;color:#b8adC4}.contour-actions{display:flex;gap:6px;margin-top:10px;align-items:center}.contour-actions>.small-button{margin-right:auto}.danger:hover{color:#c05f6c;background:#fff1f2}.preview-section{border-bottom:0}.preview-box{position:relative;height:140px;border-radius:7px;background:#f5f4f8;overflow:hidden}.preview-box canvas{display:block;width:100%;height:100%}.preview-box>span{position:absolute;bottom:10px;left:12px;font-size:8px;color:#b8afc0;letter-spacing:.5px}.preview-foot{display:flex;justify-content:space-between;font-size:8px;color:#b6aebf;margin-top:11px}.inspector-footer{padding:12px 20px 20px;font-size:8px;color:#bcb5c5;display:flex;align-items:center;gap:6px}.local-dot{width:4px;height:4px;border-radius:50%;background:#b1bfae}.status-bar{height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 17px;background:#fff;border-top:1px solid var(--line);font-size:9px;color:#aaa1b5}.status-bar>span:first-child{display:flex;align-items:center;gap:6px}.status-dot{width:5px;height:5px;background:#9caf9b;border-radius:50%}.status-middle{font-size:8px;letter-spacing:.7px}.status-middle>span{padding:0 10px;color:#b9afd0}.status-bar>button{font-size:9px;color:#a59aad}.status-bar kbd{font:9px monospace;margin-left:6px;background:#f7f5f9;padding:2px 5px;border:1px solid #eee9f2;border-radius:3px}
 .toast{position:fixed;left:50%;bottom:55px;transform:translateX(-50%);background:#2e273d;color:#f8f4ff;padding:12px 20px;border-radius:8px;box-shadow:0 10px 35px #29203725;z-index:50;font-size:12px;max-width:85vw;line-height:1.6}.toast.error{background:#944956}dialog{border:1px solid #e6e0ef;border-radius:16px;padding:30px;width:450px;max-width:calc(100vw - 32px);color:var(--ink);box-shadow:0 25px 100px #21192b25}dialog::backdrop{background:#24203055;backdrop-filter:blur(3px)}.dialog-top{display:flex;justify-content:space-between;align-items:flex-start}.dialog-top h2{font-size:22px;letter-spacing:-.5px;font-weight:550;margin:12px 0 4px}.dialog-top>.icon-button{margin:-10px -10px 0 15px}.dialog-description{font-size:12px;line-height:1.9;color:#9a8ca7;margin:18px 0 24px}.export-label{font-size:12px;display:block}.export-label>span{float:right;font-size:10px;color:#ac9db7}.export-label select{display:block;width:100%;border:1px solid #ddd4e7;border-radius:7px;background:#faf8fd;padding:11px;margin:12px 0 18px;color:#776289}.export-summary{padding:15px;background:#f5f0fc;border:1px solid #eae1f5;border-radius:7px;line-height:1.9;font-size:11px;color:#9876b5}.export-note{color:#ac9fb7;font-size:10px;line-height:1.9;margin-top:17px}.dialog-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:25px}.help-dialog{width:620px;max-height:90dvh;overflow:auto}.help-steps{display:flex;align-items:center;justify-content:space-between;background:#f7f3fc;padding:15px 10px;font-size:11px;color:#9b81b6;border:1px solid #eae2f2;border-radius:7px}.help-steps i{font-style:normal;color:#cbbbdc}.gold-text{color:var(--gold)}.help-copy{font-size:11px;color:#a18eaf;line-height:1.9;margin:16px 0}.shortcuts{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;margin:24px 0}.shortcuts>span{display:flex;align-items:center;justify-content:space-between;font-size:10px;color:#9d8dab}.shortcuts kbd{font:9px Consolas,"Microsoft YaHei",monospace;color:#b2a1bf;background:#f9f6fc;border:1px solid #eee6f3;border-radius:3px;padding:3px 5px}.help-format{border-top:1px solid var(--line);padding-top:16px;font-size:10px}
 @media(min-width:1500px){.inspector{width:300px}.inspector-section{padding:22px 24px}.inspector-title{padding-inline:24px}.preview-box{height:170px}.tool-rail{width:72px}.document-tab{margin-left:72px}}
@@ -35,6 +35,53 @@
 @media(max-width:800px){.document-tab{margin-left:85px}.glyph-library:not(.collapsed){position:absolute;top:104px;bottom:30px;left:0;width:230px;z-index:15;box-shadow:8px 0 30px #37244115}.glyph-library.collapsed{flex-basis:28px;width:28px}.library-heading{padding:0}.library-heading>.icon-button{width:27px}.header-actions .quiet{padding:5px}.save-options-button{padding:6px!important}}
 @media(max-width:600px){.glyph-library.collapsed{height:calc(72dvh - 96px);min-height:390px;flex-basis:25px;width:25px}.canvas-area{width:calc(100% - 69px)}.glyph-library:not(.collapsed){position:fixed;top:96px;bottom:30px}.library-heading{height:42px;min-height:42px}.document-tab{margin-left:69px}.header-actions{gap:2px}.app-header{gap:5px;padding-inline:8px}.brand{font-size:14px;gap:3px}.brand-mark{width:22px;height:25px;font-size:19px}.save-options-button{min-width:20px;padding:5px!important}.header-actions .quiet svg{width:16px}.header-actions .quiet{padding:3px}.boolean-section{grid-column:1/-1}.save-menu{right:-47px}.library-heading>.icon-button{width:24px}}
 .glyph-file-thumb img{width:30px;height:32px;object-fit:contain;opacity:.85}.save-menu button:focus-visible{outline-offset:-2px}
+:root{--ui-font:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif}
+body{font-family:var(--ui-font)}
+body[data-palette=blue]{--accent:#1671bc;--accent-soft:#e4f2ff}
+body[data-palette=amber]{--accent:#a76112;--accent-soft:#fff0d9}
+body[data-palette=mint]{--accent:#18795a;--accent-soft:#e2f6ed}
+body[data-theme=dark]{--paper:#1e1c24;--bg:#15141a;--canvas:#191820;--ink:#f0edf5;--muted:#c1bacb;--line:#383440;--accent-soft:#342b45;--gold:#e3b454;--brand-bg:#342b45;--shadow:0 5px 20px #0005;color:var(--ink);color-scheme:dark}
+body[data-theme=dark] .app-header,body[data-theme=dark] .tool-rail,body[data-theme=dark] .inspector,body[data-theme=dark] .inspector-title,body[data-theme=dark] .preview-section,body[data-theme=dark] .status-bar{background:var(--paper);color:var(--ink)}
+body[data-theme=dark] .document-bar{background:#201e27}body[data-theme=dark] .document-tab{background:#292631;color:var(--ink)}
+body[data-theme=dark] .canvas-area{background:var(--canvas)}body[data-theme=dark] .glyph-library{background:#1b1921;border-color:var(--line)}
+body[data-theme=dark] .canvas-toolbar,body[data-theme=dark] .context-hint{background:#221f28;color:#c9c2d2;border-color:var(--line)}
+body[data-theme=dark] .brand-mark{background:var(--brand-bg);color:#fff}body[data-theme=dark] .brand-mark>span{color:#d8c9ff}
+body[data-theme=dark] .breadcrumb,body[data-theme=dark] .slash,body[data-theme=dark] .control-toggle,body[data-theme=dark] .coordinate{color:#c9c2d2}
+body[data-theme=dark] .unicode-label,body[data-theme=dark] .mode-switch,body[data-theme=dark] .zoom-controls{background:#27232e;border-color:#484350;color:#d4cedd}
+body[data-theme=dark] .mode-switch button,body[data-theme=dark] .zoom-controls button{color:#d4cedd}
+body[data-theme=dark] .zoom-controls button:hover{background:#37313f}
+body[data-theme=dark] .quiet,body[data-theme=dark] .tool,body[data-theme=dark] .icon-button,body[data-theme=dark] .text-button,body[data-theme=dark] .document-actions{color:#c9c2d2}
+body[data-theme=dark] .button.primary{background:var(--accent);border-color:var(--accent);color:#fff}body[data-theme=dark] .button.secondary,body[data-theme=dark] .small-button{background:#24212b;border-color:#46414e;color:#d4cedd}
+body[data-theme=dark] .button.secondary:hover,body[data-theme=dark] .small-button:hover,body[data-theme=dark] .quiet:hover,body[data-theme=dark] .icon-button:hover{background:#302c39}
+body[data-theme=dark] input,body[data-theme=dark] select,body[data-theme=dark] textarea{background:#211f28!important;border-color:#484350!important;color:#f0edf5!important}
+body[data-theme=dark] .input-prefix>span,body[data-theme=dark] .coordinate-input>span{color:#b7adbf}
+body[data-theme=dark] .contour-item,body[data-theme=dark] .glyph-file{color:#d1cad9}body[data-theme=dark] .contour-item:hover,body[data-theme=dark] .glyph-file:hover{background:#2a2632}body[data-theme=dark] .contour-item.active,body[data-theme=dark] .glyph-file.active{background:#352d41;border-color:#514464}
+body[data-theme=dark] .glyph-file-thumb,body[data-theme=dark] .preview-box{background:#121117;color:#e3d8f4}body[data-theme=dark] .curve-info,body[data-theme=dark] .export-summary,body[data-theme=dark] .help-steps{background:#292531;border-color:#46414e;color:#d7cbe8}
+body[data-theme=dark] .save-menu{background:#24212b;border-color:#484350}body[data-theme=dark] .save-menu button:hover{background:#302c39}body[data-theme=dark] .save-menu span{color:#b9adc7}
+body[data-theme=dark] dialog{background:#211f28;color:var(--ink);border-color:#484350}body[data-theme=dark] .dialog-description,body[data-theme=dark] .export-note,body[data-theme=dark] .help-copy{color:#c1b8ca}
+body[data-theme=dark] .anchor-grid{background:#211f28;border-color:#484350}body[data-theme=dark] .anchor-grid button{background:#292631;border-color:#696174}body[data-theme=dark] .anchor-grid button.active{background:var(--accent)}
+body[data-theme=dark] .library-heading,body[data-theme=dark] .library-footer,body[data-theme=dark] .status-bar{border-color:var(--line)}body[data-theme=dark] .preview-section{border-color:var(--line)}body[data-theme=dark] .inspector-scroll{scrollbar-color:#575160 transparent}
+body[data-theme=dark] #editor,body[data-theme=dark] #preview{filter:invert(.88) hue-rotate(180deg)}
+body[data-contrast=high]{--accent:#004baf;--accent-soft:#dcecff;--gold:#8b3f00}
+body[data-contrast=high] :focus-visible{outline:3px solid #005fcc!important;outline-offset:2px!important}
+body[data-contrast=high] .tool,body[data-contrast=high] .icon-button,body[data-contrast=high] .small-button,body[data-contrast=high] .glyph-file,body[data-contrast=high] input,body[data-contrast=high] select{border-width:2px!important}
+body[data-contrast=high] .muted,body[data-contrast=high] .panel-note,body[data-contrast=high] .dialog-description,body[data-contrast=high] .help-copy,body[data-contrast=high] .status-bar{color:#4c4656}
+body[data-contrast=high][data-theme=dark]{--accent:#82b5ff;--accent-soft:#203d61;--gold:#ffd166}
+body[data-contrast=high][data-theme=dark] .muted,body[data-contrast=high][data-theme=dark] .panel-note,body[data-contrast=high][data-theme=dark] .dialog-description,body[data-contrast=high][data-theme=dark] .help-copy,body[data-contrast=high][data-theme=dark] .status-bar{color:#eee9f3}
+body[data-contrast=high][data-theme=dark] #editor,body[data-contrast=high][data-theme=dark] #preview{filter:invert(.88) hue-rotate(180deg) contrast(1.4)}
+.history-panel{position:fixed;right:320px;top:126px;z-index:40;width:310px;max-height:min(70vh,650px);padding:12px;background:var(--paper);border:1px solid var(--line);border-radius:9px;box-shadow:0 12px 40px #21192b25;color:var(--ink);display:flex;flex-direction:column;gap:8px}
+.history-heading{display:flex;align-items:center;justify-content:space-between;font-size:12px}.history-panel>label{font-size:10px;color:var(--muted)}.history-panel>label input{width:55px;margin-left:8px;padding:4px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink)}
+.history-panel ol{list-style:none;margin:0;padding:0;overflow:auto}.history-panel li button{width:100%;padding:7px;text-align:left;font-size:10px;border-radius:4px}.history-panel li button:hover,.history-panel li button.current{background:var(--accent-soft);color:var(--accent)}
+.settings-dialog{width:650px;max-height:90dvh;overflow-y:auto;overflow-x:hidden}.settings-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px 18px;min-width:0}.settings-grid>label,.shortcut-settings label{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--muted);min-width:0}.settings-grid .setting-wide{grid-column:1/-1}.settings-grid input:not([type=checkbox]),.settings-grid select,.shortcut-settings input{height:33px;width:100%;max-width:100%;min-width:0;border:1px solid var(--line);border-radius:5px;padding:5px 8px;background:var(--bg);color:var(--ink)}.settings-grid .setting-check{flex-direction:row;align-items:center}.setting-check input{accent-color:var(--accent)}.shortcut-settings{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;border:1px solid var(--line);border-radius:6px;padding:10px;min-width:0}.shortcut-settings legend{font-size:10px;color:var(--muted)}.settings-actions{grid-column:1/-1;display:flex;gap:8px;justify-content:space-between;min-width:0}.history-manage-dialog{max-height:85dvh;overflow:auto}.history-records{max-height:50vh;overflow:auto;display:grid;gap:5px}.history-record-row{display:flex;align-items:center;gap:10px;padding:8px;border-bottom:1px solid var(--line);font-size:11px;color:var(--ink)}.history-record-row input{accent-color:var(--accent)}.danger{color:#b43b48!important}
+.page-size-label{display:flex;align-items:center;justify-content:center;gap:7px;font-size:9px;color:var(--muted)}.page-size-label select{width:85px;border:1px solid var(--line);border-radius:4px;padding:4px;background:var(--paper);color:var(--ink)}
+body[data-theme=dark] .history-panel,body[data-theme=dark] .settings-grid input,body[data-theme=dark] .settings-grid select,body[data-theme=dark] .shortcut-settings input,body[data-theme=dark] .page-size-label select{background:#211f28;color:var(--ink);border-color:#484350}
+@media(max-width:800px){.history-panel{right:12px;top:108px;width:min(310px,calc(100vw - 60px));max-height:65vh}.settings-dialog{width:min(650px,calc(100vw - 24px))}}
+@media(max-width:560px){.settings-grid{grid-template-columns:1fr}.shortcut-settings{grid-template-columns:repeat(3,1fr)}.settings-actions{flex-direction:column}.history-panel{top:102px}}
+.document-tab{min-width:0}
+@media(max-width:600px){.document-tab{margin-left:4px;min-width:112px;max-width:132px;padding-inline:8px;gap:5px}.document-actions{gap:3px;padding-left:4px}.document-actions .small-divider{margin-inline:1px}.app-header{gap:4px}.brand{min-width:0}.header-actions{gap:1px}.header-actions .quiet{min-width:26px;padding-inline:3px}.header-actions .button{padding-inline:5px;gap:4px}.header-actions #export-button>span{display:none}.save-split>#save-button>span{display:none}}
+.settings-dialog .dialog-top,.settings-dialog .dialog-footer,.settings-dialog .dialog-description,.settings-dialog .settings-grid,.settings-dialog .export-note{min-width:0;max-width:100%}.settings-dialog .settings-grid{overflow:hidden}
+.help-list{list-style:none;padding:0;margin:8px 0;display:grid;gap:8px}.help-list li{display:flex;align-items:baseline;gap:8px;padding:7px 9px;border:1px solid var(--line);border-radius:5px;background:var(--bg);font-size:10px;line-height:1.6;color:var(--ink)}.help-list li>b{min-width:43px;color:var(--accent)}.help-list kbd{font:9px Consolas,monospace;padding:2px 4px;border:1px solid var(--line);border-radius:3px;background:var(--paper);white-space:nowrap}.help-dialog{padding:20px;width:660px}.help-dialog .dialog-top h2{font-size:18px;margin:6px 0}.help-dialog .dialog-footer{margin-top:12px}.tool-rail{gap:6px;padding-top:12px}.tool{width:38px;height:38px}.inspector-section{padding:15px 18px}.section-heading{margin-bottom:10px}.field-row{margin-bottom:9px;gap:9px}.preview-section{padding:10px 16px}.preview-box{height:clamp(75px,13vh,135px)}
+body[data-theme=dark] .help-list li{background:#211f28;color:var(--ink)}body[data-theme=dark] .help-list kbd{background:#292631;color:var(--ink)}
 
 </style>
 <!-- Bundled third-party licenses:
@@ -84,38 +131,124 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide
+development of collaborative font projects, to support the font creation
+efforts of academic and linguistic communities, and to provide a free and
+open framework in which fonts may be shared and improved in partnership
+with others.
+
+The OFL allows the licensed fonts to be used, studied, modified and
+redistributed freely as long as they are not sold by themselves. The
+fonts, including any derivative works, can be bundled, embedded,
+redistributed and/or sold with any software provided that any reserved
+names are not used by derivative works. The fonts and derivatives,
+however, cannot be released under any other type of license. The
+requirement for fonts to remain under this license does not apply to
+any document created using the fonts or their derivatives.
+
+DEFINITIONS
+"Font Software" refers to the set of files released by the Copyright
+Holder(s) under this license and clearly marked as such. This may
+include source files, build scripts and documentation.
+
+"Reserved Font Name" refers to any names specified as such after the
+copyright statement(s).
+
+"Original Version" refers to the collection of Font Software components as
+distributed by the Copyright Holder(s).
+
+"Modified Version" refers to any derivative made by adding to, deleting,
+or substituting — in part or in whole — any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+"Author" refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION & CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+binary files as long as those fields can be easily viewed by the user.
+
+3) No Modified Version of the Font Software may use the Reserved Font
+Name(s) unless explicit written permission is granted by the corresponding
+Copyright Holder. This restriction only applies to the primary font name as
+presented to the users.
+
+4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
+Software shall not be used to promote, endorse or advertise any
+Modified Version, except to acknowledge the contribution(s) of the
+Copyright Holder(s) and the Author(s) or with their explicit written
+permission.
+
+5) The Font Software, modified or unmodified, in part or in whole,
+must be distributed entirely under this license, and must not be
+distributed under any other license. The requirement for fonts to
+remain under this license does not apply to any document created
+using the Font Software.
+
+TERMINATION
+This license becomes null and void if any of the above conditions are
+not met.
+
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
+OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
+OTHER DEALINGS IN THE FONT SOFTWARE.
+
 -->
 </head>
 <body>
 <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
   <symbol id="i-select" viewBox="0 0 24 24"><path d="m5 3 14 10-7 1-3 7z"/></symbol>
-  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6h7l2 3h9v11H3zM3 6V4h7l2 2h8v3"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24" data-source="U+1F5C1"><path d="M104 0H885C923 0 942 9 966 54L1182 460C1187 469 1189 478 1189 485C1189 502 1177 514 1156 514H949V575C949 605 925 629 895 629H441V660C441 691 416 717 385 717H107C76 717 51 691 51 660V54C51 23 70 0 104 0ZM74 660C74 678 89 693 107 693H385C403 693 418 678 418 660V605H895C912 605 926 592 926 575V514H365C327 514 308 505 284 460L74 65ZM107 23C94 23 88 28 88 37C88 42 90 47 94 54L303 448C320 480 331 491 366 491H1141C1156 491 1163 488 1163 480C1163 475 1161 469 1156 460L947 66C930 34 919 23 884 23Z" transform="matrix(.017575 0 0 -.017575 1.103691 18.300527)" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
   <symbol id="i-component" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"/><path d="M8 8h8v8H8z" fill="currentColor"/></symbol>
-  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="m8 8 13 13M8 16 21 3"/></symbol>
-  <symbol id="i-pen" viewBox="0 0 24 24"><path d="m13 3 8 8-7 9-10-1-1-10zM4 19l7-7m2-9 8 8"/><circle cx="12" cy="11" r="2"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24" data-source="U+2702"><path d="M189 -20C273 -20 343 33 343 108C343 122 339 136 331 150L333 154C382 156 463 195 473 204L781 84C826 66 868 57 907 57C960 57 994 81 1011 108L603 264L1011 414C994 438 940 463 903 463C871 463 830 455 779 436L473 322C422 349 343 374 277 380C288 391 295 416 295 446C295 508 241 560 167 560C101 560 51 515 51 450C51 384 118 342 197 338C275 334 368 303 405 264C376 238 318 204 291 204C279 204 266 205 253 207C240 209 224 209 207 209C106 209 51 165 51 84C51 23 111 -20 189 -20ZM205 385C137 385 95 414 95 460C95 501 122 528 163 528C216 528 255 487 255 442C255 399 238 385 205 385ZM191 18C128 18 95 43 95 88C95 132 131 158 197 158C237 158 265 154 281 147C297 140 305 126 305 108C305 62 256 18 191 18Z" transform="matrix(.020833 0 0 -.020833 .9375 17.625)" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24" data-source="U+2712"><path d="M623 18C640 18 659 25 681 40C703 55 734 81 774 120C854 198 917 227 977 236V244C908 254 842 293 774 361C707 428 657 462 623 462C587 462 559 446 536 415C490 352 454 338 413 338C376 338 337 359 305 396H211C99 396 51 342 51 240C51 138 99 84 211 84H305C339 123 375 142 413 142C450 142 485 126 507 100L538 64C562 36 579 18 623 18ZM609 190C561 190 528 194 509 203C490 212 481 224 481 240C481 256 491 269 510 277C529 285 562 290 609 290H653C678 290 696 275 699 252C709 250 742 249 797 249C851 249 887 247 907 244V238C884 234 834 232 757 231L699 230C696 206 680 190 653 190Z" transform="matrix(.021598 0 0 -.021598 .898488 17.183585)" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-line" viewBox="0 0 24 24"><path d="m5 19 14-14"/><rect x="3" y="17" width="4" height="4"/><rect x="17" y="3" width="4" height="4"/></symbol>
-  <symbol id="i-rect" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1"/></symbol>
-  <symbol id="i-ellipse" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="7"/></symbol>
-  <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 12V5a2 2 0 0 1 4 0v6-7a2 2 0 0 1 4 0v8-5a2 2 0 0 1 4 0v9c0 4-3 6-7 6-3 0-5-2-7-5l-3-5c-1-2 1-4 3-2l2 3"/></symbol>
+  <symbol id="i-rect" viewBox="0 0 24 24" data-source="U+25AD"><path d="M0 63H1000V364H0ZM37 100V327H963V100Z" transform="matrix(.02 0 0 -.02 2 16.27)" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-ellipse" viewBox="0 0 24 24" data-source="U+2B2D"><path d="M439 129C672 129 827 221 827 362C827 504 665 596 439 596C210 596 51 503 51 362C51 222 213 129 439 129ZM439 173C242 173 96 248 96 362C96 480 243 551 439 551C638 551 782 479 782 362C782 244 635 173 439 173Z" transform="matrix(.025773 0 0 -.025773 .685567 21.342784)" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24" data-source="U+270B"><path d="M352 -116C430 -116 515 -92 554 -58L553 -12C553 5 566 20 586 43C592 50 598 57 605 65C641 106 666 152 693 228C698 242 703 273 708 307C712 335 722 385 729 405C743 446 763 498 763 520C763 558 738 584 703 584C650 584 604 522 588 460C583 451 579 441 575 430C573 465 572 499 572 531V565C572 590 569 615 568 638C567 659 564 678 564 694L562 814C561 881 536 924 494 924C475 924 459 918 448 902C442 949 420 978 384 978C346 978 317 954 308 905C300 915 289 920 274 920C232 920 196 878 189 798C188 787 184 769 183 744C176 753 168 756 157 756C113 756 88 700 78 642C69 590 65 541 65 501C65 490 63 478 61 463C58 437 51 401 51 346C51 187 80 132 101 101C115 80 126 62 127 11L128 -58C171 -96 247 -116 352 -116ZM351 -80C264 -80 202 -66 163 -41V11C163 61 151 81 137 105C116 140 90 183 87 346C86 394 92 427 96 454C99 472 101 487 101 501C101 528 100 584 112 641C124 699 137 720 157 720C168 720 177 710 177 677C177 654 175 630 174 604C173 568 169 530 169 489C169 477 170 465 170 452H206C205 470 205 487 205 504C205 556 207 605 211 665C214 715 221 775 224 794C229 825 233 846 241 862C250 880 262 888 277 888C292 888 298 876 298 843C298 804 297 778 294 747C288 685 287 617 287 549C287 541 287 532 288 524C289 515 289 507 289 498H325C325 507 324 515 324 524C324 532 323 541 323 549C323 616 325 682 330 742C332 765 333 803 336 866C338 913 352 942 385 942C409 942 418 911 418 839C418 819 418 798 417 775C416 749 416 721 416 694V660C416 640 417 618 418 596C419 564 420 533 420 511H456C456 533 456 565 454 598C453 619 452 641 452 660C452 709 450 753 450 802C450 859 462 888 493 888C514 888 525 861 526 814L528 693C528 677 530 657 532 636C534 613 535 588 536 565C539 489 542 417 550 372C486 333 445 281 425 235L455 216C481 273 523 320 577 353C582 372 594 412 617 443C631 489 666 548 704 548C722 548 728 536 728 517C728 502 710 452 693 411C684 389 675 340 670 303C666 276 662 253 659 243C636 165 609 123 577 89C571 82 565 75 560 69C537 42 517 20 517 -11V-40C480 -64 413 -80 351 -80Z" transform="matrix(.018282 0 0 -.018282 4.559415 19.879342)" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v5h16v-5"/></symbol>
   <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol>
-  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" data-source="U+27A1"><path d="M615 26 863 300 615 574V450H51V150H615Z" transform="matrix(.024631 0 0 -.024631 .743842 19.389163)" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-undo" viewBox="0 0 24 24"><path d="m8 5-5 5 5 5M3 10h11a6 6 0 0 1 0 12"/></symbol>
   <symbol id="i-redo" viewBox="0 0 24 24"><path d="m16 5 5 5-5 5m5-5H10a6 6 0 0 0 0 12"/></symbol>
-  <symbol id="i-grid" viewBox="0 0 24 24"><path d="M8 3v18M16 3v18M3 8h18M3 16h18"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24" data-source="U+25A6"><path d="M51 -4H783V728H51ZM611 557V683H738V557ZM439 557V683H565V557ZM268 557V683H394V557ZM96 557V683H222V557ZM268 385V511H394V385ZM611 385V511H738V385ZM439 385V511H565V385ZM96 385V511H222V385ZM439 214V340H565V214ZM268 214V340H394V214ZM611 214V340H738V214ZM96 214V340H222V214ZM611 41V169H738V41ZM439 41V169H565V41ZM268 41V169H394V41ZM96 41V169H222V41Z" transform="matrix(.027322 0 0 -.027322 .606557 21.89071)" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-fit" viewBox="0 0 24 24"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5"/><rect x="8" y="8" width="8" height="8"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
   <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></symbol>
   <symbol id="i-reverse" viewBox="0 0 24 24"><path d="M4 8h15l-4-4m5 12H5l4 4"/></symbol>
-  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
-  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 1 1 4 3c-1 .5-1 1-1 2m0 3h.01"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24" data-source="U+2715"><path d="M105 -76 433 252 759 -76 813 -22 485 308 813 638 759 692 433 362 105 692 51 638 379 308 51 -22Z" transform="matrix(.026042 0 0 -.026042 .75 20.020833)" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24" data-source="U+003F"><path d="M140 228V201H210V218C210 275 223 301 290 358C362 418 408 459 408 549C408 657 336 724 209 724C129 724 65 703 12 675L43 605C89 627 137 647 203 647C281 647 324 611 324 547C324 487 301 463 224 398C159 343 140 303 140 228ZM117 54C117 6 143 -14 179 -14C212 -14 240 6 240 54C240 103 212 121 179 121C143 121 117 103 117 54Z" transform="matrix(.0271 0 0 -.0271 6.308943 21.620596)" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-curve" viewBox="0 0 24 24"><path d="M4 18C4 3 20 21 20 6"/><path d="M4 18V6m16 12V6" stroke-dasharray="2 3"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="6" r="2"/></symbol>
-  <symbol id="i-snap" viewBox="0 0 24 24"><path d="M5 4v9a7 7 0 0 0 14 0V4h-4v9a3 3 0 0 1-6 0V4zM5 8h4m6 0h4"/></symbol>
+  <symbol id="i-snap" viewBox="0 0 24 24" data-source="U+2316"><path d="M11 342H143C149 224 244 129 362 122V-9H388V122C506 129 600 224 607 342H739V367H607C600 485 506 579 388 586V718H362V586C244 579 150 485 143 367H11ZM362 377H388V557C490 550 571 469 578 367H398V342H578C572 240 490 158 388 151V332H362V151C260 158 178 240 172 342H352V367H172C179 469 260 550 362 557Z" transform="matrix(.027473 0 0 -.027473 1.697802 21.739011)" fill="currentColor" stroke="none"/></symbol>
 </defs></svg>
 <header class="app-header">
   <a class="brand" href="#" aria-label="Higher Degree 首页"><span class="brand-mark">B<span>n</span></span><span>higher degree<span class="brand-dot">.</span></span></a>
-  <div class="header-divider"></div><span class="app-description">高阶曲线字形工作室 <span class="version-pill">v0.3.1</span></span>
+  <div class="header-divider"></div><span class="app-description">高阶曲线字形工作室 <span class="version-pill">v0.4.0</span></span>
   <div class="header-actions">
     <button id="new-button" class="quiet"><svg><use href="#i-plus"/></svg><span>新建</span></button>
     <button id="import-button" class="quiet" title="导入 .glyph / .glif / .svg / 本工具 JSON"><svg><use href="#i-upload"/></svg><span>导入字形</span></button>
@@ -127,12 +260,12 @@ SOFTWARE.
 <div class="document-bar">
   <div class="document-tab"><svg><use href="#i-curve"/></svg><strong id="document-name">a</strong><span class="extension">.glyph</span><span class="tab-dot"></span></div>
   <span class="save-status" id="save-status"><span></span> 本机草稿已保存</span>
-  <div class="document-actions"><button id="undo-button" class="icon-button" title="撤销 (Ctrl+Z)" aria-label="撤销"><svg><use href="#i-undo"/></svg></button><button id="redo-button" class="icon-button" title="重做 (Ctrl+Shift+Z)" aria-label="重做"><svg><use href="#i-redo"/></svg></button><span class="small-divider"></span><button id="help-button" class="icon-button" title="使用指南 (?)" aria-label="使用指南"><svg><use href="#i-help"/></svg></button></div>
+  <div class="document-actions"><button id="undo-button" class="icon-button" title="撤销 (Ctrl+Z)" aria-label="撤销"><svg><use href="#i-undo"/></svg></button><button id="redo-button" class="icon-button" title="重做 (Ctrl+Shift+Z)" aria-label="重做"><svg><use href="#i-redo"/></svg></button><button id="history-button" class="icon-button" title="历史记录" aria-label="历史记录" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5m4-1v5l3 2"/></svg></button><span class="small-divider"></span><button id="settings-button" class="icon-button" title="设置" aria-label="设置"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.7-1.4-2.4 1.4-1.1a8 8 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.7-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.7 1.4 2.4-1.4 1.1a8 8 0 0 1 0 2z"/></svg></button><button id="help-button" class="icon-button" title="使用指南 (?)" aria-label="使用指南"><svg><use href="#i-help"/></svg></button></div>
 </div>
 <main class="workspace">
   <aside id="glyph-library" class="glyph-library collapsed" aria-label="文件夹字形列表">
     <div class="library-heading"><button id="library-toggle" class="icon-button" aria-label="展开字形文件夹" aria-expanded="false" title="展开 / 收起字形列表"><svg><use href="#i-chevron"/></svg></button><div class="library-expanded"><strong id="library-title">字形文件夹</strong><span id="library-count">未导入</span></div></div>
-    <div class="library-content library-expanded"><input id="library-search" type="search" placeholder="搜索名称 / 路径 / Unicode" aria-label="搜索字形"><div class="library-filter"><label><input id="library-changed" type="checkbox">仅修改项</label><span id="library-progress">本地文件</span></div><div id="library-list" class="library-list" role="listbox" aria-label="字形文件"></div><div class="library-page"><button id="library-prev" class="small-button">上一页</button><span id="library-page-label">0 / 0</span><button id="library-next" class="small-button">下一页</button></div><div class="library-footer"><button id="library-scratch" class="small-button full-width" hidden>返回独立字形</button><button id="library-export" class="button secondary" disabled>导出文件夹 ZIP</button><button id="library-replace" class="text-button">选择文件夹</button><p>切换字形会保留修改与各自撤销记录。原文件不会自动覆盖；请导出保存。</p></div></div>
+    <div class="library-content library-expanded"><input id="library-search" type="search" placeholder="搜索名称 / 路径 / Unicode" aria-label="搜索字形"><div class="library-filter"><label><input id="library-changed" type="checkbox">仅修改项</label><span id="library-progress">本地文件</span></div><div id="library-list" class="library-list" role="listbox" aria-label="字形文件"></div><div class="library-page"><button id="library-prev" class="small-button" aria-label="上一页">‹</button><span id="library-page-label">0 / 0</span><button id="library-next" class="small-button" aria-label="下一页">›</button></div><label class="page-size-label">每页 <select id="library-page-size" aria-label="每页字形数量"><option value="30">30</option><option value="60" selected>60</option><option value="100">100</option><option value="200">200</option><option value="all">全部</option></select></label><div class="library-footer"><button id="library-scratch" class="small-button full-width" hidden>返回独立字形</button><button id="library-export" class="button secondary" disabled>导出文件夹 ZIP</button><button id="library-replace" class="text-button">选择文件夹</button><p>切换字形会保留修改与各自撤销记录。原文件不会自动覆盖；请导出保存。</p></div></div>
     <button id="library-open-collapsed" class="icon-button library-collapsed" title="导入文件夹" aria-label="从左栏导入文件夹"><svg><use href="#i-folder"/></svg></button>
   </aside>
   <aside class="tool-rail" aria-label="绘图工具">
@@ -162,7 +295,7 @@ SOFTWARE.
     <div class="context-hint"><span class="hint-indicator"></span><span id="tool-hint">左击边缘加点 · 拖动边缘改形 · 右键加控制点 · Shift 多选</span><span class="coordinate" id="pointer-coordinate">X — &nbsp; Y —</span></div>
   </section>
   <aside class="inspector" aria-label="字形属性">
-    <div class="inspector-title"><h1>字形属性</h1><span class="badge">v0.3.1</span></div>
+    <div class="inspector-title"><h1>字形属性</h1><span class="badge">v0.4.0</span></div>
     <div class="inspector-scroll" aria-label="可滚动的字形参数">
     <section id="selection-transform" class="inspector-section selection-transform" hidden>
       <div class="section-heading"><h2>选择变换</h2><span id="transform-selection-count" class="muted"></span></div>
@@ -181,7 +314,7 @@ SOFTWARE.
       <p class="panel-note" id="frame-hint">拖动框上的手柄变换 · 双击切换模式<br>Shift 等比缩放 / 15° 旋转</p>
     </section>
     <section class="inspector-section glyph-properties">
-      <div class="field-row"><label>名称<input id="glyph-name" value="a" maxlength="128" autocomplete="off"></label><label>Unicode<span class="input-prefix"><span>U+</span><input id="glyph-unicode" value="0061" maxlength="6" spellcheck="false"></span></label></div>
+      <div class="field-row"><label>名称<input id="glyph-name" value="a" maxlength="128" autocomplete="off"></label><label>Unicode<span class="input-prefix"><span>U+</span><input id="glyph-unicode" value="0061" maxlength="14" spellcheck="false" title='可输入十六进制码位或带双引号的字符，如 "a"'></span></label></div>
       <div class="field-row"><label>字宽<input id="metric-advanceWidth" type="number" min="0" max="100000" value="540"></label><label>UPM<input id="metric-upm" type="number" min="16" max="100000" value="1000"></label></div>
       <details class="metrics-details"><summary>参考线度量 <span>⌄</span></summary><div class="field-row"><label>升部<input id="metric-ascender" type="number" value="800"></label><label>降部<input id="metric-descender" type="number" value="-200"></label></div><div class="field-row"><label>大写高度<input id="metric-capHeight" type="number" value="700"></label><label>x 高度<input id="metric-xHeight" type="number" value="500"></label></div></details>
     </section>
@@ -213,19 +346,44 @@ SOFTWARE.
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <dialog id="cubic-dialog" aria-labelledby="cubic-dialog-title"><div class="dialog-top"><div><span class="eyebrow">CUBIC BÉZIER EXPORT</span><h2 id="cubic-dialog-title">保存三次曲线字形</h2></div><button class="icon-button" data-close="cubic-dialog" aria-label="关闭三次导出窗口"><svg><use href="#i-close"/></svg></button></div><p id="cubic-description" class="dialog-description"></p><label class="export-label">最大近似误差<select id="cubic-tolerance"><option value="0.05">0.05 — 极高精度</option><option value="0.25" selected>0.25 — 推荐</option><option value="1">1.00 — 较小文件</option><option value="2">2.00 — 快速预览</option></select></label><div id="cubic-summary" class="export-summary"></div><p class="export-note">使用与 SVG 相同的自适应近似算法。仅转换下载副本，画布保留原始高阶曲线。</p><div class="dialog-footer"><button class="button secondary" data-close="cubic-dialog">取消</button><button id="download-cubic" class="button primary">下载</button></div></dialog>
 <dialog id="project-export-dialog" aria-labelledby="project-export-title"><div class="dialog-top"><div><span class="eyebrow">FOLDER EXPORT</span><h2 id="project-export-title">保存整个字形工作区</h2></div><button class="icon-button" data-close="project-export-dialog" aria-label="关闭文件夹导出"><svg><use href="#i-close"/></svg></button></div><p class="dialog-description">按原相对目录打包字形。文件格式转换时会保留目录，并自动避开重名。</p><label class="degree-field">导出范围<select id="project-export-scope"><option value="all">全部可读取字形</option><option value="changed">仅修改过的字形</option></select></label><label class="degree-field">文件格式<select id="project-export-format"><option value="native">原生高阶 .glyph</option><option value="cubic">三次 Bézier .glyph</option><option value="glif">三次 UFO .glif</option></select></label><label class="degree-field">三次转换容差<select id="project-export-tolerance"><option value="0.05">0.05</option><option value="0.25" selected>0.25</option><option value="1">1.00</option></select></label><div id="project-export-summary" class="export-summary">就绪</div><p class="export-note">这是字形文件集合，不是完整 UFO 工程。无法解析的文件列入报告，不会伪装成成功。</p><div class="dialog-footer"><button class="button secondary" data-close="project-export-dialog">取消</button><button id="download-project" class="button primary">下载 ZIP</button></div></dialog>
+<dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title">
+<div class="dialog-top"><div><span class="eyebrow">PREFERENCES</span><h2 id="settings-title">设置</h2></div><button class="icon-button" data-close="settings-dialog" aria-label="关闭设置"><svg><use href="#i-close"/></svg></button></div>
+<div class="settings-grid">
+<label>外观<select id="pref-theme"><option value="system">跟随系统</option><option value="light">浅色</option><option value="dark">深色</option></select></label>
+<label>配色<select id="pref-palette"><option value="violet">紫藤</option><option value="blue">海蓝</option><option value="amber">琥珀</option><option value="mint">薄荷</option></select></label>
+<label class="setting-check"><input id="pref-contrast" type="checkbox">高对比度</label>
+<label class="setting-wide">界面字体 CSS 链<input id="pref-font" type="text" spellcheck="false" placeholder="Inter, system-ui, sans-serif"></label>
+<label>历史记录步数<input id="pref-history-limit" type="number" min="10" max="1000" step="10"></label>
+<label class="setting-check"><input id="pref-history-storage" type="checkbox">本地保存编辑历史（默认开启）</label>
+<label>每页字形数量<select id="pref-page-size"><option value="30">30</option><option value="60">60</option><option value="100">100</option><option value="200">200</option><option value="all">全部</option></select></label>
+<label>滚轮操作<select id="pref-wheel-mode"><option value="wheel">滚轮缩放</option><option value="ctrl">Ctrl / Cmd + 滚轮缩放</option></select></label>
+<label class="setting-check"><input id="pref-wheel-invert" type="checkbox">反转滚轮方向</label>
+<fieldset class="shortcut-settings"><legend>快捷键</legend><label>节点选择<input data-shortcut="select" maxlength="1"></label><label>构件选择<input data-shortcut="component" maxlength="1"></label><label>钢笔<input data-shortcut="pen" maxlength="1"></label><label>直线<input data-shortcut="line" maxlength="1"></label><label>剪刀<input data-shortcut="knife" maxlength="1"></label></fieldset>
+<div class="settings-actions"><button id="history-manage" class="small-button">管理本地历史记录…</button><button id="settings-reset" class="small-button">恢复默认设置</button></div>
+</div>
+<p class="export-note">字形与历史仅保存在本机浏览器。删除记录不可恢复；批量管理前会再次确认。</p>
+<div class="dialog-footer"><button class="button primary" data-close="settings-dialog">完成</button></div>
+</dialog>
+<section id="history-panel" class="history-panel" aria-label="历史记录" hidden><div class="history-heading"><strong>历史记录</strong><button id="history-hide" class="icon-button" aria-label="隐藏历史记录">×</button></div><label>显示步数 <input id="history-limit" type="number" min="10" max="1000" step="10" value="100"></label><ol id="history-list"></ol><button id="history-pause-current" class="text-button">暂停当前字形历史…</button><button id="history-clear-current" class="text-button danger">删除当前字形历史…</button></section>
+<dialog id="history-manage-dialog" class="history-manage-dialog"><div class="dialog-top"><div><span class="eyebrow">LOCAL HISTORY</span><h2>本地历史记录</h2></div><button class="icon-button" data-close="history-manage-dialog" aria-label="关闭历史记录管理"><svg><use href="#i-close"/></svg></button></div><p class="dialog-description">选择字形记录，可暂停/恢复保存或永久删除。</p><div id="history-records" class="history-records"></div><div class="settings-actions"><button id="history-pause-selected" class="small-button">暂停所选历史</button><button id="history-resume-selected" class="small-button">恢复所选历史</button><button id="history-pause-folder" class="small-button">暂停当前文件夹</button><button id="history-resume-folder" class="small-button">恢复当前文件夹</button><button id="history-delete-folder" class="small-button danger">删除当前文件夹历史…</button></div><div class="dialog-footer"><button class="button secondary" data-close="history-manage-dialog">完成</button><button id="history-delete-selected" class="button primary danger">删除所选记录</button></div></dialog>
 <dialog id="export-dialog"><div class="dialog-top"><div><span class="eyebrow">EXPORT GLYPH</span><h2>把曲线带到下一站。</h2></div><button class="icon-button" data-close="export-dialog" aria-label="关闭导出窗口"><svg><use href="#i-close"/></svg></button></div><p class="dialog-description">将任意阶贝塞尔统一输出为三次曲线，高阶段按误差上界自适应细分。</p><label class="export-label">最大近似误差 <span>字体单位 / units</span><select id="export-tolerance"><option value="0.05">0.05 — 极高精度</option><option value="0.25" selected>0.25 — 推荐</option><option value="1">1.00 — 较小文件</option><option value="2">2.00 — 快速预览</option></select></label><div id="export-summary" class="export-summary"></div><div class="export-note">.glyph 保存原始高阶曲线；SVG 使用 C、L 路径命令。<br>未闭合轮廓以 1 单位描边导出。</div><div class="dialog-footer"><button class="button secondary" data-close="export-dialog">取消</button><button id="download-svg" class="button primary"><svg><use href="#i-download"/></svg>下载 SVG</button></div></dialog>
 <dialog id="help-dialog" class="help-dialog" aria-labelledby="help-title">
-<div class="dialog-top"><div><span class="eyebrow">HIGHER DEGREE v0.3.1</span><h2 id="help-title">左键落节点，右键塑曲线。</h2></div><button class="icon-button" data-close="help-dialog" aria-label="关闭使用指南"><svg><use href="#i-close"/></svg></button></div>
-<p class="dialog-description">N 个内部控制点对应 N+1 次贝塞尔。上限留空时不限制每段数量；右键始终增加控制点，左键增加轮廓节点。</p>
-<div class="help-steps"><span>左键：起点</span><i>→</i><span class="gold-text">右键：任意控制点</span><i>→</i><span>左键：终点</span></div>
-<p class="help-copy"><strong>P 高阶钢笔</strong>：右键放控制点，左键放节点；设定了上限后，达到上限的右键也可放终点。点击首节点闭合，Enter 结束开放轮廓，Esc 放弃待定控制点。<br><strong>V 节点</strong>：左击曲线插入平滑节点，拖动边缘改形，右击曲线精确升阶添加控制点。Del 真正删除控制点并降阶。普通移动和变换仅影响明确选中的点，未选中的关联柄不移动。<br><strong>A 轮廓 / 构件</strong>：点内部或边缘选全部节点和控制点，Shift 多选；多个轮廓可组合。<br><strong>K 剪刀</strong>：点击节点/边缘剪开；拖线剪开所有交点。</p>
-<p class="help-copy"><strong>画布变换与九宫格</strong><br>选择整个轮廓或至少两个点，即出现变换框。默认拖角/边手柄缩放与拉伸；双击选择内部或轮廓切换为旋转/倾斜，再双击切回。角手柄旋转，边手柄剪切成平行四边形，中心十字可拖动。Shift 等比缩放 / 15° 旋转。<br>九宫格基于所选点的最小轴对齐包围矩形；X/Y 是参考点位置，W/H 是包围尺寸，修改时整组一起变换。中心为包围框中心。自定义中心可输入坐标，点击九宫格恢复预设。原始尺寸为零的方向不能比例拉伸。</p>
-<p class="help-copy"><strong>拖点修饰键</strong><br><b>Alt</b>：平滑节点或其紧邻控制柄沿原三点切线方向移动，未选中点固定；暂停普通吸附。<br><b>Ctrl</b>：任意点相对拖动起点按水平、竖直或斜 45° 移动，不执行共轭约束。<br><b>Shift 或 Ctrl+Alt</b>：仅在<strong>单独选中一个紧邻平滑节点的控制点</strong>时，把该节点的切线方向吸附到 0°/45°/90°，对侧柄联动、共线且保持原长。三键同时按作用相同。先单选该柄再按 Shift 拖动，其他场景 Shift 保留多选功能。<br>选择节点本身或多个点时，Ctrl+Alt 只使用 Ctrl 方向约束，不联动未选中柄。Mac 可用 Cmd 代替 Ctrl。释放共轭键后继续移动会恢复未选中柄，Esc 可取消整次拖动。</p>
-<div class="shortcuts"><span>节点 / 轮廓 / 剪刀<kbd>V / A / K</kbd></span><span>钢笔 / 直线<kbd>P / L</kbd></span><span>矩形 / 椭圆<kbd>R / O</kbd></span><span>平移 / 缩放<kbd>空格拖动 / 滚轮</kbd></span><span>切换变换模式<kbd>双击选择</kbd></span><span>等比 / 15° 旋转<kbd>Shift + 手柄拖动</kbd></span><span>单柄共轭方向吸附<kbd>Shift / Ctrl+Alt</kbd></span><span>沿切线移动<kbd>Alt + 拖点</kbd></span><span>组合 / 解组<kbd>Ctrl G / Ctrl Shift G</kbd></span><span>连接开放端点<kbd>Ctrl J</kbd></span><span>复制 / 剪切 / 粘贴<kbd>Ctrl C / X / V</kbd></span><span>独立复制<kbd>Ctrl D</kbd></span><span>撤销 / 重做<kbd>Ctrl Z / Ctrl Shift Z</kbd></span><span>全选 / 微移<kbd>Ctrl A / 方向键</kbd></span><span>网格 / 网格吸附<kbd>G / S</kbd></span><span>适应画布 / 填充<kbd>0 / Tab</kbd></span><span>保存 / 导入<kbd>Ctrl S / O</kbd></span><span>大步移动<kbd>Shift + 方向键</kbd></span></div>
-<p class="help-copy"><strong>布尔运算</strong><br>用 A 或右侧列表完整选择两个以上闭合轮廓，使用并集、交集、差集、异或。差集从下拉框选定的基底中减去其他形状。多个已组合轮廓作为一个含字腔的形状；需选两个独立构件。高阶段先按容差转成三次，结果可一次撤销。开放路径不能直接参与。</p>
-<p class="help-copy"><strong>文件夹与交换格式</strong><br>支持 .glyph、GLIF 1/2 的 .glif、路径/基本形状 .svg，以及本工具 JSON。SVG 自动按比例适配 700 单位高度；描边按中心线导入，文字、图片、外部资源和蒙版需先展开。<br>导入文件夹后左栏递归列出文件，可收起、搜索或只看修改项。按需解析；切换时各字形保留独立修改、撤销历史和视图。UFO 文件夹可读 contents.plist、fontinfo.plist，引用构件展开为独立轮廓；单文件缺少基字形会报错。<br>保存按钮旁下拉可下载三次 .glyph（本工具 JSON）或标准 .glif（用于跨软件交换），使用与 SVG 同样的转换容差。GLIF 会处理字腔方向，适配常见非零填充。批量 ZIP 可导出全部或修改项，保留目录并附错误报告。ZIP 是字形集合，不是完整 UFO 工程。</p>
-<p class="help-copy help-format"><strong>保存与精度</strong><br>.glyph 保存为 higher-degree-glyph v3，可读旧 Quartic v1/v2。三次 .glyph 仍是本工具格式，不是 Glyphs 的 OpenStep 文件。不限指无单段编辑上限，仍保留单文档 20,000 总点、导入 5 MB 容量保护。保形升阶/分割和三次近似不强行取整。<br>文件夹修改保留于本次会话，关闭前请下载单字形或批量 ZIP；不会自动覆盖原文件。当前字形草稿和偏好仍保存本机，整个文件夹不自动写入本地存储。</p>
-<div class="dialog-footer"><button class="button secondary" id="reset-sample">载入示例 a</button><button class="button primary" data-close="help-dialog">开始创作</button></div></dialog>
+<div class="dialog-top"><div><span class="eyebrow">HIGHER DEGREE v0.4.0</span><h2 id="help-title">字形编辑速查</h2></div><button class="icon-button" data-close="help-dialog" aria-label="关闭使用指南"><svg><use href="#i-close"/></svg></button></div>
+<ul class="help-list">
+<li><b>绘制</b><kbd data-help-shortcut="pen">P</kbd> 左键节点 · 右键控制点；<kbd data-help-shortcut="line">L</kbd> 直线；<kbd data-help-shortcut="knife">K</kbd> 剪刀。</li>
+<li><b>选择</b><kbd data-help-shortcut="select">V</kbd> 节点 · <kbd data-help-shortcut="component">A</kbd> 构件；Shift 多选；拖轮廓调整曲线。</li>
+<li><b>简化</b><kbd>Shift+Delete</kbd> 控制点降一阶拟合；<kbd>Delete</kbd> 直接删除。</li>
+<li><b>变换</b> 多选节点后，单击已选节点切换缩放 / 旋转倾斜；轮廓模式双击切换。</li>
+<li><b>度量</b> 拖动边缘参考线调整左右边距；拖动水平线调整升部、大写高度、x 高与降部。</li>
+<li><b>点约束</b><kbd>Ctrl</kbd> 方向 · <kbd>Alt</kbd> 切线；单独选平滑邻柄时 <kbd>Shift</kbd> 共轭吸附。</li>
+<li><b>外观</b> 设置可切换深浅色、高对比度、配色、字体链与快捷键。</li>
+<li><b>历史</b><kbd>Ctrl+Z</kbd> 撤销 · <kbd>Ctrl+Shift+Z</kbd> 重做；时间线可跳回任意步骤。</li>
+<li><b>Unicode</b> 可输入十六进制码位或双引号字符，如 <kbd>"a"</kbd> → <kbd>U+0061</kbd>。</li>
+<li><b>文件</b> 支持本工具 .glyph、.glif、SVG；本地历史保存在浏览器，可按字形暂停或删除。</li>
+<li><b>视图</b><kbd>G</kbd> 网格 · <kbd>S</kbd> 网格吸附 · <kbd>0</kbd> 适应画布 · <kbd>?</kbd> 快捷键。</li>
+</ul>
+<div class="dialog-footer"><button class="button secondary" id="reset-sample">载入示例 a</button><button class="button primary" data-close="help-dialog">完成</button></div>
+</dialog>
 <script>
 /*!
  * Paper.js v0.12.18 - The Swiss Army Knife of Vector Graphics Scripting.
@@ -561,6 +719,33 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     segment.type = G.typeForControls(segment.controls.length);
     return segment.controls[Math.floor(segment.controls.length / 2)];
   }
+  function reduceDegreeOne(points) {
+    const degree = points.length - 1;
+    if (degree < 2) throw new Error('直线不能再降阶');
+    const forward = Array(degree), backward = Array(degree);
+    forward[0] = { ...points[0] }; backward[degree - 1] = { ...points[degree] };
+    for (let i = 1; i < degree; i++) {
+      const t = i / degree, prior = forward[i - 1], p = points[i];
+      forward[i] = { x: (p.x - t * prior.x) / (1 - t), y: (p.y - t * prior.y) / (1 - t) };
+    }
+    for (let i = degree - 1; i > 0; i--) {
+      const t = i / degree, next = backward[i];
+      backward[i - 1] = { x: (points[i].x - (1 - t) * next.x) / t, y: (points[i].y - (1 - t) * next.y) / t };
+    }
+    const reduced = [points[0], ...Array.from({ length: degree - 2 }, (_, j) => ({
+      x: (forward[j + 1].x + backward[j + 1].x) / 2,
+      y: (forward[j + 1].y + backward[j + 1].y) / 2
+    })), points.at(-1)];
+    // Degree elevation is repeated once; the difference polygon gives a conservative bound.
+    let elevatedPoints = reduced.map(p => ({ x: p.x, y: p.y }));
+    const n = elevatedPoints.length - 1;
+    elevatedPoints = [elevatedPoints[0], ...elevatedPoints.slice(1).map((p, i) => ({
+      x: p.x * (1 - (i + 1) / (n + 1)) + elevatedPoints[i].x * (i + 1) / (n + 1),
+      y: p.y * (1 - (i + 1) / (n + 1)) + elevatedPoints[i].y * (i + 1) / (n + 1)
+    })), elevatedPoints.at(-1)];
+    const error = Math.max(...points.map((p, i) => Math.hypot(p.x - elevatedPoints[i].x, p.y - elevatedPoints[i].y)));
+    return { points: reduced, error };
+  }
   function removeControls(doc, ids) {
     for (const c of doc.contours) c.segments.forEach(s => {
       s.controls = s.controls.filter(p => !ids.has(p.id)); s.type = G.typeForControls(s.controls.length);
@@ -784,7 +969,7 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
       if (direction > 1e-9) { target.x = node.x - (source.x - node.x) / direction * length; target.y = node.y - (source.y - node.y) / direction * length; }
     });
   }
-  Object.assign(G, { addControl, removeControls, nearestPoint, reshapeSegment, cutAtNode, cutAtParameter, polynomialRoots, bernsteinRoots, lineIntersections, extremaParameters, addExtrema, cutWithLine, joinEndpoints, setStartPoint, pointBounds, transformPoints, snapPosition, preserveSmooth });
+  Object.assign(G, { addControl, reduceDegreeOne, removeControls, nearestPoint, reshapeSegment, cutAtNode, cutAtParameter, polynomialRoots, bernsteinRoots, lineIntersections, extremaParameters, addExtrema, cutWithLine, joinEndpoints, setStartPoint, pointBounds, transformPoints, snapPosition, preserveSmooth });
   if (typeof module !== 'undefined' && module.exports) module.exports = G;
 })(typeof module !== 'undefined' && module.exports ? require('./geometry') : globalThis.QuarticGeometry);
 
@@ -1261,8 +1446,9 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
       if (chain.has(id)) throw new Error('GLIF 构件存在循环引用：' + id);
       if (entry.doc) return entry;
       if (entry.error) throw new Error(entry.error);
+      if (entry.loading) return entry.loading;
       const branch = new Set(chain); branch.add(id);
-      try {
+      entry.loading = (async () => { try {
         const text = await this.readText(entry), options = { ...this.options };
         if (G.fileExtension(entry.path) === 'glif') {
           const metadata = await this.layerMetadata(entry.path), references = G.glifReferences(text, this.options.Parser), bases = new Map();
@@ -1275,7 +1461,8 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
         }
         const result = G.importText(text, entry.path, options); entry.doc = result.doc; entry.warnings = result.warnings; entry.baseline = G.serialize(result.doc); entry.error = null;
         return entry;
-      } catch (error) { entry.error = error.message; throw error; }
+      } catch (error) { entry.error = error.message; throw error; } finally { entry.loading = null; } })();
+      return entry.loading;
     }
     capture(id, doc, history, future, view) {
       const entry = this.byPath.get(id); if (!entry || !entry.doc) return;
@@ -1326,6 +1513,11 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     const draft = localStorage.getItem(storageKey) || localStorage.getItem('quartic-glyph.draft.v1');
     if (draft) { doc = G.validateDocument(JSON.parse(draft)); restored = true; }
   } catch (_) { storageAvailable = false; }
+  const uiFontStack = 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif';
+  const legacyNotoFontStack = '"Noto Sans Symbols 2", "Microsoft YaHei", sans-serif';
+  const defaults = { theme: 'system', palette: 'violet', contrast: false, fontFamily: uiFontStack, historyLimit: 100, persistHistory: true, pageSize: '60', wheelMode: 'wheel', invertWheel: false, closedHistoryKeys: [], shortcuts: { select: 'v', component: 'a', pen: 'p', line: 'l', knife: 'k' } };
+  let preferences = { ...defaults };
+  try { preferences = { ...defaults, ...JSON.parse(localStorage.getItem('higher-degree-glyph.preferences.v4') || '{}') }; preferences.shortcuts = { ...defaults.shortcuts, ...(preferences.shortcuts || {}) }; } catch (_) {}
   const state = { tool: 'select', selected: new Set(), contourId: doc.contours[0]?.id || null,
     segment: null, components: new Set(), grid: true, snap: false, snapNodes: true, snapEdges: false, gridStep: 10, precision: 2, snapHint: null, handles: true, fill: false, space: false,
     view: { x: 0, y: 0, scale: 1 }, fitMode: true, width: 1, height: 1, dpr: 1, pointer: null,
@@ -1335,7 +1527,80 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     state.selected.add(doc.contours[0].segments[4].controls[1].id);
   }
   let scheduled = false, saveTimer = null, toastTimer = null, exportResult = null, clipboard = null, clickTimer = null;
-  let project = null, libraryPage = 0, switchToken = 0, cubicMode = 'cubic', cubicResult = null, projectExportBusy = false, standaloneSession = null;
+  if (!['system', 'light', 'dark'].includes(preferences.theme)) preferences.theme = defaults.theme;
+  if (!['violet', 'blue', 'amber', 'mint'].includes(preferences.palette)) preferences.palette = defaults.palette;
+  if (!Number.isFinite(Number(preferences.historyLimit))) preferences.historyLimit = defaults.historyLimit;
+  preferences.historyLimit = Math.max(10, Math.min(1000, Math.round(Number(preferences.historyLimit))));
+  if (!['30', '60', '100', '200', 'all'].includes(String(preferences.pageSize))) preferences.pageSize = defaults.pageSize;
+  if (!['wheel', 'ctrl'].includes(preferences.wheelMode)) preferences.wheelMode = defaults.wheelMode;
+  preferences.invertWheel = !!preferences.invertWheel;
+  if (typeof preferences.fontFamily !== 'string' || preferences.fontFamily.length > 240 || /[;{}<>]/.test(preferences.fontFamily)) preferences.fontFamily = defaults.fontFamily;
+  if (preferences.fontFamily === legacyNotoFontStack) preferences.fontFamily = defaults.fontFamily;
+  preferences.contrast = !!preferences.contrast; preferences.persistHistory = preferences.persistHistory !== false;
+  if (!Array.isArray(preferences.closedHistoryKeys)) preferences.closedHistoryKeys = [];
+  for (const key of Object.keys(defaults.shortcuts)) if (!/^[a-z]$/i.test(preferences.shortcuts[key] || '')) preferences.shortcuts[key] = defaults.shortcuts[key];
+  let project = null, libraryPage = 0, pageSize = preferences.pageSize, switchToken = 0, cubicMode = 'cubic', cubicResult = null, projectExportBusy = false, standaloneSession = null;
+  let standaloneHistoryId = 'draft:' + (doc.glyph.unicode || doc.glyph.name), timeline = null, historyDb = null, historyGeneration = 0, libraryHydrating = false;
+  try { standaloneHistoryId = localStorage.getItem('higher-degree-glyph.history-key.v1') || standaloneHistoryId; } catch (_) {}
+  function setStandaloneHistoryId(value) { standaloneHistoryId = value; try { localStorage.setItem('higher-degree-glyph.history-key.v1', value); } catch (_) {} }
+  setStandaloneHistoryId(standaloneHistoryId);
+  const historyDbPromise = new Promise(resolve => {
+    if (!('indexedDB' in window)) { resolve(null); return; }
+    const request = indexedDB.open('higher-degree-glyph-history', 1);
+    request.onupgradeneeded = () => { if (!request.result.objectStoreNames.contains('files')) request.result.createObjectStore('files', { keyPath: 'key' }); };
+    request.onsuccess = () => { historyDb = request.result; resolve(historyDb); };
+    request.onerror = () => resolve(null);
+  });
+  function projectHistoryPrefix() {
+    return project ? `folder:${project.name}/` : '';
+  }
+  const historyKey = () => project?.activeId ? projectHistoryPrefix() + project.activeId : standaloneHistoryId;
+  function applyPreferences() {
+    const root = document.documentElement;
+    const dark = preferences.theme === 'dark' || preferences.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches;
+    document.body.dataset.theme = dark ? 'dark' : 'light'; document.body.dataset.palette = preferences.palette || 'violet';
+    document.body.dataset.contrast = preferences.contrast ? 'high' : 'normal';
+    root.style.setProperty('--ui-font', preferences.fontFamily || defaults.fontFamily);
+    $('library-page-size').value = pageSize; $('pref-page-size').value = pageSize;
+    $('pref-wheel-mode').value = preferences.wheelMode; $('pref-wheel-invert').checked = preferences.invertWheel;
+    const labels = { select: 'V', component: 'A', pen: 'P', line: 'L', knife: 'K' };
+    document.querySelectorAll('[data-tool]').forEach(button => { const tool = button.dataset.tool, key = preferences.shortcuts[tool] || labels[tool]; const mark = button.querySelector('span'); if (mark && key) mark.textContent = key.toUpperCase(); });
+    document.querySelectorAll('[data-help-shortcut]').forEach(mark => { const key = preferences.shortcuts[mark.dataset.helpShortcut]; if (key) mark.textContent = key.toUpperCase(); });
+  }
+  function storePreferences() {
+    try { localStorage.setItem('higher-degree-glyph.preferences.v4', JSON.stringify(preferences)); } catch (_) {}
+    savePreferences(); applyPreferences();
+  }
+  function dbRequest(mode, action) {
+    return historyDbPromise.then(db => new Promise((resolve, reject) => {
+      if (!db) return resolve(null);
+      const tx = db.transaction('files', mode), store = tx.objectStore('files'); let request;
+      try { request = action(store); } catch (error) { reject(error); return; }
+      tx.oncomplete = () => resolve(request?.result ?? null); tx.onerror = () => reject(tx.error); tx.onabort = () => reject(tx.error);
+    }));
+  }
+  async function writeTimeline() {
+    if (!timeline || !preferences.persistHistory || preferences.closedHistoryKeys.includes(timeline.key)) return;
+    try { await dbRequest('readwrite', store => store.put(timeline)); } catch (_) { toast('本地历史写入失败；请检查浏览器存储空间', true); }
+  }
+  function loadTimelineIntoState() {
+    if (!timeline) return;
+    state.history = timeline.items.slice(0, timeline.cursor).map(item => G.clone(item.doc));
+    state.future = timeline.items.slice(timeline.cursor + 1).map(item => G.clone(item.doc)).reverse();
+    doc = G.clone(timeline.items[timeline.cursor].doc);
+  }
+  async function activateHistory(key, fallback = doc) {
+    const owner = project, token = switchToken, generation = historyGeneration;
+    let saved = null;
+    if (preferences.persistHistory) { try { saved = await dbRequest('readonly', store => store.get(key)); } catch (_) {} }
+    if (token !== switchToken || owner !== project || generation !== historyGeneration) return;
+    timeline = saved?.items?.length ? saved : { key, label: key.split('/').at(-1), items: [{ doc: G.clone(fallback), label: '打开字形', time: Date.now() }], cursor: 0 };
+    timeline.cursor = Math.max(0, Math.min(timeline.cursor, timeline.items.length - 1));
+    loadTimelineIntoState();
+    const entry = project?.activeId && project.byPath.get(project.activeId);
+    if (entry) { entry.history = state.history; entry.future = state.future; entry.doc = G.clone(doc); entry.modified = G.serialize(doc) !== entry.baseline; }
+    await writeTimeline(); update(); renderLibrary(); renderHistory();
+  }
   try {
     const prefs = JSON.parse(localStorage.getItem('higher-degree-glyph.preferences.v3') || localStorage.getItem('quartic-glyph.preferences.v2') || '{}');
     if (Number.isFinite(prefs.gridStep) && prefs.gridStep >= .001 && prefs.gridStep <= 10000) state.gridStep = prefs.gridStep;
@@ -1405,7 +1670,7 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     return hit.point;
   }
   function savePreferences() {
-    try { localStorage.setItem('higher-degree-glyph.preferences.v3', JSON.stringify(Object.fromEntries(['snap', 'snapNodes', 'snapEdges', 'gridStep', 'precision', 'maxControls', 'anchor'].map(k => [k, state[k]])))); } catch (_) {}
+    try { localStorage.setItem('higher-degree-glyph.preferences.v3', JSON.stringify({ ...Object.fromEntries(['snap', 'snapNodes', 'snapEdges', 'gridStep', 'precision', 'maxControls', 'anchor'].map(k => [k, state[k]])), ...preferences })); } catch (_) {}
   }
   const members = contour => contour.component ? doc.contours.filter(c => c.component === contour.component) : [contour];
   function newComponentId() { let id; do { id = 'component-' + G.uid(); } while (doc.contours.some(c => c.component === id)); return id; }
@@ -1421,6 +1686,42 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('toast').hidden = true; }, error ? 5500 : 3000);
   }
   function setStatus(message) { $('status-text').textContent = message; }
+  function renderHistory() {
+    if (!timeline || !$('history-list')) return;
+    const list = $('history-list'), limit = Math.max(10, Number(preferences.historyLimit) || 100); list.replaceChildren();
+    const first = Math.max(0, timeline.items.length - limit - 1);
+    for (let i = timeline.items.length - 1; i >= first; i--) {
+      const item = timeline.items[i], li = document.createElement('li'), button = document.createElement('button');
+      button.className = i === timeline.cursor ? 'current' : ''; button.type = 'button';
+      button.textContent = item.label + ' · ' + new Date(item.time).toLocaleTimeString();
+      button.title = new Date(item.time).toLocaleString(); button.onclick = () => {
+        if (i === timeline.cursor) return;
+        timeline.cursor = i; loadTimelineIntoState(); finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null;
+        state.history = timeline.items.slice(0, i).map(entry => G.clone(entry.doc));
+        state.future = timeline.items.slice(i + 1).map(entry => G.clone(entry.doc)).reverse();
+        persist(); renderHistory(); writeTimeline(); update(); setStatus('已跳转到历史步骤');
+      };
+      li.append(button); list.append(li);
+    }
+    $('history-limit').value = preferences.historyLimit;
+  }
+  async function renderHistoryManager() {
+    const list = $('history-records'); list.replaceChildren();
+    const entries = await dbRequest('readonly', store => store.getAll()) || [];
+    for (const entry of entries) {
+      const label = document.createElement('label'); label.className = 'history-record-row';
+      const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.value = entry.key;
+      const text = document.createElement('span'); text.textContent = `${entry.label || entry.key} · ${(entry.items || []).length} 步 · ${new Date(entry.items?.at(-1)?.time || 0).toLocaleDateString()}${preferences.closedHistoryKeys.includes(entry.key) ? ' · 已暂停' : ''}`;
+      label.append(checkbox, text); list.append(label);
+    }
+    if (!entries.length) list.textContent = '没有已保存的历史记录';
+  }
+  function setPageSize(value, warn = true) {
+    if (value === 'all' && project?.entries.length > 1000 && warn && !window.confirm(`此文件夹有 ${project.entries.length} 个字形。单列表可能影响性能，仍要显示全部吗？`)) {
+      $('library-page-size').value = pageSize; $('pref-page-size').value = pageSize; return;
+    }
+    pageSize = value; preferences.pageSize = value; libraryPage = 0; storePreferences(); renderLibrary();
+  }
   function persist() {
     captureProject(); renderLibrary();
     clearTimeout(saveTimer);
@@ -1442,8 +1743,15 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     if (JSON.stringify(before) === JSON.stringify(doc)) { update(); return; }
     try { G.validateDocument(doc); }
     catch (error) { doc = before; finishDrawing(); normalizeSelection(); update(); toast(error.message, true); return; }
-    state.history.push(before); if (state.history.length > 100) state.history.shift();
+    state.history.push(before); if (state.history.length > preferences.historyLimit) state.history.shift();
     state.future = []; normalizeSelection(); persist(); setStatus(message); update();
+    historyGeneration++;
+    const key = historyKey();
+    if (!timeline || timeline.key !== key) timeline = { key, label: key.split('/').at(-1), items: [{ doc: G.clone(before), label: '打开字形', time: Date.now() }], cursor: 0 };
+    timeline.items.splice(timeline.cursor + 1);
+    timeline.items.push({ doc: G.clone(doc), label: message, time: Date.now() }); timeline.cursor = timeline.items.length - 1;
+    if (timeline.items.length > preferences.historyLimit + 1) { timeline.items.shift(); timeline.cursor--; }
+    renderHistory(); writeTimeline();
   }
   function edit(message, action) {
     const before = G.clone(doc);
@@ -1454,11 +1762,15 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     if (state.pending.length) { state.pending.pop(); update(); return; }
     if (!state.history.length) return;
     state.future.push(G.clone(doc)); doc = state.history.pop(); finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null;
+    historyGeneration++;
+    if (timeline?.key === historyKey()) { timeline.cursor = Math.max(0, timeline.cursor - 1); writeTimeline(); renderHistory(); }
     normalizeSelection(); persist(); update(); setStatus('已撤销');
   }
   function redo() {
     if (!state.future.length) return;
     state.history.push(G.clone(doc)); doc = state.future.pop(); finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null;
+    historyGeneration++;
+    if (timeline?.key === historyKey()) { timeline.cursor = Math.min(timeline.items.length - 1, timeline.cursor + 1); writeTimeline(); renderHistory(); }
     normalizeSelection(); persist(); update(); setStatus('已重做');
   }
   function update() { updateUI(); requestDraw(); }
@@ -1468,11 +1780,11 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
   }
   function fit() {
     state.fitMode = true;
-    const b = G.bounds(doc), width = Math.max(b.maxX - b.minX, doc.glyph.advanceWidth), height = Math.max(b.maxY - b.minY, doc.glyph.upm * 0.64);
+    const b = G.bounds(doc), width = Math.max(b.maxX - b.minX, doc.glyph.advanceWidth), metricMin = Math.min(b.minY, doc.glyph.descender, 0), metricMax = Math.max(b.maxY, doc.glyph.ascender, 0), height = Math.max(b.maxY - b.minY, metricMax - metricMin, doc.glyph.upm * 0.64);
     const sx = Math.max(70, state.width - 150) / width, sy = Math.max(100, state.height - 150) / height;
     state.view.scale = Math.max(0.02, Math.min(6, sx, sy));
     state.view.x = state.width / 2 - (b.minX + b.maxX) / 2 * state.view.scale;
-    state.view.y = state.height * 0.53 + (b.minY + b.maxY) / 2 * state.view.scale;
+    state.view.y = state.height * 0.53 + (metricMin + metricMax) / 2 * state.view.scale;
     requestDraw(); updateZoom();
   }
   function zoom(factor, center = { x: state.width / 2, y: state.height / 2 }) {
@@ -1519,7 +1831,8 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
         const { origin, direction } = state.constraintGuide, length = Math.hypot(direction.x, direction.y), span = 2000 / state.view.scale;
         if (length > 1e-10) { const a = screen({ x: origin.x - direction.x / length * span, y: origin.y - direction.y / length * span }), b = screen({ x: origin.x + direction.x / length * span, y: origin.y + direction.y / length * span }); ctx.strokeStyle = '#4b9f9a'; ctx.lineWidth = 1; ctx.setLineDash([6, 4]); line(ctx, a, b); ctx.setLineDash([]); }
       }
-      const guides = [[doc.glyph.ascender, 'ascender', '#d9d2e4'], [doc.glyph.capHeight, 'cap height', '#dfd7e7'], [doc.glyph.xHeight, 'x-height', '#d5c8e8'], [0, 'baseline', '#bba4d8'], [doc.glyph.descender, 'descender', '#d9d2e4']];
+      const guideColors = preferences.contrast ? ['#0057b8', '#00875a', '#b3006b', '#111111', '#b34c00'] : ['#d9d2e4', '#dfd7e7', '#d5c8e8', '#bba4d8', '#d9d2e4'];
+      const guides = [[doc.glyph.ascender, '升部', guideColors[0]], [doc.glyph.capHeight, '大写', guideColors[1]], [doc.glyph.xHeight, 'x高', guideColors[2]], [0, '基线', guideColors[3]], [doc.glyph.descender, '降部', guideColors[4]]];
       ctx.font = '9px Consolas, monospace';
       for (const [value, name, color] of guides) {
         const y = screen({ x: 0, y: value }).y;
@@ -1528,9 +1841,10 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
         line(ctx, { x: 24, y }, { x: w, y }); ctx.setLineDash([]);
         ctx.fillStyle = color === '#bba4d8' ? '#ad91c8' : '#bdb0cb'; ctx.fillText(name + '  ' + value, 35, y - 6);
       }
-      for (const x of [0, doc.glyph.advanceWidth]) {
-        ctx.strokeStyle = '#d4c9e1'; ctx.lineWidth = .8; ctx.setLineDash([3, 5]);
+      for (const [x, name, color] of [[G.bounds(doc).minX, '左边距', preferences.contrast ? '#0057b8' : '#b89dd5'], [doc.glyph.advanceWidth, '右边距', preferences.contrast ? '#b34c00' : '#d4c9e1']]) {
+        ctx.strokeStyle = color; ctx.lineWidth = .9; ctx.setLineDash([3, 5]);
         const p = screen({ x, y: 0 }); line(ctx, { x: p.x, y: 24 }, { x: p.x, y: h }); ctx.setLineDash([]);
+        ctx.font = '9px Consolas, monospace'; ctx.fillStyle = color; ctx.fillText(name, p.x + 3, 36);
       }
     }
     // Rulers stay in screen coordinates and remain legible at every zoom level.
@@ -1714,6 +2028,12 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     $('snap-button').classList.toggle('is-on', state.snap); $('snap-button').setAttribute('aria-pressed', String(state.snap)); $('snap-button').title = `网格吸附：${state.gridStep} 单位 (S)`;
     for (const id of ['point-x', 'point-y']) $(id).step = state.precision < 0 ? 'any' : String(10 ** -state.precision);
     $('export-button').disabled = !doc.contours.some(c => c.segments.length);
+    setInput('pref-theme', preferences.theme); setInput('pref-palette', preferences.palette); $('pref-contrast').checked = preferences.contrast;
+    setInput('pref-font', preferences.fontFamily); setInput('pref-history-limit', preferences.historyLimit); $('pref-history-storage').checked = preferences.persistHistory;
+    $('pref-wheel-mode').value = preferences.wheelMode; $('pref-wheel-invert').checked = preferences.invertWheel;
+    $('pref-page-size').value = pageSize; $('library-page-size').value = pageSize;
+    document.querySelectorAll('[data-shortcut]').forEach(input => { if (document.activeElement !== input) input.value = preferences.shortcuts[input.dataset.shortcut] || ''; });
+    renderHistory();
     updateHint();
   }
   function updateTransformFields() {
@@ -1759,6 +2079,16 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     let best = null, nearest = 9;
     for (const p of points) { const d = G.distance(screen(p.point), q); if (d < nearest) { nearest = d; best = p; } }
     return best;
+  }
+  function hitMetric(q) {
+    if (state.fill || state.tool !== 'select') return null;
+    const b = G.bounds(doc), candidates = [
+      { key: 'leftBearing', distance: Math.abs(q.x - screen({ x: b.minX, y: 0 }).x) },
+      { key: 'rightBearing', distance: Math.abs(q.x - screen({ x: doc.glyph.advanceWidth, y: 0 }).x) },
+      ...['ascender', 'capHeight', 'xHeight', 'descender'].map(key => ({ key, distance: Math.abs(q.y - screen({ x: 0, y: doc.glyph[key] }).y) }))
+    ].filter(item => item.distance <= 8 && (['ascender', 'capHeight', 'xHeight', 'descender'].includes(item.key) || q.y <= 42));
+    if (!candidates.length) return null;
+    return candidates.sort((a, b) => a.distance - b.distance)[0].key;
   }
   function hitSegment(q) {
     const p = fontPoint(q); let hit = null, nearest = 8 / state.view.scale;
@@ -1865,7 +2195,15 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
       const curve = hitSegment(q); if (curve) insertAtCurve(curve, true); return;
     }
     if (state.tool === 'rect' || state.tool === 'ellipse') { state.drag = { type: 'shape', start: q, current: q }; return; }
+    if (event.button === 0) {
+      const metric = !hitPoint(q) && !hitSegment(q) ? hitMetric(q) : null;
+      if (metric) { state.drag = { type: 'metric', key: metric, start: fontPoint(q), before: G.clone(doc) }; return; }
+    }
     const hit = hitPoint(q);
+    if (event.button === 0 && hit && state.tool === 'select' && !state.components.size && state.selected.has(hit.point.id)) {
+      const selectedNodes = G.allPoints(doc).filter(entry => state.selected.has(entry.point.id));
+      if (selectedNodes.length > 1 && selectedNodes.every(entry => entry.kind === 'node')) { changeFrameMode(state.frameMode === 'scale' ? 'rotate' : 'scale'); return; }
+    }
     if (hit) {
       state.components.clear();
       const shiftHandle = event.shiftKey && state.selected.size === 1 && state.selected.has(hit.point.id) && hit.kind === 'control' && G.smoothNeighborhood(doc, hit.point.id);
@@ -1891,9 +2229,26 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
   });
   canvas.addEventListener('pointermove', event => {
     const q = eventPoint(event); state.pointer = q; const p = fontPoint(q);
+    if (!state.drag) { const metric = hitMetric(q); canvas.style.cursor = metric ? metric.endsWith('Bearing') ? 'ew-resize' : 'ns-resize' : ''; }
     $('pointer-coordinate').textContent = 'X ' + rounded(p.x) + '   Y ' + rounded(p.y);
     const drag = state.drag;
-    if (drag?.type === 'frame') {
+    if (drag?.type === 'metric') {
+      const target = fontPoint(q), dx = target.x - drag.start.x, dy = target.y - drag.start.y; doc = G.clone(drag.before);
+      if (drag.key === 'leftBearing') {
+        const shift = Math.max(-1e6, Math.min(1e6, dx));
+        G.allPoints(doc).forEach(({ point: pt }) => { pt.x = Math.max(-1e6, Math.min(1e6, pt.x + shift)); });
+        doc.glyph.advanceWidth = Math.max(0, Math.min(100000, doc.glyph.advanceWidth + shift));
+      } else if (drag.key === 'rightBearing') doc.glyph.advanceWidth = Math.max(0, Math.min(100000, drag.before.glyph.advanceWidth + dx));
+      else {
+        let value = drag.before.glyph[drag.key] + dy;
+        if (drag.key === 'ascender') value = Math.max(1, drag.before.glyph.capHeight, value);
+        if (drag.key === 'capHeight') value = Math.max(drag.before.glyph.xHeight, Math.min(drag.before.glyph.ascender, value));
+        if (drag.key === 'xHeight') value = Math.max(0, Math.min(drag.before.glyph.capHeight, value));
+        if (drag.key === 'descender') value = Math.min(0, value);
+        doc.glyph[drag.key] = Math.max(-100000, Math.min(100000, value));
+      }
+      updateUI(); setStatus('拖动调整字形度量');
+    } else if (drag?.type === 'frame') {
       const delta = { x: (q.x - drag.start.x) / state.view.scale, y: -(q.y - drag.start.y) / state.view.scale };
       const target = { x: drag.handlePoint.x + delta.x, y: drag.handlePoint.y + delta.y };
       const result = G.frameTransform(drag.bounds, drag.origin, drag.mode, drag.handle, drag.handlePoint, target, { uniform: state.lockAspect || event.shiftKey, snapAngle: event.shiftKey });
@@ -1945,6 +2300,7 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     state.constraintGuide = null;
     if (cancelled) { if (drag.before) doc = drag.before; if (drag.type === 'pivot') state.pivot = drag.oldPivot; update(); return; }
     if (drag.type === 'frame') record(drag.before, drag.mode === 'scale' ? '已拉伸 / 缩放选择' : '已旋转 / 倾斜选择');
+    if (drag.type === 'metric') record(drag.before, '已调整字形度量');
     if (drag.type === 'points') record(drag.before, '已移动节点');
     if (drag.type === 'curve') {
       if (drag.moved) record(drag.before, '已拖动曲线边缘调整形状');
@@ -1990,7 +2346,10 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     if (selectionFrame() && insideFrame(eventPoint(event))) { clearTimeout(clickTimer); changeFrameMode(state.frameMode === 'scale' ? 'rotate' : 'scale'); return; }
     if (state.tool === 'pen' || state.tool === 'line') { finishDrawing(); update(); }
   });
-  canvas.addEventListener('wheel', event => { event.preventDefault(); if (!state.drag) zoom(Math.exp(-event.deltaY * .0015), eventPoint(event)); }, { passive: false });
+  canvas.addEventListener('wheel', event => {
+    if (preferences.wheelMode === 'ctrl' && !(event.ctrlKey || event.metaKey)) return;
+    event.preventDefault(); if (!state.drag) zoom(Math.exp((preferences.invertWheel ? 1 : -1) * event.deltaY * .0015), eventPoint(event));
+  }, { passive: false });
   canvas.addEventListener('contextmenu', event => event.preventDefault());
   function createShape(a, b, type) {
     edit(type === 'rect' ? '已绘制矩形' : '已绘制四次椭圆', () => {
@@ -2022,6 +2381,21 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
       doc.contours = doc.contours.filter(c => c.nodes.length); state.selected.clear(); state.components.clear(); state.segment = null; finishDrawing();
     });
   }
+  function simplifySelectedControl() {
+    const entry = selectedPoint(); if (!entry || entry.kind !== 'control') return false;
+    const segment = entry.contour.segments[entry.index]; if (!segment || !segment.controls.includes(entry.point)) return false;
+    let error = 0;
+    edit('已删除控制点并降低曲线阶数', () => {
+      const fit = G.reduceDegreeOne(G.segmentPoints(entry.contour, entry.index)); error = fit.error;
+      const remaining = segment.controls.filter(point => point.id !== entry.point.id), controls = fit.points.slice(1, -1);
+      if (remaining.length !== controls.length) throw new Error('曲线降阶失败：控制点结构不匹配');
+      controls.forEach((point, index) => { remaining[index].x = point.x; remaining[index].y = point.y; });
+      segment.controls = remaining; segment.type = G.typeForControls(remaining.length);
+      state.selected.clear(); state.segment = { contourId: entry.contour.id, index: entry.index };
+    });
+    if (error > .000001) toast(`已拟合为低一阶曲线 · 最大控制多边形误差上界 ${Number(error.toFixed(3))}`);
+    return true;
+  }
   function smoothSelected() {
     const selected = selectedPoint(); if (!selected || selected.kind !== 'node') return;
     const c = selected.contour, i = selected.index, n = c.nodes.length, outgoing = c.segments[i], incoming = c.segments[(i - 1 + n) % n];
@@ -2035,11 +2409,14 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
       p.smooth = true;
     });
   }
-  function replaceDocument(next, message) {
+  function replaceDocument(next, message, historyId) {
     ++switchToken;
     captureProject(); if (project) project.activeId = null; renderLibrary();
-    edit(message, () => { doc = next; finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null; state.contourId = doc.contours[0]?.id || null; });
-    setTool('select'); fit();
+    setStandaloneHistoryId(historyId || 'glyph:' + (next.glyph.unicode || next.glyph.name)); historyGeneration++;
+    doc = G.validateDocument(next); state.history = []; state.future = []; timeline = null; finishDrawing();
+    state.selected.clear(); state.components.clear(); state.segment = null; state.contourId = doc.contours[0]?.id || null;
+    persist(); update(); setStatus(message);
+    setTool('select'); fit(); activateHistory(standaloneHistoryId, doc);
   }
   function confirmReplace() { return !doc.contours.length || window.confirm('替换当前字形？可通过撤销恢复；建议先下载 .glyph 保存。'); }
   function download(content, name, mime) {
@@ -2055,7 +2432,7 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     try {
       if (file.size > 5 * 1024 * 1024) throw new Error('文件超过 5 MB 上限');
       const result = G.importText(await file.text(), file.name);
-      if (confirmReplace()) { replaceDocument(result.doc, '已导入字形'); toast('已导入 ' + result.doc.glyph.name + (result.warnings.length ? ' · ' + result.warnings.join('；') : ' · ' + result.doc.contours.length + ' 个轮廓')); }
+      if (confirmReplace()) { replaceDocument(result.doc, '已导入字形', `file:${file.name}:${file.size}:${file.lastModified || 0}`); toast('已导入 ' + result.doc.glyph.name + (result.warnings.length ? ' · ' + result.warnings.join('；') : ' · ' + result.doc.contours.length + ' 个轮廓')); }
     } catch (error) { toast(error.message, true); }
     $('file-input').value = '';
   }
@@ -2126,8 +2503,10 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     }
     const search = $('library-search').value.trim().toLowerCase(), modifiedOnly = $('library-changed').checked;
     const entries = project.entries.filter(e => (!modifiedOnly || e.modified) && (!search || (e.path + ' ' + (e.doc?.glyph.name || '') + ' ' + (e.doc?.glyph.unicode || '')).toLowerCase().includes(search)));
-    const pages = Math.max(1, Math.ceil(entries.length / 60)); libraryPage = Math.max(0, Math.min(libraryPage, pages - 1));
-    for (const entry of entries.slice(libraryPage * 60, (libraryPage + 1) * 60)) {
+    const limit = pageSize === 'all' ? entries.length || 1 : Math.max(1, Number(pageSize) || 60);
+    const pages = Math.max(1, Math.ceil(entries.length / limit)); libraryPage = Math.max(0, Math.min(libraryPage, pages - 1));
+    const visibleEntries = entries.slice(libraryPage * limit, (libraryPage + 1) * limit);
+    for (const entry of visibleEntries) {
       const button = document.createElement('button'); button.className = 'glyph-file' + (entry.id === project.activeId ? ' active' : '') + (entry.error ? ' error' : ''); button.dataset.path = entry.path;
       button.setAttribute('role', 'option'); button.setAttribute('aria-selected', String(entry.id === project.activeId)); button.title = entry.path + (entry.error ? '\n' + entry.error : entry.warnings.length ? '\n' + entry.warnings.join('；') : '');
       const icon = document.createElement('span'); icon.className = 'glyph-file-thumb';
@@ -2152,6 +2531,14 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     if (!entries.length) { const empty = document.createElement('p'); empty.className = 'library-empty'; empty.textContent = '没有匹配的字形'; list.append(empty); }
     $('library-page-label').textContent = `${libraryPage + 1} / ${pages}`;
     $('library-prev').disabled = libraryPage <= 0; $('library-next').disabled = libraryPage >= pages - 1;
+    if (!libraryHydrating && visibleEntries.some(entry => !entry.doc && !entry.error)) {
+      const owner = project, pending = visibleEntries.filter(entry => !entry.doc && !entry.error);
+      libraryHydrating = true; $('library-progress').textContent = '缩略图…';
+      setTimeout(() => Promise.all(pending.map(entry => owner.load(entry.id).catch(() => null))).finally(() => {
+        libraryHydrating = false;
+        if (owner === project) { $('library-progress').textContent = '本地文件'; renderLibrary(); }
+      }), 0);
+    }
   }
   async function switchProjectGlyph(id) {
     if (!project || id === project.activeId || projectExportBusy) return;
@@ -2163,9 +2550,9 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
       captureProject();
       if (!project.activeId) standaloneSession = { doc: G.clone(doc), history: state.history, future: state.future, view: { ...state.view } };
       clearTimeout(clickTimer); clearTimeout(saveTimer); finishDrawing(); state.drag = null; state.selected.clear(); state.components.clear(); state.segment = null; state.pivot = null;
-      project.activeId = id; doc = G.clone(entry.doc); state.history = entry.history; state.future = entry.future; state.contourId = doc.contours[0]?.id || null;
+       project.activeId = id; doc = G.clone(entry.doc); state.history = entry.history; state.future = entry.future; timeline = null; historyGeneration++; state.contourId = doc.contours[0]?.id || null;
       setTool('select'); if (entry.view) { state.view = { ...entry.view }; state.fitMode = false; updateZoom(); requestDraw(); } else fit();
-      persist(); renderLibrary(); setStatus('文件夹 · ' + entry.path);
+       persist(); renderLibrary(); setStatus('文件夹 · ' + entry.path); activateHistory(historyKey(), doc);
       if (entry.warnings.length) toast(entry.warnings.join('；'));
     } catch (error) { if (owner === project && token === switchToken) { renderLibrary(); toast('无法打开字形：' + error.message, true); } }
     finally { if (owner === project && token === switchToken) $('library-progress').textContent = '本地文件'; }
@@ -2173,7 +2560,7 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
   function restoreStandalone() {
     if (!standaloneSession || !project) return;
     ++switchToken; captureProject(); const session = standaloneSession;
-    project.activeId = null; doc = G.clone(session.doc); state.history = session.history; state.future = session.future; state.view = { ...session.view };
+    project.activeId = null; doc = G.clone(session.doc); state.history = session.history; state.future = session.future; state.view = { ...session.view }; setStandaloneHistoryId(session.historyId || standaloneHistoryId); timeline = null; historyGeneration++;
     finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null; state.contourId = doc.contours[0]?.id || null; state.fitMode = false;
     update(); updateZoom(); persist(); renderLibrary(); setStatus('独立字形');
   }
@@ -2187,9 +2574,10 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
       if (!next.entries.length) throw new Error('该文件夹没有 .glyph / .glif / .svg / .json 文件');
       ++switchToken;
       // Keep the currently visible glyph as a recoverable standalone session.
-      standaloneSession = { doc: G.clone(doc), history: state.history, future: state.future, view: { ...state.view } };
+      standaloneSession = { doc: G.clone(doc), history: state.history, future: state.future, view: { ...state.view }, historyId: standaloneHistoryId };
       project = next; libraryPage = 0; $('library-search').value = ''; $('library-changed').checked = false;
-      setLibraryExpanded(true); renderLibrary(); toast(`已载入 ${next.entries.length} 个字形文件；点击左栏打开`);
+      if (pageSize === 'all' && next.entries.length > 1000 && !window.confirm(`该文件夹有 ${next.entries.length} 个字形。显示全部可能影响性能，是否继续？`)) { pageSize = preferences.pageSize = '200'; storePreferences(); }
+      setLibraryExpanded(true); renderLibrary(); toast(`已载入 ${next.entries.length} 个字形文件；当前页缩略图正在生成`);
     } catch (error) { toast(error.message, true); }
     $('folder-input').value = '';
   }
@@ -2224,7 +2612,7 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
   $('project-export-dialog').addEventListener('cancel', event => { if (projectExportBusy) event.preventDefault(); });
   document.querySelector('.brand').addEventListener('click', event => { event.preventDefault(); fit(); });
   $('undo-button').onclick = undo; $('redo-button').onclick = redo;
-  $('new-button').onclick = () => { if (confirmReplace()) replaceDocument(G.emptyDocument(), '已新建字形'); };
+  $('new-button').onclick = () => { if (confirmReplace()) replaceDocument(G.emptyDocument(), '已新建字形', 'draft:' + G.uid()); };
   $('import-button').onclick = () => $('file-input').click(); $('save-button').onclick = saveGlyph;
   $('file-input').onchange = () => importFile($('file-input').files[0]);
   $('export-button').onclick = () => { refreshExport(); $('export-dialog').showModal(); };
@@ -2232,7 +2620,7 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
   $('download-svg').onclick = () => { refreshExport(); if (!exportResult) return; download(exportResult.svg, filename('.svg'), 'image/svg+xml'); $('export-dialog').close(); toast('已导出 ' + exportResult.cubicCount + ' 段三次曲线 SVG'); };
   $('help-button').onclick = $('shortcut-button').onclick = () => $('help-dialog').showModal();
   $('empty-pen').onclick = () => setTool('pen');
-  $('load-sample').onclick = $('reset-sample').onclick = () => { if (confirmReplace()) { replaceDocument(G.sampleDocument(), '已载入示例'); $('help-dialog').close(); } };
+  $('load-sample').onclick = $('reset-sample').onclick = () => { if (confirmReplace()) { replaceDocument(G.sampleDocument(), '已载入示例', 'sample:a'); $('help-dialog').close(); } };
   $('fit-button').onclick = fit; $('zoom-in').onclick = () => zoom(1.2); $('zoom-out').onclick = () => zoom(1 / 1.2); $('zoom-label').onclick = () => zoom(1 / state.view.scale);
   $('outline-button').onclick = () => setFill(false); $('fill-button').onclick = () => setFill(true);
   $('grid-button').onclick = () => { state.grid = !state.grid; $('grid-button').classList.toggle('is-on', state.grid); $('grid-button').setAttribute('aria-pressed', String(state.grid)); requestDraw(); };
@@ -2387,7 +2775,14 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
   const metadataBindings = [['glyph-name', 'name'], ['glyph-unicode', 'unicode'], ...['upm', 'advanceWidth', 'ascender', 'descender', 'capHeight', 'xHeight'].map(key => ['metric-' + key, key])];
   metadataBindings.forEach(([id, key]) => $(id).addEventListener('change', () => {
     let value = $(id).value.trim();
-    if (key === 'unicode') value = value.toUpperCase().replace(/^U\+/, '');
+    if (key === 'unicode') {
+      const quoted = value.match(/^"([\s\S]*)"$/);
+      if (quoted) {
+        const chars = Array.from(quoted[1]);
+        if (chars.length !== 1) { $(id).value = doc.glyph.unicode; toast('引号内请输入一个 Unicode 字符', true); return; }
+        value = chars[0].codePointAt(0).toString(16).toUpperCase().padStart(4, '0');
+      } else value = value.toUpperCase().replace(/^U\+/, '');
+    }
     if (!['name', 'unicode'].includes(key)) value = value === '' ? NaN : Number(value);
     const next = G.clone(doc); next.glyph[key] = value;
     try { G.validateDocument(next); edit('已更新字形属性', () => { doc.glyph[key] = value; }); $(id).value = value; }
@@ -2398,6 +2793,107 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     const raw = $('point-' + axis).value.trim(), value = state.precision < 0 ? Number(raw) : rounded(Number(raw));
     if (!raw || !Number.isFinite(value) || Math.abs(value) > 1e6) { $('point-' + axis).value = rounded(p.point[axis]); toast('坐标必须在 ±1,000,000 以内', true); return; }
     edit('已精确调整坐标', () => { const delta = value - p.point[axis], moving = movablePoints(); moving.forEach(entry => { entry.point[axis] = Math.max(-1e6, Math.min(1e6, entry.point[axis] + delta)); }); }); $('point-' + axis).value = value;
+  }));
+  $('history-button').onclick = () => { $('history-panel').hidden = !$('history-panel').hidden; $('history-button').setAttribute('aria-pressed', String(!$('history-panel').hidden)); renderHistory(); };
+  $('history-hide').onclick = () => { $('history-panel').hidden = true; $('history-button').setAttribute('aria-pressed', 'false'); };
+  $('settings-button').onclick = () => { updateUI(); $('settings-dialog').showModal(); };
+  $('pref-theme').onchange = event => { preferences.theme = event.target.value; storePreferences(); requestDraw(); };
+  $('pref-palette').onchange = event => { preferences.palette = event.target.value; storePreferences(); requestDraw(); };
+  $('pref-contrast').onchange = event => { preferences.contrast = event.target.checked; storePreferences(); requestDraw(); };
+  $('pref-font').onchange = event => { const value = event.target.value.trim().replace(/[;{}<>]/g, '').slice(0, 240); preferences.fontFamily = value || defaults.fontFamily; event.target.value = preferences.fontFamily; storePreferences(); };
+  $('pref-wheel-mode').onchange = event => { preferences.wheelMode = event.target.value; storePreferences(); };
+  $('pref-wheel-invert').onchange = event => { preferences.invertWheel = event.target.checked; storePreferences(); };
+  $('pref-history-limit').onchange = event => $('history-limit').value = event.target.value;
+  function updateHistoryLimit(raw) {
+    const value = Math.max(10, Math.min(1000, Math.round(Number(raw) || 100))); preferences.historyLimit = value;
+    state.history = state.history.slice(-value); state.future = state.future.slice(0, value);
+    $('pref-history-limit').value = value;
+    if (timeline && timeline.items.length > value + 1) { const remove = timeline.items.length - value - 1; timeline.items.splice(0, remove); timeline.cursor = Math.max(0, timeline.cursor - remove); }
+    storePreferences(); renderHistory(); writeTimeline();
+  }
+  $('history-limit').onchange = event => updateHistoryLimit(event.target.value);
+  $('pref-history-limit').addEventListener('change', event => updateHistoryLimit(event.target.value));
+  $('pref-page-size').onchange = event => setPageSize(event.target.value);
+  $('library-page-size').onchange = event => setPageSize(event.target.value);
+  $('pref-history-storage').onchange = async event => {
+    if (!event.target.checked && !window.confirm('关闭本地历史会暂停保存所有文件与文件夹的新操作，已有记录会保留。是否继续？')) { event.target.checked = true; return; }
+    preferences.persistHistory = event.target.checked;
+    storePreferences();
+    if (preferences.persistHistory) {
+      const key = historyKey(), saved = await dbRequest('readonly', store => store.get(key));
+      if ((!timeline || timeline.key !== key || timeline.items.length <= 1) && saved?.items?.length) timeline = saved;
+      if (!timeline || timeline.key !== key) timeline = { key, label: doc.glyph.name, items: [], cursor: -1 };
+      const recoveryStates = [...state.history, G.clone(doc)];
+      for (const snapshot of recoveryStates) {
+        const current = timeline.items[timeline.cursor]?.doc;
+        if (current && G.serialize(current) === G.serialize(snapshot)) continue;
+        timeline.items.splice(timeline.cursor + 1);
+        timeline.items.push({ doc: G.clone(snapshot), label: '恢复编辑历史', time: Date.now() }); timeline.cursor = timeline.items.length - 1;
+      }
+      if (!timeline.items.length) { timeline.items.push({ doc: G.clone(doc), label: '当前状态', time: Date.now() }); timeline.cursor = 0; }
+      if (timeline.items.length > preferences.historyLimit + 1) { const remove = timeline.items.length - preferences.historyLimit - 1; timeline.items.splice(0, remove); timeline.cursor = Math.max(0, timeline.cursor - remove); }
+      state.history = timeline.items.slice(0, timeline.cursor).map(item => G.clone(item.doc));
+      state.future = timeline.items.slice(timeline.cursor + 1).map(item => G.clone(item.doc)).reverse();
+      writeTimeline(); renderHistory(); update();
+    }
+  };
+  function changeHistoryStatus(keys, paused) {
+    const next = new Set(preferences.closedHistoryKeys);
+    keys.forEach(key => paused ? next.add(key) : next.delete(key)); preferences.closedHistoryKeys = [...next]; storePreferences();
+    if (!paused) writeTimeline(); renderHistory(); renderHistoryManager();
+  }
+  $('history-manage').onclick = async () => { await renderHistoryManager(); $('history-manage-dialog').showModal(); };
+  $('history-delete-selected').onclick = async () => {
+    const keys = [...$('history-records').querySelectorAll('input:checked')].map(input => input.value);
+    if (!keys.length) return toast('请先选择要删除的历史记录');
+    if (!window.confirm(`将永久删除 ${keys.length} 个字形的本地历史，是否继续？`)) return;
+    await dbRequest('readwrite', store => { keys.forEach(key => store.delete(key)); return null; });
+    if (keys.includes(historyKey())) { timeline = { key: historyKey(), label: doc.glyph.name, items: [{ doc: G.clone(doc), label: '当前状态', time: Date.now() }], cursor: 0 }; state.history = []; state.future = []; }
+    writeTimeline(); await renderHistoryManager(); renderHistory(); toast('已删除所选历史记录');
+  };
+  $('history-pause-current').onclick = () => {
+    if (!window.confirm('暂停为当前字形保存后续编辑历史？已有记录会保留。')) return;
+    changeHistoryStatus([historyKey()], true); toast('当前字形历史已暂停');
+  };
+  $('history-pause-selected').onclick = () => {
+    const keys = [...$('history-records').querySelectorAll('input:checked')].map(input => input.value);
+    if (!keys.length) return toast('请先选择历史记录');
+    if (!window.confirm(`暂停为 ${keys.length} 个字形保存后续历史？已有记录会保留。`)) return;
+    changeHistoryStatus(keys, true);
+  };
+  $('history-resume-selected').onclick = () => {
+    const keys = [...$('history-records').querySelectorAll('input:checked')].map(input => input.value);
+    if (!keys.length) return toast('请先选择历史记录'); changeHistoryStatus(keys, false); toast('已恢复所选历史记录');
+  };
+  async function changeFolderHistoryStatus(paused) {
+    if (!project) return toast('请先导入字形文件夹');
+    const keys = project.entries.map(entry => projectHistoryPrefix() + entry.id);
+    if (!keys.length) return toast('当前文件夹没有字形');
+    if (paused && !window.confirm(`暂停为当前文件夹 ${keys.length} 个字形保存后续历史？已有记录会保留。`)) return;
+    changeHistoryStatus(keys, paused); toast(paused ? '已暂停当前文件夹历史' : '已恢复当前文件夹历史');
+  }
+  $('history-pause-folder').onclick = () => changeFolderHistoryStatus(true);
+  $('history-resume-folder').onclick = () => changeFolderHistoryStatus(false);
+  $('history-delete-folder').onclick = async () => {
+    if (!project) return toast('请先导入字形文件夹');
+    const prefix = projectHistoryPrefix(), entries = (await dbRequest('readonly', store => store.getAll()) || []).filter(entry => entry.key.startsWith(prefix));
+    if (!entries.length) return toast('当前文件夹没有已保存的历史');
+    if (!window.confirm(`将永久删除当前文件夹 ${entries.length} 个字形的本地历史，是否继续？`)) return;
+    await dbRequest('readwrite', store => { entries.forEach(entry => store.delete(entry.key)); return null; });
+    timeline = { key: historyKey(), label: doc.glyph.name, items: [{ doc: G.clone(doc), label: '当前状态', time: Date.now() }], cursor: 0 };
+    state.history = []; state.future = []; writeTimeline(); await renderHistoryManager(); renderHistory(); update();
+  };
+  $('history-clear-current').onclick = async () => {
+    if (!timeline || !window.confirm(`删除“${timeline.label}”的全部历史？该操作无法恢复。`)) return;
+    await dbRequest('readwrite', store => store.delete(timeline.key));
+    timeline = { key: historyKey(), label: doc.glyph.name, items: [{ doc: G.clone(doc), label: '当前状态', time: Date.now() }], cursor: 0 };
+    state.history = []; state.future = []; writeTimeline(); renderHistory(); update();
+  };
+  $('settings-reset').onclick = () => { preferences = { ...defaults, shortcuts: { ...defaults.shortcuts } }; pageSize = defaults.pageSize; storePreferences(); update(); toast('已恢复默认设置'); };
+  document.querySelectorAll('[data-shortcut]').forEach(input => input.addEventListener('change', () => {
+    const key = input.dataset.shortcut, value = input.value.trim().toLowerCase();
+    if (!/^[a-z]$/.test(value) || Object.entries(preferences.shortcuts).some(([other, assigned]) => other !== key && assigned === value)) { input.value = preferences.shortcuts[key]; toast('快捷键需为不重复的单个英文字母', true); return; }
+    preferences.shortcuts[key] = value; storePreferences();
   }));
   function duplicateContour() {
     copyContours(); pasteContours();
@@ -2427,6 +2923,7 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
       event.preventDefault(); const step = event.shiftKey ? 10 : 1, dx = key === 'arrowleft' ? -step : key === 'arrowright' ? step : 0, dy = key === 'arrowup' ? step : key === 'arrowdown' ? -step : 0;
       edit('已微移节点', () => { const moving = movablePoints(); moving.forEach(p => { p.point.x = Math.max(-1e6, Math.min(1e6, p.point.x + dx)); p.point.y = Math.max(-1e6, Math.min(1e6, p.point.y + dy)); }); }); return;
     }
+    if (key === 'delete' && event.shiftKey && simplifySelectedControl()) { event.preventDefault(); return; }
     if (key === 'delete' || key === 'backspace') { event.preventDefault(); deleteSelected(); return; }
     if (key === 'escape' || key === 'enter') { finishDrawing(); update(); return; }
     if (key === 'tab' && !event.shiftKey && event.target === canvas) { event.preventDefault(); setFill(!state.fill); return; }
@@ -2434,18 +2931,21 @@ var paper=function(u,j){var T=(u=u||require("./node/self.js")).window,_=u.docume
     if (key === '+' || key === '=') zoom(1.2); if (key === '-') zoom(1 / 1.2);
     if (key === 'g') $('grid-button').click(); if (key === 's') $('snap-button').click();
     if (key === '?') $('help-dialog').showModal();
-    const tools = { v: 'select', a: 'component', k: 'knife', p: 'pen', l: 'line', r: 'rect', o: 'ellipse', h: 'hand' }; if (!mod && tools[key]) setTool(tools[key]);
+    const tools = { [preferences.shortcuts.select]: 'select', [preferences.shortcuts.component]: 'component', [preferences.shortcuts.knife]: 'knife', [preferences.shortcuts.pen]: 'pen', [preferences.shortcuts.line]: 'line', r: 'rect', o: 'ellipse', h: 'hand' }; if (!mod && !event.shiftKey && !event.altKey && tools[key]) setTool(tools[key]);
   });
   window.addEventListener('keyup', event => { if (event.key === ' ') { state.space = false; updateHint(); } });
   window.addEventListener('blur', () => { state.space = false; if (state.drag?.before) doc = state.drag.before; if (state.drag?.type === 'pivot') state.pivot = state.drag.oldPivot; state.constraintGuide = null; state.drag = null; update(); });
   window.addEventListener('dragover', event => { if (event.dataTransfer.types.includes('Files')) { event.preventDefault(); event.dataTransfer.dropEffect = 'copy'; } });
   window.addEventListener('drop', event => { if (event.dataTransfer.files.length) { event.preventDefault(); importFile(event.dataTransfer.files[0]); } });
   window.addEventListener('beforeunload', event => { captureProject(); try { localStorage.setItem(storageKey, G.serialize(doc)); } catch (_) {} if (project?.pendingCount) { event.preventDefault(); event.returnValue = ''; } });
+  applyPreferences();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (preferences.theme === 'system') { applyPreferences(); requestDraw(); } });
   new ResizeObserver(resize).observe(container);
-  window.HigherDegreeEditor = Object.freeze({ version: '0.3.1', getDocument: () => G.clone(doc) });
+  window.HigherDegreeEditor = Object.freeze({ version: '0.4.0', getDocument: () => G.clone(doc) });
   window.QuarticEditor = window.HigherDegreeEditor;
   update();
   renderLibrary();
+  activateHistory(standaloneHistoryId, doc);
   if (restored) setStatus('已恢复上次草稿');
   if (!storageAvailable) $('save-status').innerHTML = '<span></span> 请下载 .glyph 保存';
 })();

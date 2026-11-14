@@ -9,6 +9,11 @@
     const draft = localStorage.getItem(storageKey) || localStorage.getItem('quartic-glyph.draft.v1');
     if (draft) { doc = G.validateDocument(JSON.parse(draft)); restored = true; }
   } catch (_) { storageAvailable = false; }
+  const uiFontStack = 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif';
+  const legacyNotoFontStack = '"Noto Sans Symbols 2", "Microsoft YaHei", sans-serif';
+  const defaults = { theme: 'system', palette: 'violet', contrast: false, fontFamily: uiFontStack, historyLimit: 100, persistHistory: true, pageSize: '60', wheelMode: 'wheel', invertWheel: false, closedHistoryKeys: [], shortcuts: { select: 'v', component: 'a', pen: 'p', line: 'l', knife: 'k' } };
+  let preferences = { ...defaults };
+  try { preferences = { ...defaults, ...JSON.parse(localStorage.getItem('higher-degree-glyph.preferences.v4') || '{}') }; preferences.shortcuts = { ...defaults.shortcuts, ...(preferences.shortcuts || {}) }; } catch (_) {}
   const state = { tool: 'select', selected: new Set(), contourId: doc.contours[0]?.id || null,
     segment: null, components: new Set(), grid: true, snap: false, snapNodes: true, snapEdges: false, gridStep: 10, precision: 2, snapHint: null, handles: true, fill: false, space: false,
     view: { x: 0, y: 0, scale: 1 }, fitMode: true, width: 1, height: 1, dpr: 1, pointer: null,
@@ -18,7 +23,80 @@
     state.selected.add(doc.contours[0].segments[4].controls[1].id);
   }
   let scheduled = false, saveTimer = null, toastTimer = null, exportResult = null, clipboard = null, clickTimer = null;
-  let project = null, libraryPage = 0, switchToken = 0, cubicMode = 'cubic', cubicResult = null, projectExportBusy = false, standaloneSession = null;
+  if (!['system', 'light', 'dark'].includes(preferences.theme)) preferences.theme = defaults.theme;
+  if (!['violet', 'blue', 'amber', 'mint'].includes(preferences.palette)) preferences.palette = defaults.palette;
+  if (!Number.isFinite(Number(preferences.historyLimit))) preferences.historyLimit = defaults.historyLimit;
+  preferences.historyLimit = Math.max(10, Math.min(1000, Math.round(Number(preferences.historyLimit))));
+  if (!['30', '60', '100', '200', 'all'].includes(String(preferences.pageSize))) preferences.pageSize = defaults.pageSize;
+  if (!['wheel', 'ctrl'].includes(preferences.wheelMode)) preferences.wheelMode = defaults.wheelMode;
+  preferences.invertWheel = !!preferences.invertWheel;
+  if (typeof preferences.fontFamily !== 'string' || preferences.fontFamily.length > 240 || /[;{}<>]/.test(preferences.fontFamily)) preferences.fontFamily = defaults.fontFamily;
+  if (preferences.fontFamily === legacyNotoFontStack) preferences.fontFamily = defaults.fontFamily;
+  preferences.contrast = !!preferences.contrast; preferences.persistHistory = preferences.persistHistory !== false;
+  if (!Array.isArray(preferences.closedHistoryKeys)) preferences.closedHistoryKeys = [];
+  for (const key of Object.keys(defaults.shortcuts)) if (!/^[a-z]$/i.test(preferences.shortcuts[key] || '')) preferences.shortcuts[key] = defaults.shortcuts[key];
+  let project = null, libraryPage = 0, pageSize = preferences.pageSize, switchToken = 0, cubicMode = 'cubic', cubicResult = null, projectExportBusy = false, standaloneSession = null;
+  let standaloneHistoryId = 'draft:' + (doc.glyph.unicode || doc.glyph.name), timeline = null, historyDb = null, historyGeneration = 0, libraryHydrating = false;
+  try { standaloneHistoryId = localStorage.getItem('higher-degree-glyph.history-key.v1') || standaloneHistoryId; } catch (_) {}
+  function setStandaloneHistoryId(value) { standaloneHistoryId = value; try { localStorage.setItem('higher-degree-glyph.history-key.v1', value); } catch (_) {} }
+  setStandaloneHistoryId(standaloneHistoryId);
+  const historyDbPromise = new Promise(resolve => {
+    if (!('indexedDB' in window)) { resolve(null); return; }
+    const request = indexedDB.open('higher-degree-glyph-history', 1);
+    request.onupgradeneeded = () => { if (!request.result.objectStoreNames.contains('files')) request.result.createObjectStore('files', { keyPath: 'key' }); };
+    request.onsuccess = () => { historyDb = request.result; resolve(historyDb); };
+    request.onerror = () => resolve(null);
+  });
+  function projectHistoryPrefix() {
+    return project ? `folder:${project.name}/` : '';
+  }
+  const historyKey = () => project?.activeId ? projectHistoryPrefix() + project.activeId : standaloneHistoryId;
+  function applyPreferences() {
+    const root = document.documentElement;
+    const dark = preferences.theme === 'dark' || preferences.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches;
+    document.body.dataset.theme = dark ? 'dark' : 'light'; document.body.dataset.palette = preferences.palette || 'violet';
+    document.body.dataset.contrast = preferences.contrast ? 'high' : 'normal';
+    root.style.setProperty('--ui-font', preferences.fontFamily || defaults.fontFamily);
+    $('library-page-size').value = pageSize; $('pref-page-size').value = pageSize;
+    $('pref-wheel-mode').value = preferences.wheelMode; $('pref-wheel-invert').checked = preferences.invertWheel;
+    const labels = { select: 'V', component: 'A', pen: 'P', line: 'L', knife: 'K' };
+    document.querySelectorAll('[data-tool]').forEach(button => { const tool = button.dataset.tool, key = preferences.shortcuts[tool] || labels[tool]; const mark = button.querySelector('span'); if (mark && key) mark.textContent = key.toUpperCase(); });
+    document.querySelectorAll('[data-help-shortcut]').forEach(mark => { const key = preferences.shortcuts[mark.dataset.helpShortcut]; if (key) mark.textContent = key.toUpperCase(); });
+  }
+  function storePreferences() {
+    try { localStorage.setItem('higher-degree-glyph.preferences.v4', JSON.stringify(preferences)); } catch (_) {}
+    savePreferences(); applyPreferences();
+  }
+  function dbRequest(mode, action) {
+    return historyDbPromise.then(db => new Promise((resolve, reject) => {
+      if (!db) return resolve(null);
+      const tx = db.transaction('files', mode), store = tx.objectStore('files'); let request;
+      try { request = action(store); } catch (error) { reject(error); return; }
+      tx.oncomplete = () => resolve(request?.result ?? null); tx.onerror = () => reject(tx.error); tx.onabort = () => reject(tx.error);
+    }));
+  }
+  async function writeTimeline() {
+    if (!timeline || !preferences.persistHistory || preferences.closedHistoryKeys.includes(timeline.key)) return;
+    try { await dbRequest('readwrite', store => store.put(timeline)); } catch (_) { toast('本地历史写入失败；请检查浏览器存储空间', true); }
+  }
+  function loadTimelineIntoState() {
+    if (!timeline) return;
+    state.history = timeline.items.slice(0, timeline.cursor).map(item => G.clone(item.doc));
+    state.future = timeline.items.slice(timeline.cursor + 1).map(item => G.clone(item.doc)).reverse();
+    doc = G.clone(timeline.items[timeline.cursor].doc);
+  }
+  async function activateHistory(key, fallback = doc) {
+    const owner = project, token = switchToken, generation = historyGeneration;
+    let saved = null;
+    if (preferences.persistHistory) { try { saved = await dbRequest('readonly', store => store.get(key)); } catch (_) {} }
+    if (token !== switchToken || owner !== project || generation !== historyGeneration) return;
+    timeline = saved?.items?.length ? saved : { key, label: key.split('/').at(-1), items: [{ doc: G.clone(fallback), label: '打开字形', time: Date.now() }], cursor: 0 };
+    timeline.cursor = Math.max(0, Math.min(timeline.cursor, timeline.items.length - 1));
+    loadTimelineIntoState();
+    const entry = project?.activeId && project.byPath.get(project.activeId);
+    if (entry) { entry.history = state.history; entry.future = state.future; entry.doc = G.clone(doc); entry.modified = G.serialize(doc) !== entry.baseline; }
+    await writeTimeline(); update(); renderLibrary(); renderHistory();
+  }
   try {
     const prefs = JSON.parse(localStorage.getItem('higher-degree-glyph.preferences.v3') || localStorage.getItem('quartic-glyph.preferences.v2') || '{}');
     if (Number.isFinite(prefs.gridStep) && prefs.gridStep >= .001 && prefs.gridStep <= 10000) state.gridStep = prefs.gridStep;
@@ -88,7 +166,7 @@
     return hit.point;
   }
   function savePreferences() {
-    try { localStorage.setItem('higher-degree-glyph.preferences.v3', JSON.stringify(Object.fromEntries(['snap', 'snapNodes', 'snapEdges', 'gridStep', 'precision', 'maxControls', 'anchor'].map(k => [k, state[k]])))); } catch (_) {}
+    try { localStorage.setItem('higher-degree-glyph.preferences.v3', JSON.stringify({ ...Object.fromEntries(['snap', 'snapNodes', 'snapEdges', 'gridStep', 'precision', 'maxControls', 'anchor'].map(k => [k, state[k]])), ...preferences })); } catch (_) {}
   }
   const members = contour => contour.component ? doc.contours.filter(c => c.component === contour.component) : [contour];
   function newComponentId() { let id; do { id = 'component-' + G.uid(); } while (doc.contours.some(c => c.component === id)); return id; }
@@ -104,6 +182,42 @@
     clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('toast').hidden = true; }, error ? 5500 : 3000);
   }
   function setStatus(message) { $('status-text').textContent = message; }
+  function renderHistory() {
+    if (!timeline || !$('history-list')) return;
+    const list = $('history-list'), limit = Math.max(10, Number(preferences.historyLimit) || 100); list.replaceChildren();
+    const first = Math.max(0, timeline.items.length - limit - 1);
+    for (let i = timeline.items.length - 1; i >= first; i--) {
+      const item = timeline.items[i], li = document.createElement('li'), button = document.createElement('button');
+      button.className = i === timeline.cursor ? 'current' : ''; button.type = 'button';
+      button.textContent = item.label + ' · ' + new Date(item.time).toLocaleTimeString();
+      button.title = new Date(item.time).toLocaleString(); button.onclick = () => {
+        if (i === timeline.cursor) return;
+        timeline.cursor = i; loadTimelineIntoState(); finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null;
+        state.history = timeline.items.slice(0, i).map(entry => G.clone(entry.doc));
+        state.future = timeline.items.slice(i + 1).map(entry => G.clone(entry.doc)).reverse();
+        persist(); renderHistory(); writeTimeline(); update(); setStatus('已跳转到历史步骤');
+      };
+      li.append(button); list.append(li);
+    }
+    $('history-limit').value = preferences.historyLimit;
+  }
+  async function renderHistoryManager() {
+    const list = $('history-records'); list.replaceChildren();
+    const entries = await dbRequest('readonly', store => store.getAll()) || [];
+    for (const entry of entries) {
+      const label = document.createElement('label'); label.className = 'history-record-row';
+      const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.value = entry.key;
+      const text = document.createElement('span'); text.textContent = `${entry.label || entry.key} · ${(entry.items || []).length} 步 · ${new Date(entry.items?.at(-1)?.time || 0).toLocaleDateString()}${preferences.closedHistoryKeys.includes(entry.key) ? ' · 已暂停' : ''}`;
+      label.append(checkbox, text); list.append(label);
+    }
+    if (!entries.length) list.textContent = '没有已保存的历史记录';
+  }
+  function setPageSize(value, warn = true) {
+    if (value === 'all' && project?.entries.length > 1000 && warn && !window.confirm(`此文件夹有 ${project.entries.length} 个字形。单列表可能影响性能，仍要显示全部吗？`)) {
+      $('library-page-size').value = pageSize; $('pref-page-size').value = pageSize; return;
+    }
+    pageSize = value; preferences.pageSize = value; libraryPage = 0; storePreferences(); renderLibrary();
+  }
   function persist() {
     captureProject(); renderLibrary();
     clearTimeout(saveTimer);
@@ -125,8 +239,15 @@
     if (JSON.stringify(before) === JSON.stringify(doc)) { update(); return; }
     try { G.validateDocument(doc); }
     catch (error) { doc = before; finishDrawing(); normalizeSelection(); update(); toast(error.message, true); return; }
-    state.history.push(before); if (state.history.length > 100) state.history.shift();
+    state.history.push(before); if (state.history.length > preferences.historyLimit) state.history.shift();
     state.future = []; normalizeSelection(); persist(); setStatus(message); update();
+    historyGeneration++;
+    const key = historyKey();
+    if (!timeline || timeline.key !== key) timeline = { key, label: key.split('/').at(-1), items: [{ doc: G.clone(before), label: '打开字形', time: Date.now() }], cursor: 0 };
+    timeline.items.splice(timeline.cursor + 1);
+    timeline.items.push({ doc: G.clone(doc), label: message, time: Date.now() }); timeline.cursor = timeline.items.length - 1;
+    if (timeline.items.length > preferences.historyLimit + 1) { timeline.items.shift(); timeline.cursor--; }
+    renderHistory(); writeTimeline();
   }
   function edit(message, action) {
     const before = G.clone(doc);
@@ -137,11 +258,15 @@
     if (state.pending.length) { state.pending.pop(); update(); return; }
     if (!state.history.length) return;
     state.future.push(G.clone(doc)); doc = state.history.pop(); finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null;
+    historyGeneration++;
+    if (timeline?.key === historyKey()) { timeline.cursor = Math.max(0, timeline.cursor - 1); writeTimeline(); renderHistory(); }
     normalizeSelection(); persist(); update(); setStatus('已撤销');
   }
   function redo() {
     if (!state.future.length) return;
     state.history.push(G.clone(doc)); doc = state.future.pop(); finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null;
+    historyGeneration++;
+    if (timeline?.key === historyKey()) { timeline.cursor = Math.min(timeline.items.length - 1, timeline.cursor + 1); writeTimeline(); renderHistory(); }
     normalizeSelection(); persist(); update(); setStatus('已重做');
   }
   function update() { updateUI(); requestDraw(); }
@@ -151,11 +276,11 @@
   }
   function fit() {
     state.fitMode = true;
-    const b = G.bounds(doc), width = Math.max(b.maxX - b.minX, doc.glyph.advanceWidth), height = Math.max(b.maxY - b.minY, doc.glyph.upm * 0.64);
+    const b = G.bounds(doc), width = Math.max(b.maxX - b.minX, doc.glyph.advanceWidth), metricMin = Math.min(b.minY, doc.glyph.descender, 0), metricMax = Math.max(b.maxY, doc.glyph.ascender, 0), height = Math.max(b.maxY - b.minY, metricMax - metricMin, doc.glyph.upm * 0.64);
     const sx = Math.max(70, state.width - 150) / width, sy = Math.max(100, state.height - 150) / height;
     state.view.scale = Math.max(0.02, Math.min(6, sx, sy));
     state.view.x = state.width / 2 - (b.minX + b.maxX) / 2 * state.view.scale;
-    state.view.y = state.height * 0.53 + (b.minY + b.maxY) / 2 * state.view.scale;
+    state.view.y = state.height * 0.53 + (metricMin + metricMax) / 2 * state.view.scale;
     requestDraw(); updateZoom();
   }
   function zoom(factor, center = { x: state.width / 2, y: state.height / 2 }) {
@@ -202,7 +327,8 @@
         const { origin, direction } = state.constraintGuide, length = Math.hypot(direction.x, direction.y), span = 2000 / state.view.scale;
         if (length > 1e-10) { const a = screen({ x: origin.x - direction.x / length * span, y: origin.y - direction.y / length * span }), b = screen({ x: origin.x + direction.x / length * span, y: origin.y + direction.y / length * span }); ctx.strokeStyle = '#4b9f9a'; ctx.lineWidth = 1; ctx.setLineDash([6, 4]); line(ctx, a, b); ctx.setLineDash([]); }
       }
-      const guides = [[doc.glyph.ascender, 'ascender', '#d9d2e4'], [doc.glyph.capHeight, 'cap height', '#dfd7e7'], [doc.glyph.xHeight, 'x-height', '#d5c8e8'], [0, 'baseline', '#bba4d8'], [doc.glyph.descender, 'descender', '#d9d2e4']];
+      const guideColors = preferences.contrast ? ['#0057b8', '#00875a', '#b3006b', '#111111', '#b34c00'] : ['#d9d2e4', '#dfd7e7', '#d5c8e8', '#bba4d8', '#d9d2e4'];
+      const guides = [[doc.glyph.ascender, '升部', guideColors[0]], [doc.glyph.capHeight, '大写', guideColors[1]], [doc.glyph.xHeight, 'x高', guideColors[2]], [0, '基线', guideColors[3]], [doc.glyph.descender, '降部', guideColors[4]]];
       ctx.font = '9px Consolas, monospace';
       for (const [value, name, color] of guides) {
         const y = screen({ x: 0, y: value }).y;
@@ -211,9 +337,10 @@
         line(ctx, { x: 24, y }, { x: w, y }); ctx.setLineDash([]);
         ctx.fillStyle = color === '#bba4d8' ? '#ad91c8' : '#bdb0cb'; ctx.fillText(name + '  ' + value, 35, y - 6);
       }
-      for (const x of [0, doc.glyph.advanceWidth]) {
-        ctx.strokeStyle = '#d4c9e1'; ctx.lineWidth = .8; ctx.setLineDash([3, 5]);
+      for (const [x, name, color] of [[G.bounds(doc).minX, '左边距', preferences.contrast ? '#0057b8' : '#b89dd5'], [doc.glyph.advanceWidth, '右边距', preferences.contrast ? '#b34c00' : '#d4c9e1']]) {
+        ctx.strokeStyle = color; ctx.lineWidth = .9; ctx.setLineDash([3, 5]);
         const p = screen({ x, y: 0 }); line(ctx, { x: p.x, y: 24 }, { x: p.x, y: h }); ctx.setLineDash([]);
+        ctx.font = '9px Consolas, monospace'; ctx.fillStyle = color; ctx.fillText(name, p.x + 3, 36);
       }
     }
     // Rulers stay in screen coordinates and remain legible at every zoom level.
@@ -397,6 +524,12 @@
     $('snap-button').classList.toggle('is-on', state.snap); $('snap-button').setAttribute('aria-pressed', String(state.snap)); $('snap-button').title = `网格吸附：${state.gridStep} 单位 (S)`;
     for (const id of ['point-x', 'point-y']) $(id).step = state.precision < 0 ? 'any' : String(10 ** -state.precision);
     $('export-button').disabled = !doc.contours.some(c => c.segments.length);
+    setInput('pref-theme', preferences.theme); setInput('pref-palette', preferences.palette); $('pref-contrast').checked = preferences.contrast;
+    setInput('pref-font', preferences.fontFamily); setInput('pref-history-limit', preferences.historyLimit); $('pref-history-storage').checked = preferences.persistHistory;
+    $('pref-wheel-mode').value = preferences.wheelMode; $('pref-wheel-invert').checked = preferences.invertWheel;
+    $('pref-page-size').value = pageSize; $('library-page-size').value = pageSize;
+    document.querySelectorAll('[data-shortcut]').forEach(input => { if (document.activeElement !== input) input.value = preferences.shortcuts[input.dataset.shortcut] || ''; });
+    renderHistory();
     updateHint();
   }
   function updateTransformFields() {
@@ -442,6 +575,16 @@
     let best = null, nearest = 9;
     for (const p of points) { const d = G.distance(screen(p.point), q); if (d < nearest) { nearest = d; best = p; } }
     return best;
+  }
+  function hitMetric(q) {
+    if (state.fill || state.tool !== 'select') return null;
+    const b = G.bounds(doc), candidates = [
+      { key: 'leftBearing', distance: Math.abs(q.x - screen({ x: b.minX, y: 0 }).x) },
+      { key: 'rightBearing', distance: Math.abs(q.x - screen({ x: doc.glyph.advanceWidth, y: 0 }).x) },
+      ...['ascender', 'capHeight', 'xHeight', 'descender'].map(key => ({ key, distance: Math.abs(q.y - screen({ x: 0, y: doc.glyph[key] }).y) }))
+    ].filter(item => item.distance <= 8 && (['ascender', 'capHeight', 'xHeight', 'descender'].includes(item.key) || q.y <= 42));
+    if (!candidates.length) return null;
+    return candidates.sort((a, b) => a.distance - b.distance)[0].key;
   }
   function hitSegment(q) {
     const p = fontPoint(q); let hit = null, nearest = 8 / state.view.scale;
@@ -548,7 +691,15 @@
       const curve = hitSegment(q); if (curve) insertAtCurve(curve, true); return;
     }
     if (state.tool === 'rect' || state.tool === 'ellipse') { state.drag = { type: 'shape', start: q, current: q }; return; }
+    if (event.button === 0) {
+      const metric = !hitPoint(q) && !hitSegment(q) ? hitMetric(q) : null;
+      if (metric) { state.drag = { type: 'metric', key: metric, start: fontPoint(q), before: G.clone(doc) }; return; }
+    }
     const hit = hitPoint(q);
+    if (event.button === 0 && hit && state.tool === 'select' && !state.components.size && state.selected.has(hit.point.id)) {
+      const selectedNodes = G.allPoints(doc).filter(entry => state.selected.has(entry.point.id));
+      if (selectedNodes.length > 1 && selectedNodes.every(entry => entry.kind === 'node')) { changeFrameMode(state.frameMode === 'scale' ? 'rotate' : 'scale'); return; }
+    }
     if (hit) {
       state.components.clear();
       const shiftHandle = event.shiftKey && state.selected.size === 1 && state.selected.has(hit.point.id) && hit.kind === 'control' && G.smoothNeighborhood(doc, hit.point.id);
@@ -574,9 +725,26 @@
   });
   canvas.addEventListener('pointermove', event => {
     const q = eventPoint(event); state.pointer = q; const p = fontPoint(q);
+    if (!state.drag) { const metric = hitMetric(q); canvas.style.cursor = metric ? metric.endsWith('Bearing') ? 'ew-resize' : 'ns-resize' : ''; }
     $('pointer-coordinate').textContent = 'X ' + rounded(p.x) + '   Y ' + rounded(p.y);
     const drag = state.drag;
-    if (drag?.type === 'frame') {
+    if (drag?.type === 'metric') {
+      const target = fontPoint(q), dx = target.x - drag.start.x, dy = target.y - drag.start.y; doc = G.clone(drag.before);
+      if (drag.key === 'leftBearing') {
+        const shift = Math.max(-1e6, Math.min(1e6, dx));
+        G.allPoints(doc).forEach(({ point: pt }) => { pt.x = Math.max(-1e6, Math.min(1e6, pt.x + shift)); });
+        doc.glyph.advanceWidth = Math.max(0, Math.min(100000, doc.glyph.advanceWidth + shift));
+      } else if (drag.key === 'rightBearing') doc.glyph.advanceWidth = Math.max(0, Math.min(100000, drag.before.glyph.advanceWidth + dx));
+      else {
+        let value = drag.before.glyph[drag.key] + dy;
+        if (drag.key === 'ascender') value = Math.max(1, drag.before.glyph.capHeight, value);
+        if (drag.key === 'capHeight') value = Math.max(drag.before.glyph.xHeight, Math.min(drag.before.glyph.ascender, value));
+        if (drag.key === 'xHeight') value = Math.max(0, Math.min(drag.before.glyph.capHeight, value));
+        if (drag.key === 'descender') value = Math.min(0, value);
+        doc.glyph[drag.key] = Math.max(-100000, Math.min(100000, value));
+      }
+      updateUI(); setStatus('拖动调整字形度量');
+    } else if (drag?.type === 'frame') {
       const delta = { x: (q.x - drag.start.x) / state.view.scale, y: -(q.y - drag.start.y) / state.view.scale };
       const target = { x: drag.handlePoint.x + delta.x, y: drag.handlePoint.y + delta.y };
       const result = G.frameTransform(drag.bounds, drag.origin, drag.mode, drag.handle, drag.handlePoint, target, { uniform: state.lockAspect || event.shiftKey, snapAngle: event.shiftKey });
@@ -628,6 +796,7 @@
     state.constraintGuide = null;
     if (cancelled) { if (drag.before) doc = drag.before; if (drag.type === 'pivot') state.pivot = drag.oldPivot; update(); return; }
     if (drag.type === 'frame') record(drag.before, drag.mode === 'scale' ? '已拉伸 / 缩放选择' : '已旋转 / 倾斜选择');
+    if (drag.type === 'metric') record(drag.before, '已调整字形度量');
     if (drag.type === 'points') record(drag.before, '已移动节点');
     if (drag.type === 'curve') {
       if (drag.moved) record(drag.before, '已拖动曲线边缘调整形状');
@@ -673,7 +842,10 @@
     if (selectionFrame() && insideFrame(eventPoint(event))) { clearTimeout(clickTimer); changeFrameMode(state.frameMode === 'scale' ? 'rotate' : 'scale'); return; }
     if (state.tool === 'pen' || state.tool === 'line') { finishDrawing(); update(); }
   });
-  canvas.addEventListener('wheel', event => { event.preventDefault(); if (!state.drag) zoom(Math.exp(-event.deltaY * .0015), eventPoint(event)); }, { passive: false });
+  canvas.addEventListener('wheel', event => {
+    if (preferences.wheelMode === 'ctrl' && !(event.ctrlKey || event.metaKey)) return;
+    event.preventDefault(); if (!state.drag) zoom(Math.exp((preferences.invertWheel ? 1 : -1) * event.deltaY * .0015), eventPoint(event));
+  }, { passive: false });
   canvas.addEventListener('contextmenu', event => event.preventDefault());
   function createShape(a, b, type) {
     edit(type === 'rect' ? '已绘制矩形' : '已绘制四次椭圆', () => {
@@ -705,6 +877,21 @@
       doc.contours = doc.contours.filter(c => c.nodes.length); state.selected.clear(); state.components.clear(); state.segment = null; finishDrawing();
     });
   }
+  function simplifySelectedControl() {
+    const entry = selectedPoint(); if (!entry || entry.kind !== 'control') return false;
+    const segment = entry.contour.segments[entry.index]; if (!segment || !segment.controls.includes(entry.point)) return false;
+    let error = 0;
+    edit('已删除控制点并降低曲线阶数', () => {
+      const fit = G.reduceDegreeOne(G.segmentPoints(entry.contour, entry.index)); error = fit.error;
+      const remaining = segment.controls.filter(point => point.id !== entry.point.id), controls = fit.points.slice(1, -1);
+      if (remaining.length !== controls.length) throw new Error('曲线降阶失败：控制点结构不匹配');
+      controls.forEach((point, index) => { remaining[index].x = point.x; remaining[index].y = point.y; });
+      segment.controls = remaining; segment.type = G.typeForControls(remaining.length);
+      state.selected.clear(); state.segment = { contourId: entry.contour.id, index: entry.index };
+    });
+    if (error > .000001) toast(`已拟合为低一阶曲线 · 最大控制多边形误差上界 ${Number(error.toFixed(3))}`);
+    return true;
+  }
   function smoothSelected() {
     const selected = selectedPoint(); if (!selected || selected.kind !== 'node') return;
     const c = selected.contour, i = selected.index, n = c.nodes.length, outgoing = c.segments[i], incoming = c.segments[(i - 1 + n) % n];
@@ -718,11 +905,14 @@
       p.smooth = true;
     });
   }
-  function replaceDocument(next, message) {
+  function replaceDocument(next, message, historyId) {
     ++switchToken;
     captureProject(); if (project) project.activeId = null; renderLibrary();
-    edit(message, () => { doc = next; finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null; state.contourId = doc.contours[0]?.id || null; });
-    setTool('select'); fit();
+    setStandaloneHistoryId(historyId || 'glyph:' + (next.glyph.unicode || next.glyph.name)); historyGeneration++;
+    doc = G.validateDocument(next); state.history = []; state.future = []; timeline = null; finishDrawing();
+    state.selected.clear(); state.components.clear(); state.segment = null; state.contourId = doc.contours[0]?.id || null;
+    persist(); update(); setStatus(message);
+    setTool('select'); fit(); activateHistory(standaloneHistoryId, doc);
   }
   function confirmReplace() { return !doc.contours.length || window.confirm('替换当前字形？可通过撤销恢复；建议先下载 .glyph 保存。'); }
   function download(content, name, mime) {
@@ -738,7 +928,7 @@
     try {
       if (file.size > 5 * 1024 * 1024) throw new Error('文件超过 5 MB 上限');
       const result = G.importText(await file.text(), file.name);
-      if (confirmReplace()) { replaceDocument(result.doc, '已导入字形'); toast('已导入 ' + result.doc.glyph.name + (result.warnings.length ? ' · ' + result.warnings.join('；') : ' · ' + result.doc.contours.length + ' 个轮廓')); }
+      if (confirmReplace()) { replaceDocument(result.doc, '已导入字形', `file:${file.name}:${file.size}:${file.lastModified || 0}`); toast('已导入 ' + result.doc.glyph.name + (result.warnings.length ? ' · ' + result.warnings.join('；') : ' · ' + result.doc.contours.length + ' 个轮廓')); }
     } catch (error) { toast(error.message, true); }
     $('file-input').value = '';
   }
@@ -809,8 +999,10 @@
     }
     const search = $('library-search').value.trim().toLowerCase(), modifiedOnly = $('library-changed').checked;
     const entries = project.entries.filter(e => (!modifiedOnly || e.modified) && (!search || (e.path + ' ' + (e.doc?.glyph.name || '') + ' ' + (e.doc?.glyph.unicode || '')).toLowerCase().includes(search)));
-    const pages = Math.max(1, Math.ceil(entries.length / 60)); libraryPage = Math.max(0, Math.min(libraryPage, pages - 1));
-    for (const entry of entries.slice(libraryPage * 60, (libraryPage + 1) * 60)) {
+    const limit = pageSize === 'all' ? entries.length || 1 : Math.max(1, Number(pageSize) || 60);
+    const pages = Math.max(1, Math.ceil(entries.length / limit)); libraryPage = Math.max(0, Math.min(libraryPage, pages - 1));
+    const visibleEntries = entries.slice(libraryPage * limit, (libraryPage + 1) * limit);
+    for (const entry of visibleEntries) {
       const button = document.createElement('button'); button.className = 'glyph-file' + (entry.id === project.activeId ? ' active' : '') + (entry.error ? ' error' : ''); button.dataset.path = entry.path;
       button.setAttribute('role', 'option'); button.setAttribute('aria-selected', String(entry.id === project.activeId)); button.title = entry.path + (entry.error ? '\n' + entry.error : entry.warnings.length ? '\n' + entry.warnings.join('；') : '');
       const icon = document.createElement('span'); icon.className = 'glyph-file-thumb';
@@ -835,6 +1027,14 @@
     if (!entries.length) { const empty = document.createElement('p'); empty.className = 'library-empty'; empty.textContent = '没有匹配的字形'; list.append(empty); }
     $('library-page-label').textContent = `${libraryPage + 1} / ${pages}`;
     $('library-prev').disabled = libraryPage <= 0; $('library-next').disabled = libraryPage >= pages - 1;
+    if (!libraryHydrating && visibleEntries.some(entry => !entry.doc && !entry.error)) {
+      const owner = project, pending = visibleEntries.filter(entry => !entry.doc && !entry.error);
+      libraryHydrating = true; $('library-progress').textContent = '缩略图…';
+      setTimeout(() => Promise.all(pending.map(entry => owner.load(entry.id).catch(() => null))).finally(() => {
+        libraryHydrating = false;
+        if (owner === project) { $('library-progress').textContent = '本地文件'; renderLibrary(); }
+      }), 0);
+    }
   }
   async function switchProjectGlyph(id) {
     if (!project || id === project.activeId || projectExportBusy) return;
@@ -846,9 +1046,9 @@
       captureProject();
       if (!project.activeId) standaloneSession = { doc: G.clone(doc), history: state.history, future: state.future, view: { ...state.view } };
       clearTimeout(clickTimer); clearTimeout(saveTimer); finishDrawing(); state.drag = null; state.selected.clear(); state.components.clear(); state.segment = null; state.pivot = null;
-      project.activeId = id; doc = G.clone(entry.doc); state.history = entry.history; state.future = entry.future; state.contourId = doc.contours[0]?.id || null;
+       project.activeId = id; doc = G.clone(entry.doc); state.history = entry.history; state.future = entry.future; timeline = null; historyGeneration++; state.contourId = doc.contours[0]?.id || null;
       setTool('select'); if (entry.view) { state.view = { ...entry.view }; state.fitMode = false; updateZoom(); requestDraw(); } else fit();
-      persist(); renderLibrary(); setStatus('文件夹 · ' + entry.path);
+       persist(); renderLibrary(); setStatus('文件夹 · ' + entry.path); activateHistory(historyKey(), doc);
       if (entry.warnings.length) toast(entry.warnings.join('；'));
     } catch (error) { if (owner === project && token === switchToken) { renderLibrary(); toast('无法打开字形：' + error.message, true); } }
     finally { if (owner === project && token === switchToken) $('library-progress').textContent = '本地文件'; }
@@ -856,7 +1056,7 @@
   function restoreStandalone() {
     if (!standaloneSession || !project) return;
     ++switchToken; captureProject(); const session = standaloneSession;
-    project.activeId = null; doc = G.clone(session.doc); state.history = session.history; state.future = session.future; state.view = { ...session.view };
+    project.activeId = null; doc = G.clone(session.doc); state.history = session.history; state.future = session.future; state.view = { ...session.view }; setStandaloneHistoryId(session.historyId || standaloneHistoryId); timeline = null; historyGeneration++;
     finishDrawing(); state.selected.clear(); state.components.clear(); state.segment = null; state.contourId = doc.contours[0]?.id || null; state.fitMode = false;
     update(); updateZoom(); persist(); renderLibrary(); setStatus('独立字形');
   }
@@ -870,9 +1070,10 @@
       if (!next.entries.length) throw new Error('该文件夹没有 .glyph / .glif / .svg / .json 文件');
       ++switchToken;
       // Keep the currently visible glyph as a recoverable standalone session.
-      standaloneSession = { doc: G.clone(doc), history: state.history, future: state.future, view: { ...state.view } };
+      standaloneSession = { doc: G.clone(doc), history: state.history, future: state.future, view: { ...state.view }, historyId: standaloneHistoryId };
       project = next; libraryPage = 0; $('library-search').value = ''; $('library-changed').checked = false;
-      setLibraryExpanded(true); renderLibrary(); toast(`已载入 ${next.entries.length} 个字形文件；点击左栏打开`);
+      if (pageSize === 'all' && next.entries.length > 1000 && !window.confirm(`该文件夹有 ${next.entries.length} 个字形。显示全部可能影响性能，是否继续？`)) { pageSize = preferences.pageSize = '200'; storePreferences(); }
+      setLibraryExpanded(true); renderLibrary(); toast(`已载入 ${next.entries.length} 个字形文件；当前页缩略图正在生成`);
     } catch (error) { toast(error.message, true); }
     $('folder-input').value = '';
   }
@@ -907,7 +1108,7 @@
   $('project-export-dialog').addEventListener('cancel', event => { if (projectExportBusy) event.preventDefault(); });
   document.querySelector('.brand').addEventListener('click', event => { event.preventDefault(); fit(); });
   $('undo-button').onclick = undo; $('redo-button').onclick = redo;
-  $('new-button').onclick = () => { if (confirmReplace()) replaceDocument(G.emptyDocument(), '已新建字形'); };
+  $('new-button').onclick = () => { if (confirmReplace()) replaceDocument(G.emptyDocument(), '已新建字形', 'draft:' + G.uid()); };
   $('import-button').onclick = () => $('file-input').click(); $('save-button').onclick = saveGlyph;
   $('file-input').onchange = () => importFile($('file-input').files[0]);
   $('export-button').onclick = () => { refreshExport(); $('export-dialog').showModal(); };
@@ -915,7 +1116,7 @@
   $('download-svg').onclick = () => { refreshExport(); if (!exportResult) return; download(exportResult.svg, filename('.svg'), 'image/svg+xml'); $('export-dialog').close(); toast('已导出 ' + exportResult.cubicCount + ' 段三次曲线 SVG'); };
   $('help-button').onclick = $('shortcut-button').onclick = () => $('help-dialog').showModal();
   $('empty-pen').onclick = () => setTool('pen');
-  $('load-sample').onclick = $('reset-sample').onclick = () => { if (confirmReplace()) { replaceDocument(G.sampleDocument(), '已载入示例'); $('help-dialog').close(); } };
+  $('load-sample').onclick = $('reset-sample').onclick = () => { if (confirmReplace()) { replaceDocument(G.sampleDocument(), '已载入示例', 'sample:a'); $('help-dialog').close(); } };
   $('fit-button').onclick = fit; $('zoom-in').onclick = () => zoom(1.2); $('zoom-out').onclick = () => zoom(1 / 1.2); $('zoom-label').onclick = () => zoom(1 / state.view.scale);
   $('outline-button').onclick = () => setFill(false); $('fill-button').onclick = () => setFill(true);
   $('grid-button').onclick = () => { state.grid = !state.grid; $('grid-button').classList.toggle('is-on', state.grid); $('grid-button').setAttribute('aria-pressed', String(state.grid)); requestDraw(); };
@@ -1070,7 +1271,14 @@
   const metadataBindings = [['glyph-name', 'name'], ['glyph-unicode', 'unicode'], ...['upm', 'advanceWidth', 'ascender', 'descender', 'capHeight', 'xHeight'].map(key => ['metric-' + key, key])];
   metadataBindings.forEach(([id, key]) => $(id).addEventListener('change', () => {
     let value = $(id).value.trim();
-    if (key === 'unicode') value = value.toUpperCase().replace(/^U\+/, '');
+    if (key === 'unicode') {
+      const quoted = value.match(/^"([\s\S]*)"$/);
+      if (quoted) {
+        const chars = Array.from(quoted[1]);
+        if (chars.length !== 1) { $(id).value = doc.glyph.unicode; toast('引号内请输入一个 Unicode 字符', true); return; }
+        value = chars[0].codePointAt(0).toString(16).toUpperCase().padStart(4, '0');
+      } else value = value.toUpperCase().replace(/^U\+/, '');
+    }
     if (!['name', 'unicode'].includes(key)) value = value === '' ? NaN : Number(value);
     const next = G.clone(doc); next.glyph[key] = value;
     try { G.validateDocument(next); edit('已更新字形属性', () => { doc.glyph[key] = value; }); $(id).value = value; }
@@ -1081,6 +1289,107 @@
     const raw = $('point-' + axis).value.trim(), value = state.precision < 0 ? Number(raw) : rounded(Number(raw));
     if (!raw || !Number.isFinite(value) || Math.abs(value) > 1e6) { $('point-' + axis).value = rounded(p.point[axis]); toast('坐标必须在 ±1,000,000 以内', true); return; }
     edit('已精确调整坐标', () => { const delta = value - p.point[axis], moving = movablePoints(); moving.forEach(entry => { entry.point[axis] = Math.max(-1e6, Math.min(1e6, entry.point[axis] + delta)); }); }); $('point-' + axis).value = value;
+  }));
+  $('history-button').onclick = () => { $('history-panel').hidden = !$('history-panel').hidden; $('history-button').setAttribute('aria-pressed', String(!$('history-panel').hidden)); renderHistory(); };
+  $('history-hide').onclick = () => { $('history-panel').hidden = true; $('history-button').setAttribute('aria-pressed', 'false'); };
+  $('settings-button').onclick = () => { updateUI(); $('settings-dialog').showModal(); };
+  $('pref-theme').onchange = event => { preferences.theme = event.target.value; storePreferences(); requestDraw(); };
+  $('pref-palette').onchange = event => { preferences.palette = event.target.value; storePreferences(); requestDraw(); };
+  $('pref-contrast').onchange = event => { preferences.contrast = event.target.checked; storePreferences(); requestDraw(); };
+  $('pref-font').onchange = event => { const value = event.target.value.trim().replace(/[;{}<>]/g, '').slice(0, 240); preferences.fontFamily = value || defaults.fontFamily; event.target.value = preferences.fontFamily; storePreferences(); };
+  $('pref-wheel-mode').onchange = event => { preferences.wheelMode = event.target.value; storePreferences(); };
+  $('pref-wheel-invert').onchange = event => { preferences.invertWheel = event.target.checked; storePreferences(); };
+  $('pref-history-limit').onchange = event => $('history-limit').value = event.target.value;
+  function updateHistoryLimit(raw) {
+    const value = Math.max(10, Math.min(1000, Math.round(Number(raw) || 100))); preferences.historyLimit = value;
+    state.history = state.history.slice(-value); state.future = state.future.slice(0, value);
+    $('pref-history-limit').value = value;
+    if (timeline && timeline.items.length > value + 1) { const remove = timeline.items.length - value - 1; timeline.items.splice(0, remove); timeline.cursor = Math.max(0, timeline.cursor - remove); }
+    storePreferences(); renderHistory(); writeTimeline();
+  }
+  $('history-limit').onchange = event => updateHistoryLimit(event.target.value);
+  $('pref-history-limit').addEventListener('change', event => updateHistoryLimit(event.target.value));
+  $('pref-page-size').onchange = event => setPageSize(event.target.value);
+  $('library-page-size').onchange = event => setPageSize(event.target.value);
+  $('pref-history-storage').onchange = async event => {
+    if (!event.target.checked && !window.confirm('关闭本地历史会暂停保存所有文件与文件夹的新操作，已有记录会保留。是否继续？')) { event.target.checked = true; return; }
+    preferences.persistHistory = event.target.checked;
+    storePreferences();
+    if (preferences.persistHistory) {
+      const key = historyKey(), saved = await dbRequest('readonly', store => store.get(key));
+      if ((!timeline || timeline.key !== key || timeline.items.length <= 1) && saved?.items?.length) timeline = saved;
+      if (!timeline || timeline.key !== key) timeline = { key, label: doc.glyph.name, items: [], cursor: -1 };
+      const recoveryStates = [...state.history, G.clone(doc)];
+      for (const snapshot of recoveryStates) {
+        const current = timeline.items[timeline.cursor]?.doc;
+        if (current && G.serialize(current) === G.serialize(snapshot)) continue;
+        timeline.items.splice(timeline.cursor + 1);
+        timeline.items.push({ doc: G.clone(snapshot), label: '恢复编辑历史', time: Date.now() }); timeline.cursor = timeline.items.length - 1;
+      }
+      if (!timeline.items.length) { timeline.items.push({ doc: G.clone(doc), label: '当前状态', time: Date.now() }); timeline.cursor = 0; }
+      if (timeline.items.length > preferences.historyLimit + 1) { const remove = timeline.items.length - preferences.historyLimit - 1; timeline.items.splice(0, remove); timeline.cursor = Math.max(0, timeline.cursor - remove); }
+      state.history = timeline.items.slice(0, timeline.cursor).map(item => G.clone(item.doc));
+      state.future = timeline.items.slice(timeline.cursor + 1).map(item => G.clone(item.doc)).reverse();
+      writeTimeline(); renderHistory(); update();
+    }
+  };
+  function changeHistoryStatus(keys, paused) {
+    const next = new Set(preferences.closedHistoryKeys);
+    keys.forEach(key => paused ? next.add(key) : next.delete(key)); preferences.closedHistoryKeys = [...next]; storePreferences();
+    if (!paused) writeTimeline(); renderHistory(); renderHistoryManager();
+  }
+  $('history-manage').onclick = async () => { await renderHistoryManager(); $('history-manage-dialog').showModal(); };
+  $('history-delete-selected').onclick = async () => {
+    const keys = [...$('history-records').querySelectorAll('input:checked')].map(input => input.value);
+    if (!keys.length) return toast('请先选择要删除的历史记录');
+    if (!window.confirm(`将永久删除 ${keys.length} 个字形的本地历史，是否继续？`)) return;
+    await dbRequest('readwrite', store => { keys.forEach(key => store.delete(key)); return null; });
+    if (keys.includes(historyKey())) { timeline = { key: historyKey(), label: doc.glyph.name, items: [{ doc: G.clone(doc), label: '当前状态', time: Date.now() }], cursor: 0 }; state.history = []; state.future = []; }
+    writeTimeline(); await renderHistoryManager(); renderHistory(); toast('已删除所选历史记录');
+  };
+  $('history-pause-current').onclick = () => {
+    if (!window.confirm('暂停为当前字形保存后续编辑历史？已有记录会保留。')) return;
+    changeHistoryStatus([historyKey()], true); toast('当前字形历史已暂停');
+  };
+  $('history-pause-selected').onclick = () => {
+    const keys = [...$('history-records').querySelectorAll('input:checked')].map(input => input.value);
+    if (!keys.length) return toast('请先选择历史记录');
+    if (!window.confirm(`暂停为 ${keys.length} 个字形保存后续历史？已有记录会保留。`)) return;
+    changeHistoryStatus(keys, true);
+  };
+  $('history-resume-selected').onclick = () => {
+    const keys = [...$('history-records').querySelectorAll('input:checked')].map(input => input.value);
+    if (!keys.length) return toast('请先选择历史记录'); changeHistoryStatus(keys, false); toast('已恢复所选历史记录');
+  };
+  async function changeFolderHistoryStatus(paused) {
+    if (!project) return toast('请先导入字形文件夹');
+    const keys = project.entries.map(entry => projectHistoryPrefix() + entry.id);
+    if (!keys.length) return toast('当前文件夹没有字形');
+    if (paused && !window.confirm(`暂停为当前文件夹 ${keys.length} 个字形保存后续历史？已有记录会保留。`)) return;
+    changeHistoryStatus(keys, paused); toast(paused ? '已暂停当前文件夹历史' : '已恢复当前文件夹历史');
+  }
+  $('history-pause-folder').onclick = () => changeFolderHistoryStatus(true);
+  $('history-resume-folder').onclick = () => changeFolderHistoryStatus(false);
+  $('history-delete-folder').onclick = async () => {
+    if (!project) return toast('请先导入字形文件夹');
+    const prefix = projectHistoryPrefix(), entries = (await dbRequest('readonly', store => store.getAll()) || []).filter(entry => entry.key.startsWith(prefix));
+    if (!entries.length) return toast('当前文件夹没有已保存的历史');
+    if (!window.confirm(`将永久删除当前文件夹 ${entries.length} 个字形的本地历史，是否继续？`)) return;
+    await dbRequest('readwrite', store => { entries.forEach(entry => store.delete(entry.key)); return null; });
+    timeline = { key: historyKey(), label: doc.glyph.name, items: [{ doc: G.clone(doc), label: '当前状态', time: Date.now() }], cursor: 0 };
+    state.history = []; state.future = []; writeTimeline(); await renderHistoryManager(); renderHistory(); update();
+  };
+  $('history-clear-current').onclick = async () => {
+    if (!timeline || !window.confirm(`删除“${timeline.label}”的全部历史？该操作无法恢复。`)) return;
+    await dbRequest('readwrite', store => store.delete(timeline.key));
+    timeline = { key: historyKey(), label: doc.glyph.name, items: [{ doc: G.clone(doc), label: '当前状态', time: Date.now() }], cursor: 0 };
+    state.history = []; state.future = []; writeTimeline(); renderHistory(); update();
+  };
+  $('settings-reset').onclick = () => { preferences = { ...defaults, shortcuts: { ...defaults.shortcuts } }; pageSize = defaults.pageSize; storePreferences(); update(); toast('已恢复默认设置'); };
+  document.querySelectorAll('[data-shortcut]').forEach(input => input.addEventListener('change', () => {
+    const key = input.dataset.shortcut, value = input.value.trim().toLowerCase();
+    if (!/^[a-z]$/.test(value) || Object.entries(preferences.shortcuts).some(([other, assigned]) => other !== key && assigned === value)) { input.value = preferences.shortcuts[key]; toast('快捷键需为不重复的单个英文字母', true); return; }
+    preferences.shortcuts[key] = value; storePreferences();
   }));
   function duplicateContour() {
     copyContours(); pasteContours();
@@ -1110,6 +1419,7 @@
       event.preventDefault(); const step = event.shiftKey ? 10 : 1, dx = key === 'arrowleft' ? -step : key === 'arrowright' ? step : 0, dy = key === 'arrowup' ? step : key === 'arrowdown' ? -step : 0;
       edit('已微移节点', () => { const moving = movablePoints(); moving.forEach(p => { p.point.x = Math.max(-1e6, Math.min(1e6, p.point.x + dx)); p.point.y = Math.max(-1e6, Math.min(1e6, p.point.y + dy)); }); }); return;
     }
+    if (key === 'delete' && event.shiftKey && simplifySelectedControl()) { event.preventDefault(); return; }
     if (key === 'delete' || key === 'backspace') { event.preventDefault(); deleteSelected(); return; }
     if (key === 'escape' || key === 'enter') { finishDrawing(); update(); return; }
     if (key === 'tab' && !event.shiftKey && event.target === canvas) { event.preventDefault(); setFill(!state.fill); return; }
@@ -1117,18 +1427,21 @@
     if (key === '+' || key === '=') zoom(1.2); if (key === '-') zoom(1 / 1.2);
     if (key === 'g') $('grid-button').click(); if (key === 's') $('snap-button').click();
     if (key === '?') $('help-dialog').showModal();
-    const tools = { v: 'select', a: 'component', k: 'knife', p: 'pen', l: 'line', r: 'rect', o: 'ellipse', h: 'hand' }; if (!mod && tools[key]) setTool(tools[key]);
+    const tools = { [preferences.shortcuts.select]: 'select', [preferences.shortcuts.component]: 'component', [preferences.shortcuts.knife]: 'knife', [preferences.shortcuts.pen]: 'pen', [preferences.shortcuts.line]: 'line', r: 'rect', o: 'ellipse', h: 'hand' }; if (!mod && !event.shiftKey && !event.altKey && tools[key]) setTool(tools[key]);
   });
   window.addEventListener('keyup', event => { if (event.key === ' ') { state.space = false; updateHint(); } });
   window.addEventListener('blur', () => { state.space = false; if (state.drag?.before) doc = state.drag.before; if (state.drag?.type === 'pivot') state.pivot = state.drag.oldPivot; state.constraintGuide = null; state.drag = null; update(); });
   window.addEventListener('dragover', event => { if (event.dataTransfer.types.includes('Files')) { event.preventDefault(); event.dataTransfer.dropEffect = 'copy'; } });
   window.addEventListener('drop', event => { if (event.dataTransfer.files.length) { event.preventDefault(); importFile(event.dataTransfer.files[0]); } });
   window.addEventListener('beforeunload', event => { captureProject(); try { localStorage.setItem(storageKey, G.serialize(doc)); } catch (_) {} if (project?.pendingCount) { event.preventDefault(); event.returnValue = ''; } });
+  applyPreferences();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (preferences.theme === 'system') { applyPreferences(); requestDraw(); } });
   new ResizeObserver(resize).observe(container);
-  window.HigherDegreeEditor = Object.freeze({ version: '0.3.1', getDocument: () => G.clone(doc) });
+  window.HigherDegreeEditor = Object.freeze({ version: '0.4.0', getDocument: () => G.clone(doc) });
   window.QuarticEditor = window.HigherDegreeEditor;
   update();
   renderLibrary();
+  activateHistory(standaloneHistoryId, doc);
   if (restored) setStatus('已恢复上次草稿');
   if (!storageAvailable) $('save-status').innerHTML = '<span></span> 请下载 .glyph 保存';
 })();

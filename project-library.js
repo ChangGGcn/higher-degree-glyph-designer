@@ -60,8 +60,9 @@
       if (chain.has(id)) throw new Error('GLIF 构件存在循环引用：' + id);
       if (entry.doc) return entry;
       if (entry.error) throw new Error(entry.error);
+      if (entry.loading) return entry.loading;
       const branch = new Set(chain); branch.add(id);
-      try {
+      entry.loading = (async () => { try {
         const text = await this.readText(entry), options = { ...this.options };
         if (G.fileExtension(entry.path) === 'glif') {
           const metadata = await this.layerMetadata(entry.path), references = G.glifReferences(text, this.options.Parser), bases = new Map();
@@ -74,7 +75,8 @@
         }
         const result = G.importText(text, entry.path, options); entry.doc = result.doc; entry.warnings = result.warnings; entry.baseline = G.serialize(result.doc); entry.error = null;
         return entry;
-      } catch (error) { entry.error = error.message; throw error; }
+      } catch (error) { entry.error = error.message; throw error; } finally { entry.loading = null; } })();
+      return entry.loading;
     }
     capture(id, doc, history, future, view) {
       const entry = this.byPath.get(id); if (!entry || !entry.doc) return;
